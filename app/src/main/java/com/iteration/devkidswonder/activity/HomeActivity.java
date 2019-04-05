@@ -1,10 +1,13 @@
 package com.iteration.devkidswonder.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -62,6 +67,17 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View headerview = navigationView.getHeaderView(0);
+        TextView txt_login = (TextView)headerview.findViewById(R.id.txt_login);
+        LinearLayout nav_header_ll = (LinearLayout)headerview.findViewById(R.id.nav_header_ll);
+        nav_header_ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this,SignInActivity.class);
+                startActivity(i);
+            }
+        });
+
         GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
         /*================== Slider ========================*/
@@ -102,7 +118,7 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<SliderList> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -155,8 +171,14 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.menu_search)
+        {
+
+        }
+        else if (id == R.id.menu_cart)
+        {
+            Intent i = new Intent(getApplicationContext(),CartActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
@@ -168,19 +190,57 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        /*if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_home)
+        {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
+        }
+        else if (id == R.id.nav_cart)
+        {
+            Intent i = new Intent(getApplicationContext(),CartActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_wishlist)
+        {
+            /*Intent i = new Intent(getApplicationContext(),WishListActivity.class);
+            startActivity(i);*/
+        }
+        else if (id == R.id.nav_order)
+        {
+           /* Intent i = new Intent(getApplicationContext(),MyOrderActivity.class);
+            startActivity(i);*/
+        }
+        else if (id == R.id.nav_notification)
+        {
+           /* Intent i = new Intent(getApplicationContext(),NotificationActivity.class);
+            startActivity(i);*/
+        }
+        else if (id == R.id.nav_offerZone)
+        {
+          /*  Intent i = new Intent(getApplicationContext(),OfferZoneActivity.class);
+            startActivity(i);*/
+        }
+        else if (id == R.id.nav_rate)
+        {
+           /* Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.wondering"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.wondering"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }*/
+        }
+        else if (id == R.id.nav_share)
+        {
+            Intent i=new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            String body="https://play.google.com/store/apps/details?id=com.iteration.wondering";
+            i.putExtra(Intent.EXTRA_SUBJECT,body);
+            i.putExtra(Intent.EXTRA_TEXT,body);
+            startActivity(Intent.createChooser(i,"Share using"));
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
