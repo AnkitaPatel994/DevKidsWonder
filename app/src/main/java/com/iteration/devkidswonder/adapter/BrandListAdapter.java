@@ -63,7 +63,7 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
 
     @Override
     public int getItemCount() {
-        return brandListArray.size();
+        return 10;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

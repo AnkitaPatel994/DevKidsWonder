@@ -1,5 +1,8 @@
 package com.iteration.devkidswonder.activity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,8 +13,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.Formatter;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
@@ -32,8 +40,10 @@ import com.iteration.devkidswonder.model.Slider;
 import com.iteration.devkidswonder.model.SliderList;
 import com.iteration.devkidswonder.network.GetProductDataService;
 import com.iteration.devkidswonder.network.RetrofitInstance;
+import com.iteration.devkidswonder.network.SessionManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,12 +61,22 @@ public class HomeActivity extends AppCompatActivity
     ArrayList<Brand> BrandListArray = new ArrayList<>();
     ArrayList<Product> BestSellingListArray = new ArrayList<>();
 
+    SessionManager session;
+    int flag = 0;
+    String ip_address;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        session = new SessionManager(HomeActivity.this);
+        flag = session.checkLogin();
+
+        HashMap<String,String> user = session.getUserDetails();
+        String user_name = user.get(SessionManager.user_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -66,6 +86,37 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerview = navigationView.getHeaderView(0);
+        TextView txt_login = (TextView)headerview.findViewById(R.id.txt_login);
+        LinearLayout nav_header_ll = (LinearLayout)headerview.findViewById(R.id.nav_header_ll);
+
+        if (flag == 1)
+        {
+            txt_login.setText(user_name);
+            nav_header_ll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    /*Intent i = new Intent(HomeActivity.this,MyProfileActivity.class);
+                    startActivity(i);*/
+                }
+            });
+        }
+        else if (flag == 0)
+        {
+            txt_login.setText("Login / Register");
+            nav_header_ll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    /*Intent i = new Intent(HomeActivity.this,SignInActivity.class);
+                    startActivity(i);*/
+                }
+            });
+        }
+
+        @SuppressLint("WifiManagerLeak")
+        WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
+        ip_address = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
         GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
@@ -107,7 +158,27 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             public void onFailure(Call<SliderList> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
+        /*================= btn view all ==============*/
+        Button btnViewAllCat = (Button)findViewById(R.id.btnViewAllCat);
+        btnViewAllCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this,CategoryListActivity.class);
+                startActivity(i);
+            }
+        });
+
+        /*================= btn view all ==============*/
+        Button btnViewAllBrand = (Button)findViewById(R.id.btnViewAllBrand);
+        btnViewAllBrand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this,BrandListActivity.class);
+                startActivity(i);
             }
         });
 
