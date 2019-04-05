@@ -3,12 +3,12 @@ package com.iteration.devkidswonder.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -26,7 +26,13 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.adapter.BestSellingProductListAdapter;
+import com.iteration.devkidswonder.adapter.BrandListAdapter;
 import com.iteration.devkidswonder.adapter.CategoryListAdapter;
+import com.iteration.devkidswonder.model.Product;
+import com.iteration.devkidswonder.model.BestSellingList;
+import com.iteration.devkidswonder.model.Brand;
+import com.iteration.devkidswonder.model.BrandList;
 import com.iteration.devkidswonder.model.Category;
 import com.iteration.devkidswonder.model.CategoryList;
 import com.iteration.devkidswonder.model.Slider;
@@ -44,12 +50,13 @@ public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     SliderLayout slBannerSlider;
+    ArrayList<Slider> sliderListArray = new ArrayList<>();
     ArrayList<String> sliderImgArray = new ArrayList<>();
 
-    RecyclerView rvCategoryList;
-    CategoryListAdapter categoryListAdapter;
+    RecyclerView rvCategoryList,rvBrandList,rvSellerProduct;
     ArrayList<Category> categoryListArray = new ArrayList<>();
-    ArrayList<Slider> sliderListArray = new ArrayList<>();
+    ArrayList<Brand> BrandListArray = new ArrayList<>();
+    ArrayList<Product> BestSellingListArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +142,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<CategoryList> call, Response<CategoryList> response) {
                 categoryListArray = response.body().getCategoryArrayList();
-                categoryListAdapter = new CategoryListAdapter(HomeActivity.this,categoryListArray);
+                CategoryListAdapter categoryListAdapter = new CategoryListAdapter(HomeActivity.this,categoryListArray);
                 rvCategoryList.setAdapter(categoryListAdapter);
             }
 
@@ -144,6 +151,53 @@ public class HomeActivity extends AppCompatActivity
                 Toast.makeText(HomeActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        /*================= Brand List =================*/
+        rvBrandList = (RecyclerView)findViewById(R.id.rvBrandList);
+        rvBrandList.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager manager2 = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false);
+        rvBrandList.setLayoutManager(manager2);
+
+        Call<BrandList> brandListCall = productDataService.getBrandData();
+
+        brandListCall.enqueue(new Callback<BrandList>() {
+            @Override
+            public void onResponse(Call<BrandList> call, Response<BrandList> response) {
+                BrandListArray = response.body().getBrandArrayList();
+                BrandListAdapter brandListAdapter = new BrandListAdapter(HomeActivity.this,BrandListArray);
+                rvBrandList.setAdapter(brandListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<BrandList> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        /*================= Best Selling Product List =================*/
+        rvSellerProduct = (RecyclerView)findViewById(R.id.rvSellerProduct);
+        rvSellerProduct.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager manager3 = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false);
+        rvSellerProduct.setLayoutManager(manager3);
+
+        Call<BestSellingList> bestSellingListCall = productDataService.getBestSellingData();
+
+        bestSellingListCall.enqueue(new Callback<BestSellingList>() {
+            @Override
+            public void onResponse(Call<BestSellingList> call, Response<BestSellingList> response) {
+                BestSellingListArray = response.body().getBestSellingArrayList();
+                BestSellingProductListAdapter bestSellingProductListAdapter = new BestSellingProductListAdapter(HomeActivity.this,BestSellingListArray);
+                rvSellerProduct.setAdapter(bestSellingProductListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<BestSellingList> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
