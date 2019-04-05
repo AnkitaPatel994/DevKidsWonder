@@ -14,5 +14,7 @@
     <string name="top_seller">Top Seller</string>
     <string name="featured_brand">Featured Brand</string>
     <string name="login">Login / Register</string>
+    <string name="RS">₹</string>
+    <string name="title_activity_product_details">ProductDetailsActivity</string>
 
 </resources>
