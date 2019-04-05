@@ -3,10 +3,15 @@ package com.iteration.devkidswonder.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -172,7 +177,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        /*================= btn view all ==============*/
+        /*================= btn view all Brand ==============*/
         Button btnViewAllBrand = (Button)findViewById(R.id.btnViewAllBrand);
         btnViewAllBrand.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,8 +283,14 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.menu_search)
+        {
+
+        }
+        else if (id == R.id.menu_cart)
+        {
+            Intent i = new Intent(getApplicationContext(),CartActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
@@ -291,19 +302,57 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        /*if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_home)
+        {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
+        }
+        else if (id == R.id.nav_cart)
+        {
+            Intent i = new Intent(getApplicationContext(),CartActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_wishlist)
+        {
+            /*Intent i = new Intent(getApplicationContext(),WishListActivity.class);
+            startActivity(i);*/
+        }
+        else if (id == R.id.nav_order)
+        {
+           /* Intent i = new Intent(getApplicationContext(),MyOrderActivity.class);
+            startActivity(i);*/
+        }
+        else if (id == R.id.nav_notification)
+        {
+           /* Intent i = new Intent(getApplicationContext(),NotificationActivity.class);
+            startActivity(i);*/
+        }
+        else if (id == R.id.nav_offerZone)
+        {
+          /*  Intent i = new Intent(getApplicationContext(),OfferZoneActivity.class);
+            startActivity(i);*/
+        }
+        else if (id == R.id.nav_rate)
+        {
+           /* Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.wondering"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.wondering"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }*/
+        }
+        else if (id == R.id.nav_share)
+        {
+            Intent i=new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            String body="https://play.google.com/store/apps/details?id=com.iteration.wondering";
+            i.putExtra(Intent.EXTRA_SUBJECT,body);
+            i.putExtra(Intent.EXTRA_TEXT,body);
+            startActivity(Intent.createChooser(i,"Share using"));
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
