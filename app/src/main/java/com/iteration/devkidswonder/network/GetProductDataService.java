@@ -3,6 +3,7 @@ package com.iteration.devkidswonder.network;
 import com.iteration.devkidswonder.model.BestSellingList;
 import com.iteration.devkidswonder.model.BrandList;
 import com.iteration.devkidswonder.model.CategoryList;
+import com.iteration.devkidswonder.model.OneProductWish;
 import com.iteration.devkidswonder.model.ProductImgList;
 import com.iteration.devkidswonder.model.ProductSizeList;
 import com.iteration.devkidswonder.model.SliderList;
@@ -35,5 +36,10 @@ public interface GetProductDataService {
     @FormUrlEncoded
     @POST("json_android/product_size.php")
     Call<ProductSizeList> getProductSizeListData(@Field("pro_id") String pro_id);
+
+    @FormUrlEncoded
+    @POST("json_android/one_pro_wishlist.php")
+    Call<OneProductWish> getOneProductWishlistListData(@Field("customer_id") String customer_id,
+                                                       @Field("pro_id") String pro_id);
 
 }

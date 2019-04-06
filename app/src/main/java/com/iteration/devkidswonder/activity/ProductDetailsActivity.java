@@ -1,7 +1,10 @@
 package com.iteration.devkidswonder.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
@@ -11,22 +14,29 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.model.OneProductWish;
 import com.iteration.devkidswonder.model.ProductImg;
 import com.iteration.devkidswonder.model.ProductImgList;
 import com.iteration.devkidswonder.model.ProductSize;
@@ -254,6 +264,241 @@ public class ProductDetailsActivity extends AppCompatActivity {
             productSizeListArray.add(String.valueOf(s));
         }
 
+        LinearLayout llPDQty = (LinearLayout)findViewById(R.id.llPDQty);
+        llPDQty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(ProductDetailsActivity.this,android.R.style.Theme_Light_NoTitleBar);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.setContentView(R.layout.qty_dialog);
+                dialog.setCancelable(true);
+                ImageView ivDClose = (ImageView)dialog.findViewById(R.id.ivDClose);
+                ListView lvDListQty = (ListView)dialog.findViewById(R.id.lvDListQty);
+                ivDClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, productSizeListArray);
+                lvDListQty.setAdapter(adapter);
+                lvDListQty.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String value=adapter.getItem(position);
+                        dialog.dismiss();
+                        txtPDQty.setText(value);
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+
+        ivPdWishBlack = (ImageView)findViewById(R.id.ivPdWishBlack);
+        ivPdWishRed = (ImageView)findViewById(R.id.ivPdWishRed);
+        ivPdWishRed.setVisibility(View.GONE);
+        if (flag == 1)
+        {
+            Call<OneProductWish> OneProductWishListCall = productDataService.getOneProductWishlistListData(user_id,pro_id);
+            OneProductWishListCall.enqueue(new Callback<OneProductWish>() {
+                @Override
+                public void onResponse(Call<OneProductWish> call, Response<OneProductWish> response) {
+                    String status = response.body().getStatus();
+                    if (status.equals("1"))
+                    {
+                        ivPdWishRed.setVisibility(View.VISIBLE);
+                        ivPdWishBlack.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        ivPdWishRed.setVisibility(View.GONE);
+                        ivPdWishBlack.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<OneProductWish> call, Throwable t) {
+                    Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else if (flag == 0)
+        {
+
+        }
+
+        llPDWishlist = (LinearLayout)findViewById(R.id.llPDWishlist);
+        llPDWishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flag == 1)
+                {
+                    if(ivPdWishRed.getVisibility() == View.VISIBLE )
+                    {
+                        /*GetDeleteWishlistPro deleteWishlistPro = new GetDeleteWishlistPro();
+                        deleteWishlistPro.execute();*/
+                    }
+                    else if(ivPdWishBlack.getVisibility() == View.VISIBLE)
+                    {
+                        String pd_user_id_wish = user_id;
+                        String pd_pro_id_wish = pro_id;
+                        String pd_size_name_wish = txtPDPSize.getText().toString();
+
+                        if (llPDPSizeChart.getVisibility() == View.VISIBLE)
+                        {
+                            if(pd_size_name_wish.equals("Select Size"))
+                            {
+                                txtError.setVisibility(View.VISIBLE);
+                            }
+                            else
+                            {
+                                txtError.setVisibility(View.GONE);
+                                /*GetInsertWishlist insertWishlist = new GetInsertWishlist(pd_user_id_wish,pd_pro_id_wish,pd_size_name_wish);
+                                insertWishlist.execute();*/
+                            }
+                        }
+                        else
+                        {
+                            txtError.setVisibility(View.GONE);
+                            pd_size_name_wish = "";
+                            /*GetInsertWishlist insertWishlist = new GetInsertWishlist(pd_user_id_wish,pd_pro_id_wish,pd_size_name_wish);
+                            insertWishlist.execute();*/
+                        }
+
+                    }
+                }
+                else if (flag == 0)
+                {
+                    Intent i = new Intent(ProductDetailsActivity.this,SignInActivity.class);
+                    startActivity(i);
+                }
+            }
+        });
+
+        btnPDAddCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (flag == 1)
+                {
+                    String pd_user_id = user_id;
+                    String pd_pro_id = pro_id;
+                    String pd_quantity = txtPDQty.getText().toString();
+                    String pd_size_name = txtPDPSize.getText().toString();
+                    String pd_pro_price = txtProductPrice.getText().toString();
+
+                    if (llPDPSizeChart.getVisibility() == View.VISIBLE)
+                    {
+                        if(pd_size_name.equals("Select Size"))
+                        {
+                            txtError.setVisibility(View.VISIBLE);
+                        }
+                        else
+                        {
+                            txtError.setVisibility(View.GONE);
+                            if(txtPDStatusId.getText().toString().equals("Available"))
+                            {
+                                /*GetInsertCart insertCart = new GetInsertCart(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
+                                insertCart.execute();*/
+                            }
+                            else
+                            {
+                                Toast.makeText(ProductDetailsActivity.this,"Product not Available", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        txtError.setVisibility(View.GONE);
+                        pd_size_name = "";
+                        if(statusid.equals("Available"))
+                        {
+                            /*GetInsertCart insertCart = new GetInsertCart(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
+                            insertCart.execute();*/
+                        }
+                        else
+                        {
+                            Toast.makeText(ProductDetailsActivity.this,"Product not Available", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                }
+                else if (flag == 0)
+                {
+                    Intent i = new Intent(ProductDetailsActivity.this,SignInActivity.class);
+                    startActivity(i);
+                }
+
+            }
+        });
+
+        txtProduct_view_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*Intent i = new Intent(ProductDetailsActivity.this,SubCategoryActivity.class);
+                i.putExtra("category_id",cate_id);
+                startActivity(i);*/
+            }
+        });
+
+        rvPDAllView = (RecyclerView)findViewById(R.id.rvPDAllView);
+        rvPDAllView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),2);
+        rvPDAllView.setLayoutManager(manager);
+
+        /*GetProductlist productlist = new GetProductlist();
+        productlist.execute();*/
+
+        rvPDInterestedProductList  = (RecyclerView)findViewById(R.id.rvPDInterestedProductList);
+        rvPDInterestedProductList.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager manager1 = new GridLayoutManager(getApplicationContext(),1);
+        rvPDInterestedProductList.setLayoutManager(manager1);
+
+        /*GetCategorylist categorylist = new GetCategorylist();
+        categorylist.execute();*/
+
+        rvPDRecentView  = (RecyclerView)findViewById(R.id.rvPDRecentView);
+        rvPDRecentView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager manager2 = new LinearLayoutManager(ProductDetailsActivity.this,LinearLayoutManager.HORIZONTAL,false);
+        rvPDRecentView.setLayoutManager(manager2);
+
+        /*GetRecentView recentView = new GetRecentView();
+        recentView.execute();*/
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if(id == android.R.id.home)
+            finish();
+
+        if (id == R.id.menu_search)
+        {
+
+        }
+        else if (id == R.id.menu_cart)
+        {
+            Intent i = new Intent(getApplicationContext(),CartActivity.class);
+            startActivity(i);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private class ProductSizeAdapter extends RecyclerView.Adapter<ProductSizeAdapter.ViewHolder>{
