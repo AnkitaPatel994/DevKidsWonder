@@ -67,7 +67,7 @@ public class HomeActivity extends AppCompatActivity
     ArrayList<Brand> BrandListArray = new ArrayList<>();
     ArrayList<Product> BestSellingListArray = new ArrayList<>();
 
-    SessionManager session;
+   SessionManager session;
     int flag = 0;
     String ip_address;
 
@@ -103,8 +103,8 @@ public class HomeActivity extends AppCompatActivity
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*Intent i = new Intent(HomeActivity.this,MyProfileActivity.class);
-                    startActivity(i);*/
+                    Intent i = new Intent(HomeActivity.this,MyProfileActivity.class);
+                    startActivity(i);
                 }
             });
         }
@@ -310,13 +310,13 @@ public class HomeActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_wishlist)
         {
-            /*Intent i = new Intent(getApplicationContext(),WishListActivity.class);
-            startActivity(i);*/
+            Intent i = new Intent(getApplicationContext(),WishListActivity.class);
+            startActivity(i);
         }
         else if (id == R.id.nav_order)
         {
-           /* Intent i = new Intent(getApplicationContext(),MyOrderActivity.class);
-            startActivity(i);*/
+            Intent i = new Intent(getApplicationContext(),OrderActivity.class);
+            startActivity(i);
         }
         else if (id == R.id.nav_rate)
         {

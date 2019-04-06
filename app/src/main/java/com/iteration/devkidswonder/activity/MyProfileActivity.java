@@ -2,8 +2,8 @@ package com.iteration.devkidswonder.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,42 +13,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
-import com.iteration.devkidswonder.adapter.BrandAllListAdapter;
-import com.iteration.devkidswonder.adapter.BrandListAdapter;
-import com.iteration.devkidswonder.model.Brand;
-import com.iteration.devkidswonder.model.BrandList;
-import com.iteration.devkidswonder.network.GetProductDataService;
-import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.iteration.devkidswonder.network.SessionManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class BrandListActivity extends AppCompatActivity
+public class MyProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    RecyclerView rvAllBrandList;
-    ArrayList<Brand> BrandAllListArray = new ArrayList<>();
+    TextView txtprofilename,txtprofileemail,txtprofilemobileno,txtprofileaddress;
+    String firstname, lastname, email, contact, address, city, zipcode;
     SessionManager session;
     int flag = 0;
+    String user_id;
+    LinearLayout llHomeAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_brand_list);
+        setContentView(R.layout.activity_my_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        session = new SessionManager(BrandListActivity.this);
+        session = new SessionManager(MyProfileActivity.this);
         flag = session.checkLogin();
 
         HashMap<String,String> user = session.getUserDetails();
@@ -62,7 +53,6 @@ public class BrandListActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         View headerview = navigationView.getHeaderView(0);
         TextView txt_login = (TextView)headerview.findViewById(R.id.txt_login);
         LinearLayout nav_header_ll = (LinearLayout)headerview.findViewById(R.id.nav_header_ll);
@@ -73,8 +63,8 @@ public class BrandListActivity extends AppCompatActivity
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*Intent i = new Intent(BrandListActivity.this,MyProfileActivity.class);
-                    startActivity(i);*/
+                    Intent i = new Intent(MyProfileActivity.this,MyProfileActivity.class);
+                    startActivity(i);
                 }
             });
         }
@@ -84,36 +74,28 @@ public class BrandListActivity extends AppCompatActivity
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*Intent i = new Intent(BrandListActivity.this,SignInActivity.class);
-                    startActivity(i);*/
+                    Intent i = new Intent(MyProfileActivity.this,SignInActivity.class);
+                    startActivity(i);
                 }
             });
         }
 
-        rvAllBrandList = (RecyclerView)findViewById(R.id.rvAllBrandList);
-        rvAllBrandList.setHasFixedSize(true);
+        txtprofilename = (TextView) findViewById(R.id.myprofile_name);
+        txtprofileemail = (TextView) findViewById(R.id.myprofile_email);
+        txtprofilemobileno = (TextView) findViewById(R.id.myprofile_phone_number);
+        txtprofileaddress = (TextView) findViewById(R.id.myprofile_address);
+        llHomeAddress = (LinearLayout) findViewById(R.id.llHomeAddress);
 
-        RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),1);
-        rvAllBrandList.setLayoutManager(manager);
-
-        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
-
-        Call<BrandList> brandListCall = productDataService.getBrandData();
-
-        brandListCall.enqueue(new Callback<BrandList>() {
+        Button btnMyprofileLogout = (Button)findViewById(R.id.btnMyprofileLogout);
+        btnMyprofileLogout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<BrandList> call, Response<BrandList> response) {
-                BrandAllListArray = response.body().getBrandArrayList();
-                BrandAllListAdapter brandAllListAdapter = new BrandAllListAdapter(BrandListActivity.this,BrandAllListArray);
-                rvAllBrandList.setAdapter(brandAllListAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<BrandList> call, Throwable t) {
-                Toast.makeText(BrandListActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                session.logoutUser();
+                Intent i = new Intent(MyProfileActivity.this,HomeActivity.class);
+                startActivity(i);
+                finish();
             }
         });
-
     }
 
     @Override
@@ -129,7 +111,7 @@ public class BrandListActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.my_profile, menu);
         return true;
     }
 
@@ -141,14 +123,8 @@ public class BrandListActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.menu_search)
-        {
-
-        }
-        else if (id == R.id.menu_cart)
-        {
-            Intent i = new Intent(getApplicationContext(),CartActivity.class);
-            startActivity(i);
+        if (id == R.id.action_settings) {
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

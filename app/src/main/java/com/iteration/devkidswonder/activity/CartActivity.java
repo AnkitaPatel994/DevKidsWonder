@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,18 +17,39 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.network.SessionManager;
+
+import java.util.HashMap;
 
 public class CartActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    LinearLayout llCartEmpty,llCartProductList;
+    TextView txtCartPrice,txtShippingPrice,txtTotalAmount;
+    Button btnPlaceOrder;
+    RecyclerView rvCart;
+    SessionManager session;
+    int flag = 0;
+    String ip_address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        session = new SessionManager(CartActivity.this);
+        flag = session.checkLogin();
+
+        HashMap<String,String> user = session.getUserDetails();
+        String user_name = user.get(SessionManager.user_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -37,6 +59,52 @@ public class CartActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerview = navigationView.getHeaderView(0);
+        TextView txt_login = (TextView)headerview.findViewById(R.id.txt_login);
+        LinearLayout nav_header_ll = (LinearLayout)headerview.findViewById(R.id.nav_header_ll);
+
+        if (flag == 1)
+        {
+            txt_login.setText(user_name);
+            nav_header_ll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(CartActivity.this,MyProfileActivity.class);
+                    startActivity(i);
+                }
+            });
+        /*    llCartEmpty.setVisibility(View.GONE);
+            llCartProductList.setVisibility(View.VISIBLE);*/
+        }
+        else if (flag == 0)
+        {
+            txt_login.setText("Login / Register");
+            nav_header_ll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(CartActivity.this,SignInActivity.class);
+                    startActivity(i);
+                }
+            });
+           /* llCartEmpty.setVisibility(View.VISIBLE);
+            llCartProductList.setVisibility(View.GONE);*/
+        }
+
+        rvCart = (RecyclerView)findViewById(R.id.rvCart);
+        Button btnEmptyCart = (Button)findViewById(R.id.btnEmptyCart);
+        btnEmptyCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(CartActivity.this,HomeActivity.class);
+                startActivity(i);
+            }
+        });
+
+        txtCartPrice = (TextView)findViewById(R.id.txtCartPrice);
+        txtShippingPrice = (TextView)findViewById(R.id.txtShippingPrice);
+        txtTotalAmount = (TextView)findViewById(R.id.txtTotalAmount);
+        btnPlaceOrder = (Button)findViewById(R.id.btnPlaceOrder);
     }
 
     @Override
@@ -52,7 +120,7 @@ public class CartActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.cart, menu);
+        getMenuInflater().inflate(R.menu.wish_list, menu);
         return true;
     }
 
@@ -64,15 +132,12 @@ public class CartActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.menu_search)
+        if (id == R.id.menu_wishlist)
         {
-
-        }
-        else if (id == R.id.menu_cart)
-        {
-            Intent i = new Intent(getApplicationContext(),CartActivity.class);
+            Intent i = new Intent(getApplicationContext(),WishListActivity.class);
             startActivity(i);
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -89,13 +154,13 @@ public class CartActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_wishlist)
         {
-           /* Intent i = new Intent(getApplicationContext(),WishListActivity.class);
-            startActivity(i);*/
+            Intent i = new Intent(getApplicationContext(),WishListActivity.class);
+            startActivity(i);
         }
         else if (id == R.id.nav_order)
         {
-           /* Intent i = new Intent(getApplicationContext(),MyOrderActivity.class);
-            startActivity(i);*/
+            Intent i = new Intent(getApplicationContext(),OrderActivity.class);
+            startActivity(i);
         }
         else if (id == R.id.nav_rate)
         {

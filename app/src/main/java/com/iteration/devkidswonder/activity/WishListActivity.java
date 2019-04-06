@@ -1,9 +1,13 @@
 package com.iteration.devkidswonder.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,42 +17,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
-import com.iteration.devkidswonder.adapter.BrandAllListAdapter;
-import com.iteration.devkidswonder.adapter.BrandListAdapter;
-import com.iteration.devkidswonder.model.Brand;
-import com.iteration.devkidswonder.model.BrandList;
-import com.iteration.devkidswonder.network.GetProductDataService;
-import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.iteration.devkidswonder.network.SessionManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class BrandListActivity extends AppCompatActivity
+public class WishListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    RecyclerView rvAllBrandList;
-    ArrayList<Brand> BrandAllListArray = new ArrayList<>();
     SessionManager session;
     int flag = 0;
+    RecyclerView rvProductWishlist;
+    LinearLayout llWishlistEmpty;
+    String user_id;
+    String ip_address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_brand_list);
+        setContentView(R.layout.activity_wish_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        session = new SessionManager(BrandListActivity.this);
+        session = new SessionManager(WishListActivity.this);
         flag = session.checkLogin();
 
         HashMap<String,String> user = session.getUserDetails();
@@ -63,6 +58,9 @@ public class BrandListActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        llWishlistEmpty = (LinearLayout)findViewById(R.id.llWishlistEmpty);
+        rvProductWishlist = (RecyclerView)findViewById(R.id.rvProductWishlist);
+
         View headerview = navigationView.getHeaderView(0);
         TextView txt_login = (TextView)headerview.findViewById(R.id.txt_login);
         LinearLayout nav_header_ll = (LinearLayout)headerview.findViewById(R.id.nav_header_ll);
@@ -73,10 +71,12 @@ public class BrandListActivity extends AppCompatActivity
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*Intent i = new Intent(BrandListActivity.this,MyProfileActivity.class);
-                    startActivity(i);*/
+                    Intent i = new Intent(WishListActivity.this,MyProfileActivity.class);
+                    startActivity(i);
                 }
             });
+            llWishlistEmpty.setVisibility(View.GONE);
+            rvProductWishlist.setVisibility(View.VISIBLE);
         }
         else if (flag == 0)
         {
@@ -84,36 +84,22 @@ public class BrandListActivity extends AppCompatActivity
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*Intent i = new Intent(BrandListActivity.this,SignInActivity.class);
-                    startActivity(i);*/
+                    Intent i = new Intent(WishListActivity.this,SignInActivity.class);
+                    startActivity(i);
                 }
             });
+            llWishlistEmpty.setVisibility(View.VISIBLE);
+            rvProductWishlist.setVisibility(View.GONE);
         }
 
-        rvAllBrandList = (RecyclerView)findViewById(R.id.rvAllBrandList);
-        rvAllBrandList.setHasFixedSize(true);
-
-        RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),1);
-        rvAllBrandList.setLayoutManager(manager);
-
-        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
-
-        Call<BrandList> brandListCall = productDataService.getBrandData();
-
-        brandListCall.enqueue(new Callback<BrandList>() {
+        Button btnEmptyWhishlist = (Button)findViewById(R.id.btnEmptyWhishlist);
+        btnEmptyWhishlist.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<BrandList> call, Response<BrandList> response) {
-                BrandAllListArray = response.body().getBrandArrayList();
-                BrandAllListAdapter brandAllListAdapter = new BrandAllListAdapter(BrandListActivity.this,BrandAllListArray);
-                rvAllBrandList.setAdapter(brandAllListAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<BrandList> call, Throwable t) {
-                Toast.makeText(BrandListActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                Intent i = new Intent(WishListActivity.this,HomeActivity.class);
+                startActivity(i);
             }
         });
-
     }
 
     @Override
@@ -129,7 +115,7 @@ public class BrandListActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.cart, menu);
         return true;
     }
 
@@ -141,11 +127,7 @@ public class BrandListActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.menu_search)
-        {
-
-        }
-        else if (id == R.id.menu_cart)
+        if (id == R.id.menu_cart_wish)
         {
             Intent i = new Intent(getApplicationContext(),CartActivity.class);
             startActivity(i);
@@ -160,22 +142,58 @@ public class BrandListActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_home)
+        {
+            Intent i = new Intent(getApplicationContext(),HomeActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_cart)
+        {
+            Intent i = new Intent(getApplicationContext(),CartActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_order)
+        {
+            Intent i = new Intent(getApplicationContext(),OrderActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_rate)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_share)
+        {
+            Intent i=new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            String body="https://play.google.com/store/apps/details?id=com.iteration.devkidswonder";
+            i.putExtra(Intent.EXTRA_SUBJECT,body);
+            i.putExtra(Intent.EXTRA_TEXT,body);
+            startActivity(Intent.createChooser(i,"Share using"));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private boolean MyStartActivity(Intent i) {
+        try
+        {
+            startActivity(i);
+            return true;
+        }
+        catch (ActivityNotFoundException e)
+        {
+            return false;
+        }
     }
 }
