@@ -1,5 +1,6 @@
 package com.iteration.devkidswonder.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -83,11 +84,7 @@ public class CartActivity extends AppCompatActivity
 
         if (id == R.id.nav_home)
         {
-
-        }
-        else if (id == R.id.nav_cart)
-        {
-            Intent i = new Intent(getApplicationContext(),CartActivity.class);
+            Intent i = new Intent(getApplicationContext(),HomeActivity.class);
             startActivity(i);
         }
         else if (id == R.id.nav_wishlist)
@@ -100,34 +97,24 @@ public class CartActivity extends AppCompatActivity
            /* Intent i = new Intent(getApplicationContext(),MyOrderActivity.class);
             startActivity(i);*/
         }
-        else if (id == R.id.nav_notification)
-        {
-           /* Intent i = new Intent(getApplicationContext(),NotificationActivity.class);
-            startActivity(i);*/
-        }
-        else if (id == R.id.nav_offerZone)
-        {
-            /*Intent i = new Intent(getApplicationContext(),OfferZoneActivity.class);
-            startActivity(i);*/
-        }
         else if (id == R.id.nav_rate)
         {
-            /*Intent i=new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.wondering"));
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
             if(!MyStartActivity(i))
             {
-                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.wondering"));
+                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
                 if(!MyStartActivity(i))
                 {
                     Log.d("Like","Could not open browser");
                 }
-            }*/
+            }
         }
         else if (id == R.id.nav_share)
         {
             Intent i=new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
-            String body="https://play.google.com/store/apps/details?id=com.iteration.wondering";
+            String body="https://play.google.com/store/apps/details?id=com.iteration.devkidswonder";
             i.putExtra(Intent.EXTRA_SUBJECT,body);
             i.putExtra(Intent.EXTRA_TEXT,body);
             startActivity(Intent.createChooser(i,"Share using"));
@@ -136,5 +123,17 @@ public class CartActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private boolean MyStartActivity(Intent i) {
+        try
+        {
+            startActivity(i);
+            return true;
+        }
+        catch (ActivityNotFoundException e)
+        {
+            return false;
+        }
     }
 }

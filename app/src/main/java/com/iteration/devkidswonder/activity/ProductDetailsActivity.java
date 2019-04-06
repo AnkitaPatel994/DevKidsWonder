@@ -97,6 +97,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         final String statusid = getIntent().getExtras().getString("statusid");
         String rating = getIntent().getExtras().getString("rating");
 
+        ProductImgArray.clear();
+        ProductImgIdArray.clear();
+        ProductImgNameArray.clear();
+
         vpPagerImgSlider = (ViewPager)findViewById(R.id.vpPagerImgSlider);
 
         tabIndicator = (TabLayout)findViewById(R.id.tabIndicator);
@@ -108,8 +112,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         ProductImgListCall.enqueue(new Callback<ProductImgList>() {
             @Override
             public void onResponse(Call<ProductImgList> call, Response<ProductImgList> response) {
-                ProductImgArray = response.body().getProductImgArrayList();
-                /*for (int i=0;i<ProductImgArray.size();i++)
+
+                ProductImgArray = response.body().getProductImgList();
+
+                for (int i=0;i<ProductImgArray.size();i++)
                 {
                     String ProductImgId = ProductImgArray.get(i).getImg_id();
                     ProductImgIdArray.add(ProductImgId);
@@ -121,7 +127,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 for (int i = 0; i < ProductImgIdArray.size(); i++) {
                     adapter.addFrag(new ImgSliderFragment(), ProductImgIdArray.get(i).trim());
                 }
-                vpPagerImgSlider.setAdapter(adapter);*/
+                vpPagerImgSlider.setAdapter(adapter);
 
             }
 

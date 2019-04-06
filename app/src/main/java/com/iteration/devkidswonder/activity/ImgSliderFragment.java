@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -49,7 +50,7 @@ public class ImgSliderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_img_slider, container, false);
         ImageView ivImgSlider = (ImageView)view.findViewById(R.id.ivImgSlider);
-        Picasso.with(getActivity()).load(title).into(ivImgSlider);
+        Picasso.with(getActivity()).load(RetrofitInstance.BASE_URL +title).into(ivImgSlider);
         return view;
     }
 

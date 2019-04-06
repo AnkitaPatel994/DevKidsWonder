@@ -6,6 +6,8 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_cart">CartActivity</string>
+    <string name="title_activity_sign_up">Register</string>
 
     <!--==== Home Page ===-->
     <string name="shop_by_category">Shop by Category</string>
@@ -13,9 +15,6 @@
     <string name="top_seller">Top Seller</string>
     <string name="featured_brand">Featured Brand</string>
     <string name="login">Login / Register</string>
-<<<<<<< HEAD
-    <string name="title_activity_cart">CartActivity</string>
-    <string name="title_activity_sign_up">Register</string>
 
     <!--==== SignUp ===-->
     <string name="firstname">Enter First Name</string>
@@ -35,10 +34,8 @@
     <string name="title_activity_reset">Reset Password</string>
     <!--==== SignIn ===-->
 
-=======
     <string name="RS">₹</string>
     <string name="title_activity_product_details">ProductDetailsActivity</string>
->>>>>>> 903fafd53f0626a80b5fe10f3681b495c4f59e46
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

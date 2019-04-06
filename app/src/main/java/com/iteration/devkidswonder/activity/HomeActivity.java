@@ -1,6 +1,7 @@
 package com.iteration.devkidswonder.activity;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.content.Intent;
@@ -113,8 +114,8 @@ public class HomeActivity extends AppCompatActivity
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*Intent i = new Intent(HomeActivity.this,SignInActivity.class);
-                    startActivity(i);*/
+                    Intent i = new Intent(HomeActivity.this,SignInActivity.class);
+                    startActivity(i);
                 }
             });
         }
@@ -302,11 +303,7 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home)
-        {
-
-        }
-        else if (id == R.id.nav_cart)
+        if (id == R.id.nav_cart)
         {
             Intent i = new Intent(getApplicationContext(),CartActivity.class);
             startActivity(i);
@@ -321,34 +318,24 @@ public class HomeActivity extends AppCompatActivity
            /* Intent i = new Intent(getApplicationContext(),MyOrderActivity.class);
             startActivity(i);*/
         }
-        else if (id == R.id.nav_notification)
-        {
-           /* Intent i = new Intent(getApplicationContext(),NotificationActivity.class);
-            startActivity(i);*/
-        }
-        else if (id == R.id.nav_offerZone)
-        {
-          /*  Intent i = new Intent(getApplicationContext(),OfferZoneActivity.class);
-            startActivity(i);*/
-        }
         else if (id == R.id.nav_rate)
         {
-           /* Intent i=new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.wondering"));
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
             if(!MyStartActivity(i))
             {
-                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.wondering"));
+                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
                 if(!MyStartActivity(i))
                 {
                     Log.d("Like","Could not open browser");
                 }
-            }*/
+            }
         }
         else if (id == R.id.nav_share)
         {
             Intent i=new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
-            String body="https://play.google.com/store/apps/details?id=com.iteration.wondering";
+            String body="https://play.google.com/store/apps/details?id=com.iteration.devkidswonder";
             i.putExtra(Intent.EXTRA_SUBJECT,body);
             i.putExtra(Intent.EXTRA_TEXT,body);
             startActivity(Intent.createChooser(i,"Share using"));
@@ -357,5 +344,16 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private boolean MyStartActivity(Intent i) {
+        try
+        {
+            startActivity(i);
+            return true;
+        }
+        catch (ActivityNotFoundException e)
+        {
+            return false;
+        }
     }
 }
