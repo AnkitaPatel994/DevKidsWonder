@@ -11,10 +11,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +29,8 @@ import android.widget.Toast;
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.model.ProductImg;
 import com.iteration.devkidswonder.model.ProductImgList;
+import com.iteration.devkidswonder.model.ProductSize;
+import com.iteration.devkidswonder.model.ProductSizeList;
 import com.iteration.devkidswonder.network.GetProductDataService;
 import com.iteration.devkidswonder.network.Pager;
 import com.iteration.devkidswonder.network.RetrofitInstance;
@@ -55,6 +60,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
     ArrayList<ProductImg> ProductImgArray = new ArrayList<>();
     ArrayList<String> ProductImgIdArray = new ArrayList<>();
     public static ArrayList<String> ProductImgNameArray = new ArrayList<>();
+    ArrayList<ProductSize> ProductSizeArrayList = new ArrayList<>();
+    ArrayList<String> productSizeListArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +78,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        productSizeListArray.clear();
+
         session = new SessionManager(ProductDetailsActivity.this);
         flag = session.checkLogin();
 
@@ -80,6 +89,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         @SuppressLint("WifiManagerLeak")
         WifiManager wifiManager = (WifiManager)getSystemService(WIFI_SERVICE);
         ipAddress = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
+
+        ProductImgArray.clear();
+        ProductImgIdArray.clear();
+        ProductImgNameArray.clear();
 
         rs = ProductDetailsActivity.this.getResources().getString(R.string.RS);
         String id = getIntent().getExtras().getString("id");
@@ -97,16 +110,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
         final String statusid = getIntent().getExtras().getString("statusid");
         String rating = getIntent().getExtras().getString("rating");
 
-        ProductImgArray.clear();
-        ProductImgIdArray.clear();
-        ProductImgNameArray.clear();
-
         vpPagerImgSlider = (ViewPager)findViewById(R.id.vpPagerImgSlider);
 
         tabIndicator = (TabLayout)findViewById(R.id.tabIndicator);
         tabIndicator.setupWithViewPager(vpPagerImgSlider);
 
-        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+        final GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
         Call<ProductImgList> ProductImgListCall = productDataService.getProductImgListData(pro_id);
         ProductImgListCall.enqueue(new Callback<ProductImgList>() {
@@ -181,6 +190,155 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
+        Call<ProductSizeList> ProductSizeListCall = productDataService.getProductSizeListData(pro_id);
+        ProductSizeListCall.enqueue(new Callback<ProductSizeList>() {
+            @Override
+            public void onResponse(Call<ProductSizeList> call, Response<ProductSizeList> response) {
+                String status = response.body().getStatus();
+                if (status.equals("1"))
+                {
+                    llPDPSizeChart.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    llPDPSizeChart.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProductSizeList> call, Throwable t) {
+                Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        final TextView txtPDPSize = (TextView)findViewById(R.id.txtPDPSize);
+        llPDPSize = (LinearLayout)findViewById(R.id.llPDPSize);
+        llPDPSize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ProductSizeArrayList.clear();
+
+                bottomSheetDialog = new BottomSheetDialog(ProductDetailsActivity.this);
+                View view1 = getLayoutInflater().inflate(R.layout.bottom_sheet_size, null);
+
+                rvPDProductSize = (RecyclerView)view1.findViewById(R.id.rvPDProductSize);
+                rvPDProductSize.setHasFixedSize(true);
+
+                RecyclerView.LayoutManager manager5 = new LinearLayoutManager(ProductDetailsActivity.this,LinearLayoutManager.HORIZONTAL,false);
+                rvPDProductSize.setLayoutManager(manager5);
+
+                Call<ProductSizeList> ProductSizeCall = productDataService.getProductSizeListData(pro_id);
+                ProductSizeCall.enqueue(new Callback<ProductSizeList>() {
+                    @Override
+                    public void onResponse(Call<ProductSizeList> call, Response<ProductSizeList> response) {
+                        ProductSizeArrayList = response.body().getProductSizeList();
+                        ProductSizeAdapter productSizeAdapter = new ProductSizeAdapter(ProductSizeArrayList,txtProductPrice);
+                        rvPDProductSize.setAdapter(productSizeAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<ProductSizeList> call, Throwable t) {
+                        Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                bottomSheetDialog.setContentView(view1);
+                bottomSheetDialog.show();
+            }
+        });
+
+        size = Integer.parseInt(pro_quantity);
+        for(int s=1;s<=size;s++)
+        {
+            productSizeListArray.add(String.valueOf(s));
+        }
+
     }
 
+    private class ProductSizeAdapter extends RecyclerView.Adapter<ProductSizeAdapter.ViewHolder>{
+
+        ArrayList<ProductSize> productSizeArrayList;
+        View v;
+        TextView txtProductPrice;
+
+        public ProductSizeAdapter(ArrayList<ProductSize> productSizeArrayList, TextView txtProductPrice) {
+            this.productSizeArrayList = productSizeArrayList;
+            this.txtProductPrice = txtProductPrice;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            v = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.product_size_list, viewGroup, false);
+
+            ViewHolder viewHolder = new ViewHolder(v);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
+            productSizeListArray.clear();
+            final String s_id = productSizeArrayList.get(i).getS_id();
+            String s_pro_id = productSizeArrayList.get(i).getS_pro_id();
+            final String size_name = productSizeArrayList.get(i).getSize();
+            final String size_qty = productSizeArrayList.get(i).getSize_qty();
+            final String size_price = productSizeArrayList.get(i).getSize_price();
+            final String size_discount = productSizeArrayList.get(i).getSize_discount();
+            int cprice = Integer.parseInt(size_price);
+            int pdiscount = Integer.parseInt(size_discount);
+            final int o_price = cprice-((cprice*pdiscount)/100);
+
+            viewHolder.txtPSizeName.setText(size_name);
+            viewHolder.txtPSizePrize.setText(rs+size_price);
+            viewHolder.txtPSizeQty.setText("Only "+size_qty+" left in stock.");
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    txtPDPSize.setText(size_name);
+                    txtError.setVisibility(View.GONE);
+                    txtCuttedPrice.setText(rs+size_price);
+                    txtProductPrice.setText(""+o_price);
+                    txtProductOffers.setText(size_discount+"%off");
+
+                    size = Integer.parseInt(size_qty);
+                    for(int s=1;s<=size;s++)
+                    {
+                        productSizeListArray.add(String.valueOf(s));
+                    }
+                    if(size == 0)
+                    {
+                        txtPDStatusId.setTextColor(ContextCompat.getColor(ProductDetailsActivity.this,R.color.colorRed));
+                        txtPDStatusId.setText("Unavailable");
+                    }
+                    else
+                    {
+                        txtPDStatusId.setTextColor(ContextCompat.getColor(ProductDetailsActivity.this,R.color.colorProductRating));
+                        txtPDStatusId.setText("Available");
+                    }
+
+                    bottomSheetDialog.dismiss();
+
+                }
+            });
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return productSizeArrayList.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            TextView txtPSizeName,txtPSizePrize,txtPSizeQty;
+            public ViewHolder(View itemView) {
+                super(itemView);
+                txtPSizeName = (TextView) itemView.findViewById(R.id.txtPSizeName);
+                txtPSizePrize = (TextView) itemView.findViewById(R.id.txtPSizePrize);
+                txtPSizeQty = (TextView) itemView.findViewById(R.id.txtPSizeQty);
+            }
+        }
+    }
 }
