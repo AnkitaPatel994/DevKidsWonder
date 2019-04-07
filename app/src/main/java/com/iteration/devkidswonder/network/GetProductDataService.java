@@ -4,6 +4,8 @@ import com.iteration.devkidswonder.model.BestSellingList;
 import com.iteration.devkidswonder.model.BrandList;
 import com.iteration.devkidswonder.model.CategoryList;
 import com.iteration.devkidswonder.model.Customers;
+
+import com.iteration.devkidswonder.model.OneProductWish;
 import com.iteration.devkidswonder.model.ProductImgList;
 import com.iteration.devkidswonder.model.ProductSizeList;
 import com.iteration.devkidswonder.model.SliderList;
@@ -43,4 +45,9 @@ public interface GetProductDataService {
                                         @Field("email") String email,
                                         @Field("contact") String contact,
                                         @Field("password") String password);
+
+    @POST("json_android/one_pro_wishlist.php")
+    Call<OneProductWish> getOneProductWishlistListData(@Field("customer_id") String customer_id,
+                                                       @Field("pro_id") String pro_id);
+
 }
