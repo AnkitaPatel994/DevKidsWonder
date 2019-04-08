@@ -2,8 +2,6 @@ package com.iteration.devkidswonder.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
@@ -11,10 +9,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.model.Customers;
+import com.iteration.devkidswonder.network.GetProductDataService;
+import com.iteration.devkidswonder.network.RetrofitInstance;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -57,6 +63,37 @@ public class SignUpActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        final GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+
+        btnReg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String firstname = txtname.getText().toString().trim();
+                String lastname = txtlastname.getText().toString().trim();
+                String email = txtemail.getText().toString().trim();
+                String contact = txtmobile_no.getText().toString().trim();
+                String password = txtpassword.getText().toString().trim();
+
+                Call<Customers> customerCall = productDataService.getCustomerListData(firstname,lastname,email,contact,password);
+                customerCall.enqueue(new Callback<Customers>() {
+                    @Override
+                    public void onResponse(Call<Customers> call, Response<Customers> response) {
+                        String message = response.body().getMessage();
+
+                        Toast.makeText(SignUpActivity.this,message , Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Customers> call, Throwable t) {
+                        Toast.makeText(SignUpActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+
+
     }
 
     @Override

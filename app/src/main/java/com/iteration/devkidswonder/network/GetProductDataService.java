@@ -7,6 +7,7 @@ import com.iteration.devkidswonder.model.DeleteWishlist;
 import com.iteration.devkidswonder.model.InsertCart;
 import com.iteration.devkidswonder.model.InsertRecentViewProp;
 import com.iteration.devkidswonder.model.InsertWishlist;
+import com.iteration.devkidswonder.model.Customers;
 import com.iteration.devkidswonder.model.OneProductWish;
 import com.iteration.devkidswonder.model.ProductImgList;
 import com.iteration.devkidswonder.model.ProductSizeList;
@@ -18,7 +19,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 
 public interface GetProductDataService {
 
@@ -43,6 +43,13 @@ public interface GetProductDataService {
     Call<ProductSizeList> getProductSizeListData(@Field("pro_id") String pro_id);
 
     @FormUrlEncoded
+    @POST("json_android/insertcustomers.php")
+    Call<Customers> getCustomerListData(@Field("firstname") String firstname,
+                                        @Field("lastname") String lastname,
+                                        @Field("email") String email,
+                                        @Field("contact") String contact,
+                                        @Field("password") String password);
+
     @POST("json_android/one_pro_wishlist.php")
     Call<OneProductWish> getOneProductWishlistListData(@Field("customer_id") String customer_id,
                                                        @Field("pro_id") String pro_id);
