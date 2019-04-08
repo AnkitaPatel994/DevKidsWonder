@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ProductDetailsActivity">
+    tools:context=".activity.SubCategoryActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -16,11 +16,19 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:layout_scrollFlags="scroll|enterAlways"/>
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <ImageView
+                android:id="@+id/actionbar_logo"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:src="@drawable/splashnamelogo"
+                android:scaleType="fitStart" />
+
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_product_details" />
+    <include layout="@layout/content_sub_category" />
 
 </android.support.design.widget.CoordinatorLayout>

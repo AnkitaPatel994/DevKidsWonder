@@ -1,6 +1,7 @@
 package com.iteration.devkidswonder.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.activity.SubCategoryActivity;
 import com.iteration.devkidswonder.model.Category;
 import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.squareup.picasso.Picasso;
@@ -48,14 +50,14 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         Picasso.with(context).load(RetrofitInstance.BASE_URL +category_img).into(viewHolder.ivCatImg);
 
 
-        /*v.setOnClickListener(new View.OnClickListener() {
+        v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context,SubCategoryActivity.class);
+                Intent i = new Intent(context, SubCategoryActivity.class);
                 i.putExtra("category_id",category_id);
                 context.startActivity(i);
             }
-        });*/
+        });
     }
 
     @Override

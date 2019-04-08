@@ -1,6 +1,7 @@
 package com.iteration.devkidswonder.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.activity.BrandListActivity;
+import com.iteration.devkidswonder.activity.SubCategoryActivity;
 import com.iteration.devkidswonder.model.Brand;
 import com.iteration.devkidswonder.model.Category;
 import com.iteration.devkidswonder.network.RetrofitInstance;
@@ -60,14 +62,14 @@ public class BrandAllListAdapter extends RecyclerView.Adapter<BrandAllListAdapte
         Picasso.with(context).load(RetrofitInstance.BASE_URL +Brand_img).into(viewHolder.ivAllCatImg);
 
 
-        /*v.setOnClickListener(new View.OnClickListener() {
+        v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context,SubCategoryActivity.class);
-                i.putExtra("category_id",category_id);
+                Intent i = new Intent(context, SubCategoryActivity.class);
+                i.putExtra("Brand_id",Brand_id);
                 context.startActivity(i);
             }
-        });*/
+        });
     }
 
     @Override

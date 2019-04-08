@@ -13,13 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
-import com.iteration.devkidswonder.activity.HomeActivity;
 import com.iteration.devkidswonder.activity.ProductDetailsActivity;
-import com.iteration.devkidswonder.model.BestSellingList;
-import com.iteration.devkidswonder.model.Brand;
 import com.iteration.devkidswonder.model.InsertRecentViewProp;
 import com.iteration.devkidswonder.model.Product;
-import com.iteration.devkidswonder.model.ProductSize;
 import com.iteration.devkidswonder.network.GetProductDataService;
 import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.squareup.picasso.Picasso;
@@ -30,23 +26,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BestSellingProductListAdapter extends RecyclerView.Adapter<BestSellingProductListAdapter.ViewHolder> {
+public class RecentviewListAdapter extends RecyclerView.Adapter<RecentviewListAdapter.ViewHolder> {
 
     Context context;
-    ArrayList<Product> bestSellingListArray;
+    ArrayList<Product> recentviewListArray;
     View v;
-    String ip_address;
+    String ipAddress;
 
-    public BestSellingProductListAdapter(Context context, ArrayList<Product> bestSellingListArray, String ip_address) {
+    public RecentviewListAdapter(Context context, ArrayList<Product> recentviewListArray, String ipAddress) {
         this.context = context;
-        this.bestSellingListArray = bestSellingListArray;
-        this.ip_address = ip_address;
+        this.recentviewListArray = recentviewListArray;
+        this.ipAddress = ipAddress;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.seller_product_list, parent, false);
+                .inflate(R.layout.product_list, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
@@ -56,35 +52,38 @@ public class BestSellingProductListAdapter extends RecyclerView.Adapter<BestSell
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
         String rs = context.getResources().getString(R.string.RS);
-        final String id = bestSellingListArray.get(position).getId();
-        final String pro_id = bestSellingListArray.get(position).getPro_id();
-        final String cate_id = bestSellingListArray.get(position).getCate_id();
-        final String pro_title = bestSellingListArray.get(position).getPro_title();
-        final String brand_id = bestSellingListArray.get(position).getBrand_id();
-        final String brand_name = bestSellingListArray.get(position).getBrand_name();
-        final String pro_oprice = bestSellingListArray.get(position).getPro_oprice();
-        final String pro_discount = bestSellingListArray.get(position).getPro_discount();
-        final String pro_price = bestSellingListArray.get(position).getPro_price();
-        final String pro_desc = bestSellingListArray.get(position).getPro_desc();
-        final String pro_quantity = bestSellingListArray.get(position).getPro_quantity();
-        final String pro_date = bestSellingListArray.get(position).getPro_date();
-        final String statusid = bestSellingListArray.get(position).getStatusid();
-        final String rating = bestSellingListArray.get(position).getRating();
-        String product_img = bestSellingListArray.get(position).getProduct_img();
+        final String id = recentviewListArray.get(position).getId();
+        final String pro_id = recentviewListArray.get(position).getPro_id();
+        final String cate_id = recentviewListArray.get(position).getCate_id();
+        final String pro_title = recentviewListArray.get(position).getPro_title();
+        final String brand_id = recentviewListArray.get(position).getBrand_id();
+        final String brand_name = recentviewListArray.get(position).getBrand_name();
+        final String pro_oprice = recentviewListArray.get(position).getPro_oprice();
+        final String pro_discount = recentviewListArray.get(position).getPro_discount();
+        final String pro_price = recentviewListArray.get(position).getPro_price();
+        final String pro_desc = recentviewListArray.get(position).getPro_desc();
+        final String pro_quantity = recentviewListArray.get(position).getPro_quantity();
+        final String pro_date = recentviewListArray.get(position).getPro_date();
+        final String statusid = recentviewListArray.get(position).getStatusid();
+        final String rating = recentviewListArray.get(position).getRating();
+        String product_img = recentviewListArray.get(position).getProduct_img();
 
-        viewHolder.txtSellerProductName.setText(pro_title);
-        viewHolder.txtSellerProductOffer.setText(pro_discount);
-        viewHolder.txtSellerProductPrize.setText(rs+pro_price);
-        viewHolder.txtSellerProductOPrize.setText(rs+pro_oprice);
-        viewHolder.txtSellerProductOPrize.setPaintFlags(viewHolder.txtSellerProductOPrize.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+        viewHolder.txtSubProductName.setText(pro_title);
+        viewHolder.txtsubrating.setText(rating);
+        viewHolder.txtsubprice.setText(rs+pro_price);
+        viewHolder.txtsubcuttedprice.setText(rs+pro_oprice);
+        viewHolder.txtsubcuttedprice.setPaintFlags(viewHolder.txtsubcuttedprice.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+        viewHolder.txtsuboffer.setText(pro_discount);
 
-        Picasso.with(context).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivSellerProductImg);
+        Picasso.with(context).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivsubProductImg);
+
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
-                Call<InsertRecentViewProp> insertRecentViewPropCall = productDataService.getInsertRecentViewPropData(pro_id,ip_address);
+                Call<InsertRecentViewProp> insertRecentViewPropCall = productDataService.getInsertRecentViewPropData(pro_id,ipAddress);
                 insertRecentViewPropCall.enqueue(new Callback<InsertRecentViewProp>() {
                     @Override
                     public void onResponse(Call<InsertRecentViewProp> call, Response<InsertRecentViewProp> response) {
@@ -120,22 +119,23 @@ public class BestSellingProductListAdapter extends RecyclerView.Adapter<BestSell
 
     @Override
     public int getItemCount() {
-        return bestSellingListArray.size();
+        return 10;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView ivSellerProductImg;
-        TextView txtSellerProductName,txtSellerProductPrize,txtSellerProductOPrize,txtSellerProductOffer;
+        ImageView ivsubProductImg;
+        TextView txtSubProductName,txtsubrating,txtsubprice,txtsubcuttedprice,txtsuboffer;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            ivSellerProductImg = (ImageView)itemView.findViewById(R.id.ivSellerProductImg);
-            txtSellerProductName = (TextView)itemView.findViewById(R.id.txtSellerProductName);
-            txtSellerProductPrize = (TextView)itemView.findViewById(R.id.txtSellerProductPrize);
-            txtSellerProductOPrize = (TextView)itemView.findViewById(R.id.txtSellerProductOPrize);
-            txtSellerProductOffer = (TextView)itemView.findViewById(R.id.txtSellerProductOffer);
+            ivsubProductImg = (ImageView)itemView.findViewById(R.id.ivsubProductImg);
+            txtSubProductName = (TextView)itemView.findViewById(R.id.txtSubProductName);
+            txtsubrating = (TextView)itemView.findViewById(R.id.txtsubrating);
+            txtsubprice = (TextView)itemView.findViewById(R.id.txtsubprice);
+            txtsubcuttedprice = (TextView)itemView.findViewById(R.id.txtsubcuttedprice);
+            txtsuboffer = (TextView)itemView.findViewById(R.id.txtsuboffer);
 
         }
     }

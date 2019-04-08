@@ -2,14 +2,13 @@ package com.iteration.devkidswonder.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -36,17 +35,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.adapter.CategoryInterestedListAdapter;
+import com.iteration.devkidswonder.adapter.RecentviewListAdapter;
+import com.iteration.devkidswonder.model.Category;
+import com.iteration.devkidswonder.model.CategoryList;
+import com.iteration.devkidswonder.model.DeleteWishlist;
+import com.iteration.devkidswonder.model.InsertCart;
+import com.iteration.devkidswonder.model.InsertWishlist;
 import com.iteration.devkidswonder.model.OneProductWish;
+import com.iteration.devkidswonder.model.Product;
 import com.iteration.devkidswonder.model.ProductImg;
 import com.iteration.devkidswonder.model.ProductImgList;
 import com.iteration.devkidswonder.model.ProductSize;
 import com.iteration.devkidswonder.model.ProductSizeList;
+import com.iteration.devkidswonder.model.RecentViewList;
 import com.iteration.devkidswonder.network.GetProductDataService;
 import com.iteration.devkidswonder.network.Pager;
 import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.iteration.devkidswonder.network.SessionManager;
 
-import java.net.CookieHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -72,6 +79,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
     public static ArrayList<String> ProductImgNameArray = new ArrayList<>();
     ArrayList<ProductSize> ProductSizeArrayList = new ArrayList<>();
     ArrayList<String> productSizeListArray = new ArrayList<>();
+    ArrayList<Category> CategoryListArray = new ArrayList<>();
+    ArrayList<Product> RecentviewListArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +98,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         }
 
         productSizeListArray.clear();
+        CategoryListArray.clear();
 
         session = new SessionManager(ProductDetailsActivity.this);
         flag = session.checkLogin();
@@ -336,8 +346,19 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 {
                     if(ivPdWishRed.getVisibility() == View.VISIBLE )
                     {
-                        /*GetDeleteWishlistPro deleteWishlistPro = new GetDeleteWishlistPro();
-                        deleteWishlistPro.execute();*/
+                        Call<DeleteWishlist> DeleteWishlistCall = productDataService.getDeleteWishlistData(user_id,pro_id);
+                        DeleteWishlistCall.enqueue(new Callback<DeleteWishlist>() {
+                            @Override
+                            public void onResponse(Call<DeleteWishlist> call, Response<DeleteWishlist> response) {
+                                String message = response.body().getMessage();
+                                Toast.makeText(ProductDetailsActivity.this,message,Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<DeleteWishlist> call, Throwable t) {
+                                Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                     else if(ivPdWishBlack.getVisibility() == View.VISIBLE)
                     {
@@ -354,16 +375,43 @@ public class ProductDetailsActivity extends AppCompatActivity {
                             else
                             {
                                 txtError.setVisibility(View.GONE);
-                                /*GetInsertWishlist insertWishlist = new GetInsertWishlist(pd_user_id_wish,pd_pro_id_wish,pd_size_name_wish);
-                                insertWishlist.execute();*/
+                                Call<InsertWishlist> InsertWishlistCall = productDataService.getInsertWishlistData(pd_user_id_wish,pd_pro_id_wish,pd_size_name_wish);
+                                InsertWishlistCall.enqueue(new Callback<InsertWishlist>() {
+                                    @Override
+                                    public void onResponse(Call<InsertWishlist> call, Response<InsertWishlist> response) {
+                                        String Status = response.body().getStatus();
+                                        Toast.makeText(ProductDetailsActivity.this, "Added to wishlist", Toast.LENGTH_SHORT).show();
+                                        ivPdWishRed.setVisibility(View.VISIBLE);
+                                        ivPdWishBlack.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<InsertWishlist> call, Throwable t) {
+                                        Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                         }
                         else
                         {
                             txtError.setVisibility(View.GONE);
                             pd_size_name_wish = "";
-                            /*GetInsertWishlist insertWishlist = new GetInsertWishlist(pd_user_id_wish,pd_pro_id_wish,pd_size_name_wish);
-                            insertWishlist.execute();*/
+                            Call<InsertWishlist> InsertWishlistCall = productDataService.getInsertWishlistData(pd_user_id_wish,pd_pro_id_wish,pd_size_name_wish);
+                            InsertWishlistCall.enqueue(new Callback<InsertWishlist>() {
+                                @Override
+                                public void onResponse(Call<InsertWishlist> call, Response<InsertWishlist> response) {
+                                    String Status = response.body().getStatus();
+                                    Toast.makeText(ProductDetailsActivity.this, "Added to wishlist", Toast.LENGTH_SHORT).show();
+                                    ivPdWishRed.setVisibility(View.VISIBLE);
+                                    ivPdWishBlack.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void onFailure(Call<InsertWishlist> call, Throwable t) {
+                                    Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                         }
 
                     }
@@ -399,8 +447,25 @@ public class ProductDetailsActivity extends AppCompatActivity {
                             txtError.setVisibility(View.GONE);
                             if(txtPDStatusId.getText().toString().equals("Available"))
                             {
-                                /*GetInsertCart insertCart = new GetInsertCart(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
-                                insertCart.execute();*/
+                                final ProgressDialog dialog = new ProgressDialog(ProductDetailsActivity.this);
+                                dialog.setMessage("Loading...");
+                                dialog.setCancelable(true);
+                                dialog.show();
+
+                                Call<InsertCart> InsertCartCall = productDataService.getInsertCartData(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
+                                InsertCartCall.enqueue(new Callback<InsertCart>() {
+                                    @Override
+                                    public void onResponse(Call<InsertCart> call, Response<InsertCart> response) {
+                                        dialog.dismiss();
+                                        String Status = response.body().getStatus();
+                                        Toast.makeText(ProductDetailsActivity.this, "Added to cart", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<InsertCart> call, Throwable t) {
+                                        Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                             else
                             {
@@ -415,8 +480,26 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         pd_size_name = "";
                         if(statusid.equals("Available"))
                         {
-                            /*GetInsertCart insertCart = new GetInsertCart(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
-                            insertCart.execute();*/
+                            final ProgressDialog dialog = new ProgressDialog(ProductDetailsActivity.this);
+                            dialog.setMessage("Loading...");
+                            dialog.setCancelable(true);
+                            dialog.show();
+
+                            Call<InsertCart> InsertCartCall = productDataService.getInsertCartData(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
+                            InsertCartCall.enqueue(new Callback<InsertCart>() {
+                                @Override
+                                public void onResponse(Call<InsertCart> call, Response<InsertCart> response) {
+                                    dialog.dismiss();
+                                    String Status = response.body().getStatus();
+                                    Toast.makeText(ProductDetailsActivity.this, "Added to cart", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onFailure(Call<InsertCart> call, Throwable t) {
+                                    Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                         }
                         else
                         {
@@ -438,9 +521,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
         txtProduct_view_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent i = new Intent(ProductDetailsActivity.this,SubCategoryActivity.class);
+                Intent i = new Intent(ProductDetailsActivity.this,SubCategoryActivity.class);
                 i.putExtra("category_id",cate_id);
-                startActivity(i);*/
+                startActivity(i);
             }
         });
 
@@ -459,8 +542,22 @@ public class ProductDetailsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager manager1 = new GridLayoutManager(getApplicationContext(),1);
         rvPDInterestedProductList.setLayoutManager(manager1);
 
-        /*GetCategorylist categorylist = new GetCategorylist();
-        categorylist.execute();*/
+        Call<CategoryList> categoryListCall = productDataService.getCategoryData();
+        categoryListCall.enqueue(new Callback<CategoryList>() {
+            @Override
+            public void onResponse(Call<CategoryList> call, Response<CategoryList> response) {
+                CategoryListArray = response.body().getCategoryArrayList();
+                CategoryInterestedListAdapter categoryInterestedListAdapter = new CategoryInterestedListAdapter(ProductDetailsActivity.this,CategoryListArray);
+                rvPDInterestedProductList.setAdapter(categoryInterestedListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<CategoryList> call, Throwable t) {
+                Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        RecentviewListArray.clear();
 
         rvPDRecentView  = (RecyclerView)findViewById(R.id.rvPDRecentView);
         rvPDRecentView.setHasFixedSize(true);
@@ -468,8 +565,20 @@ public class ProductDetailsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager manager2 = new LinearLayoutManager(ProductDetailsActivity.this,LinearLayoutManager.HORIZONTAL,false);
         rvPDRecentView.setLayoutManager(manager2);
 
-        /*GetRecentView recentView = new GetRecentView();
-        recentView.execute();*/
+        Call<RecentViewList> recentViewListCall = productDataService.getRecentViewListData(ipAddress);
+        recentViewListCall.enqueue(new Callback<RecentViewList>() {
+            @Override
+            public void onResponse(Call<RecentViewList> call, Response<RecentViewList> response) {
+                RecentviewListArray = response.body().getRecentviewList();
+                RecentviewListAdapter recentviewListAdapter = new RecentviewListAdapter(ProductDetailsActivity.this,RecentviewListArray,ipAddress);
+                rvPDRecentView.setAdapter(recentviewListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<RecentViewList> call, Throwable t) {
+                Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

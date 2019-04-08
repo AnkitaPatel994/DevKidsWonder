@@ -10,9 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.iteration.devkidswonder.R;
-import com.iteration.devkidswonder.activity.HomeActivity;
 import com.iteration.devkidswonder.activity.SubCategoryActivity;
-import com.iteration.devkidswonder.model.Brand;
 import com.iteration.devkidswonder.model.Category;
 import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.squareup.picasso.Picasso;
@@ -21,21 +19,21 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.ViewHolder> {
+public class CategoryInterestedListAdapter extends RecyclerView.Adapter<CategoryInterestedListAdapter.ViewHolder> {
 
     Context context;
-    ArrayList<Brand> brandListArray;
+    ArrayList<Category> categoryListArray;
     View v;
 
-    public BrandListAdapter(Context context, ArrayList<Brand> brandListArray) {
+    public CategoryInterestedListAdapter(Context context, ArrayList<Category> categoryListArray) {
         this.context = context;
-        this.brandListArray = brandListArray;
+        this.categoryListArray = categoryListArray;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.brand_list, parent, false);
+                .inflate(R.layout.int_category_list, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
@@ -44,20 +42,20 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        final String Brand_id = brandListArray.get(position).getBrand_id();
-        String Brand_name = brandListArray.get(position).getBrand_name();
-        String Brand_img = brandListArray.get(position).getBrand_img();
+        final String category_id = categoryListArray.get(position).getCategory_id();
+        String category_title = categoryListArray.get(position).getCategory_title();
+        String category_img = categoryListArray.get(position).getCategory_img();
 
-        viewHolder.txtBrandName.setText(Brand_name);
+        viewHolder.txtcpProductCatName.setText(category_title);
 
-        Picasso.with(context).load(RetrofitInstance.BASE_URL +Brand_img).into(viewHolder.ivBrandImg);
+        Picasso.with(context).load(RetrofitInstance.BASE_URL +category_img).into(viewHolder.ivcpProductImg);
 
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, SubCategoryActivity.class);
-                i.putExtra("Brand_id",Brand_id);
+                i.putExtra("category_id",category_id);
                 context.startActivity(i);
             }
         });
@@ -65,19 +63,19 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
 
     @Override
     public int getItemCount() {
-        return 10;
+        return 4;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView ivBrandImg;
-        TextView txtBrandName;
+        ImageView ivcpProductImg;
+        TextView txtcpProductCatName;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            ivBrandImg = (ImageView)itemView.findViewById(R.id.ivBrandImg);
-            txtBrandName = (TextView)itemView.findViewById(R.id.txtBrandName);
+            ivcpProductImg = (ImageView) itemView.findViewById(R.id.ivcpProductImg);
+            txtcpProductCatName = (TextView)itemView.findViewById(R.id.txtcpProductCatName);
         }
     }
 }

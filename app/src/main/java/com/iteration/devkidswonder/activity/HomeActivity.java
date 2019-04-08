@@ -78,6 +78,10 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        categoryListArray.clear();
+        BrandListArray.clear();
+        BestSellingListArray.clear();
+
         session = new SessionManager(HomeActivity.this);
         flag = session.checkLogin();
 
@@ -123,6 +127,7 @@ public class HomeActivity extends AppCompatActivity
         @SuppressLint("WifiManagerLeak")
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
         ip_address = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+        Toast.makeText(HomeActivity.this, ip_address, Toast.LENGTH_SHORT).show();
 
         GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
@@ -247,7 +252,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<BestSellingList> call, Response<BestSellingList> response) {
                 BestSellingListArray = response.body().getBestSellingArrayList();
-                BestSellingProductListAdapter bestSellingProductListAdapter = new BestSellingProductListAdapter(HomeActivity.this,BestSellingListArray);
+                BestSellingProductListAdapter bestSellingProductListAdapter = new BestSellingProductListAdapter(HomeActivity.this,BestSellingListArray,ip_address);
                 rvSellerProduct.setAdapter(bestSellingProductListAdapter);
             }
 
