@@ -31,6 +31,14 @@
     <string name="title_activity_forgot_password">Forgot Password</string>
     <!--==== SignUp ===-->
 
+    <!--==== SignUp ===-->
+    <string name="Name">Enter Name</string>
+    <string name="Address">Enter Address</string>
+    <string name="City">Enter City</string>
+    <string name="Pincode">Enter Pincode</string>
+    <string name="MobileNo">Enter Mobile Number</string>
+    <!--==== SignUp ===-->
+
     <!--==== SignIn ===-->
     <string name="uname">Enter UserName</string>
     <string name="Psw">Enter Password</string>
@@ -47,5 +55,9 @@
     <string name="title_activity_category_list">CategoryListActivity</string>
     <string name="title_activity_brand_list">BrandListActivity</string>
     <string name="title_activity_sub_category">SubCategoryActivity</string>
+    <string name="title_activity_add_address">AddAddressActivity</string>
+    <string name="title_activity_add_shipping_address">AddShippingAddressActivity</string>
+    <string name="title_activity_delivery">DeliveryActivity</string>
+    <string name="title_activity_order_placed">OrderPlacedActivity</string>
 
 </resources>

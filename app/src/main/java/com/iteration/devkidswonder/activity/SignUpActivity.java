@@ -1,5 +1,6 @@
 package com.iteration.devkidswonder.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.iteration.devkidswonder.R;
-import com.iteration.devkidswonder.model.Customers;
+import com.iteration.devkidswonder.model.Message;
 import com.iteration.devkidswonder.network.GetProductDataService;
 import com.iteration.devkidswonder.network.RetrofitInstance;
 
@@ -69,27 +70,36 @@ public class SignUpActivity extends AppCompatActivity {
         btnReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String firstname = txtname.getText().toString().trim();
-                String lastname = txtlastname.getText().toString().trim();
-                String email = txtemail.getText().toString().trim();
-                String contact = txtmobile_no.getText().toString().trim();
-                String password = txtpassword.getText().toString().trim();
+                if (awesomeValidation.validate())
+                {
+                    String firstname = txtname.getText().toString().trim();
+                    String lastname = txtlastname.getText().toString().trim();
+                    String email = txtemail.getText().toString().trim();
+                    String contact = txtmobile_no.getText().toString().trim();
+                    String password = txtpassword.getText().toString().trim();
 
-                Call<Customers> customerCall = productDataService.getCustomerListData(firstname,lastname,email,contact,password);
-                customerCall.enqueue(new Callback<Customers>() {
-                    @Override
-                    public void onResponse(Call<Customers> call, Response<Customers> response) {
-                        String message = response.body().getMessage();
+                    final ProgressDialog dialog = new ProgressDialog(SignUpActivity.this);
+                    dialog.setMessage("Loading...");
+                    dialog.setCancelable(true);
+                    dialog.show();
 
-                        Toast.makeText(SignUpActivity.this,message , Toast.LENGTH_SHORT).show();
-                    }
+                    Call<Message> customerCall = productDataService.getCustomerListData(firstname,lastname,email,contact,password);
+                    customerCall.enqueue(new Callback<Message>() {
+                        @Override
+                        public void onResponse(Call<Message> call, Response<Message> response) {
+                            dialog.dismiss();
+                            String message = response.body().getMessage();
+                            Toast.makeText(SignUpActivity.this,message , Toast.LENGTH_SHORT).show();
+                            Intent i = new Intent(SignUpActivity.this,SignInActivity.class);
+                            startActivity(i);
+                        }
 
-                    @Override
-                    public void onFailure(Call<Customers> call, Throwable t) {
-                        Toast.makeText(SignUpActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+                        @Override
+                        public void onFailure(Call<Message> call, Throwable t) {
+                            Toast.makeText(SignUpActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
 

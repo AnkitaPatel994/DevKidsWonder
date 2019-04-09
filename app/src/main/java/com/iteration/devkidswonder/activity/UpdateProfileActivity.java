@@ -1,16 +1,24 @@
 package com.iteration.devkidswonder.activity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.model.Message;
+import com.iteration.devkidswonder.network.GetProductDataService;
+import com.iteration.devkidswonder.network.RetrofitInstance;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UpdateProfileActivity extends AppCompatActivity {
 
@@ -39,6 +47,61 @@ public class UpdateProfileActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
+
+        user_id = getIntent().getExtras().getString("user_id");
+        String firstname = getIntent().getExtras().getString("firstname");
+        String lastname = getIntent().getExtras().getString("lastname");
+        String email = getIntent().getExtras().getString("email");
+        String contact = getIntent().getExtras().getString("contact");
+        String address = getIntent().getExtras().getString("address");
+        String city = getIntent().getExtras().getString("city");
+        String zipcode = getIntent().getExtras().getString("zipcode");
+
+        update_fname.setText(firstname);
+        update_lastname.setText(lastname);
+        update_email.setText(email);
+        update_number.setText(contact);
+        update_address.setText(address);
+        update_city.setText(city);
+        update_pincode.setText(zipcode);
+
+        btnEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+                String firstname_e = update_fname.getText().toString();
+                String lastname_e = update_lastname.getText().toString();
+                String email_e = update_email.getText().toString();
+                String contact_e = update_number.getText().toString();
+                String address_e = update_address.getText().toString();
+                String city_e = update_city.getText().toString();
+                String zipcode_e = update_pincode.getText().toString();
+
+                final ProgressDialog dialog = new ProgressDialog(UpdateProfileActivity.this);
+                dialog.setMessage("Loading...");
+                dialog.setCancelable(true);
+                dialog.show();
+
+                Call<Message> EditCustomerCall = productDataService.getEditCustomerData(user_id,firstname_e,lastname_e,email_e,contact_e,address_e,city_e,zipcode_e);
+                EditCustomerCall.enqueue(new Callback<Message>() {
+                    @Override
+                    public void onResponse(Call<Message> call, Response<Message> response) {
+                        dialog.dismiss();
+                        String message = response.body().getMessage();
+                        Intent i = new Intent(UpdateProfileActivity.this,MyProfileActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Message> call, Throwable t) {
+                        Toast.makeText(UpdateProfileActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+
     }
 
     @Override

@@ -39,10 +39,7 @@ import com.iteration.devkidswonder.adapter.CategoryInterestedListAdapter;
 import com.iteration.devkidswonder.adapter.RecentviewListAdapter;
 import com.iteration.devkidswonder.model.Category;
 import com.iteration.devkidswonder.model.CategoryList;
-import com.iteration.devkidswonder.model.DeleteWishlist;
-import com.iteration.devkidswonder.model.InsertCart;
-import com.iteration.devkidswonder.model.InsertWishlist;
-import com.iteration.devkidswonder.model.OneProductWish;
+import com.iteration.devkidswonder.model.Message;
 import com.iteration.devkidswonder.model.Product;
 import com.iteration.devkidswonder.model.ProductImg;
 import com.iteration.devkidswonder.model.ProductImgList;
@@ -81,6 +78,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     ArrayList<String> productSizeListArray = new ArrayList<>();
     ArrayList<Category> CategoryListArray = new ArrayList<>();
     ArrayList<Product> RecentviewListArray = new ArrayList<>();
+    GetProductDataService productDataService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +103,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         HashMap<String,String> user = session.getUserDetails();
         user_id = user.get(SessionManager.user_id);
+
+        productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
         @SuppressLint("WifiManagerLeak")
         WifiManager wifiManager = (WifiManager)getSystemService(WIFI_SERVICE);
@@ -134,8 +134,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         tabIndicator = (TabLayout)findViewById(R.id.tabIndicator);
         tabIndicator.setupWithViewPager(vpPagerImgSlider);
-
-        final GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
         Call<ProductImgList> ProductImgListCall = productDataService.getProductImgListData(pro_id);
         ProductImgListCall.enqueue(new Callback<ProductImgList>() {
@@ -310,10 +308,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         ivPdWishRed.setVisibility(View.GONE);
         if (flag == 1)
         {
-            Call<OneProductWish> OneProductWishListCall = productDataService.getOneProductWishlistListData(user_id,pro_id);
-            OneProductWishListCall.enqueue(new Callback<OneProductWish>() {
+            Call<Message> OneProductWishListCall = productDataService.getOneProductWishlistListData(user_id,pro_id);
+            OneProductWishListCall.enqueue(new Callback<Message>() {
                 @Override
-                public void onResponse(Call<OneProductWish> call, Response<OneProductWish> response) {
+                public void onResponse(Call<Message> call, Response<Message> response) {
                     String status = response.body().getStatus();
                     if (status.equals("1"))
                     {
@@ -328,7 +326,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<OneProductWish> call, Throwable t) {
+                public void onFailure(Call<Message> call, Throwable t) {
+                    ivPdWishRed.setVisibility(View.GONE);
+                    ivPdWishBlack.setVisibility(View.VISIBLE);
                     Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -346,16 +346,16 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 {
                     if(ivPdWishRed.getVisibility() == View.VISIBLE )
                     {
-                        Call<DeleteWishlist> DeleteWishlistCall = productDataService.getDeleteWishlistData(user_id,pro_id);
-                        DeleteWishlistCall.enqueue(new Callback<DeleteWishlist>() {
+                        Call<Message> DeleteWishlistCall = productDataService.getDeleteWishlistData(user_id,pro_id);
+                        DeleteWishlistCall.enqueue(new Callback<Message>() {
                             @Override
-                            public void onResponse(Call<DeleteWishlist> call, Response<DeleteWishlist> response) {
+                            public void onResponse(Call<Message> call, Response<Message> response) {
                                 String message = response.body().getMessage();
                                 Toast.makeText(ProductDetailsActivity.this,message,Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
-                            public void onFailure(Call<DeleteWishlist> call, Throwable t) {
+                            public void onFailure(Call<Message> call, Throwable t) {
                                 Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -375,42 +375,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
                             else
                             {
                                 txtError.setVisibility(View.GONE);
-                                Call<InsertWishlist> InsertWishlistCall = productDataService.getInsertWishlistData(pd_user_id_wish,pd_pro_id_wish,pd_size_name_wish);
-                                InsertWishlistCall.enqueue(new Callback<InsertWishlist>() {
-                                    @Override
-                                    public void onResponse(Call<InsertWishlist> call, Response<InsertWishlist> response) {
-                                        String Status = response.body().getStatus();
-                                        Toast.makeText(ProductDetailsActivity.this, "Added to wishlist", Toast.LENGTH_SHORT).show();
-                                        ivPdWishRed.setVisibility(View.VISIBLE);
-                                        ivPdWishBlack.setVisibility(View.GONE);
-                                    }
+                                InsertWishlist(pd_user_id_wish,pd_pro_id_wish,pd_size_name_wish);
 
-                                    @Override
-                                    public void onFailure(Call<InsertWishlist> call, Throwable t) {
-                                        Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
                             }
                         }
                         else
                         {
                             txtError.setVisibility(View.GONE);
                             pd_size_name_wish = "";
-                            Call<InsertWishlist> InsertWishlistCall = productDataService.getInsertWishlistData(pd_user_id_wish,pd_pro_id_wish,pd_size_name_wish);
-                            InsertWishlistCall.enqueue(new Callback<InsertWishlist>() {
-                                @Override
-                                public void onResponse(Call<InsertWishlist> call, Response<InsertWishlist> response) {
-                                    String Status = response.body().getStatus();
-                                    Toast.makeText(ProductDetailsActivity.this, "Added to wishlist", Toast.LENGTH_SHORT).show();
-                                    ivPdWishRed.setVisibility(View.VISIBLE);
-                                    ivPdWishBlack.setVisibility(View.GONE);
-                                }
-
-                                @Override
-                                public void onFailure(Call<InsertWishlist> call, Throwable t) {
-                                    Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            InsertWishlist(pd_user_id_wish,pd_pro_id_wish,pd_size_name_wish);
 
                         }
 
@@ -447,25 +420,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                             txtError.setVisibility(View.GONE);
                             if(txtPDStatusId.getText().toString().equals("Available"))
                             {
-                                final ProgressDialog dialog = new ProgressDialog(ProductDetailsActivity.this);
-                                dialog.setMessage("Loading...");
-                                dialog.setCancelable(true);
-                                dialog.show();
+                                InsertCart(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
 
-                                Call<InsertCart> InsertCartCall = productDataService.getInsertCartData(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
-                                InsertCartCall.enqueue(new Callback<InsertCart>() {
-                                    @Override
-                                    public void onResponse(Call<InsertCart> call, Response<InsertCart> response) {
-                                        dialog.dismiss();
-                                        String Status = response.body().getStatus();
-                                        Toast.makeText(ProductDetailsActivity.this, "Added to cart", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<InsertCart> call, Throwable t) {
-                                        Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
                             }
                             else
                             {
@@ -480,26 +436,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         pd_size_name = "";
                         if(statusid.equals("Available"))
                         {
-                            final ProgressDialog dialog = new ProgressDialog(ProductDetailsActivity.this);
-                            dialog.setMessage("Loading...");
-                            dialog.setCancelable(true);
-                            dialog.show();
-
-                            Call<InsertCart> InsertCartCall = productDataService.getInsertCartData(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
-                            InsertCartCall.enqueue(new Callback<InsertCart>() {
-                                @Override
-                                public void onResponse(Call<InsertCart> call, Response<InsertCart> response) {
-                                    dialog.dismiss();
-                                    String Status = response.body().getStatus();
-                                    Toast.makeText(ProductDetailsActivity.this, "Added to cart", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onFailure(Call<InsertCart> call, Throwable t) {
-                                    Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
+                            InsertCart(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
                         }
                         else
                         {
@@ -582,6 +519,46 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     }
 
+    private void InsertCart(String pd_user_id, String pd_pro_id, String pd_quantity, String pd_pro_price, String pd_size_name) {
+        final ProgressDialog dialog = new ProgressDialog(ProductDetailsActivity.this);
+        dialog.setMessage("Loading...");
+        dialog.setCancelable(true);
+        dialog.show();
+
+        Call<Message> InsertCartCall = productDataService.getInsertCartData(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
+        InsertCartCall.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                dialog.dismiss();
+                String Status = response.body().getStatus();
+                Toast.makeText(ProductDetailsActivity.this, "Added to cart", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void InsertWishlist(String pd_user_id_wish, String pd_pro_id_wish, String pd_size_name_wish) {
+        Call<Message> InsertWishlistCall = productDataService.getInsertWishlistData(pd_user_id_wish,pd_pro_id_wish,pd_size_name_wish);
+        InsertWishlistCall.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                String Status = response.body().getStatus();
+                Toast.makeText(ProductDetailsActivity.this, "Added to wishlist", Toast.LENGTH_SHORT).show();
+                ivPdWishRed.setVisibility(View.VISIBLE);
+                ivPdWishBlack.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -635,7 +612,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             productSizeListArray.clear();
             final String s_id = productSizeArrayList.get(i).getS_id();
             String s_pro_id = productSizeArrayList.get(i).getS_pro_id();
-            final String size_name = productSizeArrayList.get(i).getSize();
+            final String size_name = productSizeArrayList.get(i).getSize_name();
             final String size_qty = productSizeArrayList.get(i).getSize_qty();
             final String size_price = productSizeArrayList.get(i).getSize_price();
             final String size_discount = productSizeArrayList.get(i).getSize_discount();

@@ -1,11 +1,13 @@
 package com.iteration.devkidswonder.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,12 +16,22 @@ import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.model.CategoryList;
+import com.iteration.devkidswonder.model.Login;
+import com.iteration.devkidswonder.network.GetProductDataService;
+import com.iteration.devkidswonder.network.RetrofitInstance;
+import com.iteration.devkidswonder.network.SessionManager;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignInActivity extends AppCompatActivity {
 
     EditText uname,password;
     Button forgotpass,btnLogin,signUp;
     AwesomeValidation awesomeValidation;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +39,8 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        session = new SessionManager(SignInActivity.this);
 
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
@@ -36,7 +50,7 @@ public class SignInActivity extends AppCompatActivity {
         btnLogin=(Button)findViewById(R.id.btnLogin);
         signUp=(Button)findViewById(R.id.btnSignUp);
 
-        awesomeValidation.addValidation(this, R.id.etUserNameLogin, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", R.string.uname);
+        awesomeValidation.addValidation(this, R.id.etUserNameLogin, Patterns.EMAIL_ADDRESS, R.string.uname);
         awesomeValidation.addValidation(this, R.id.etPasswordLogin, "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})", R.string.Psw);
 
         forgotpass.setOnClickListener(new View.OnClickListener() {
@@ -55,17 +69,54 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
+        final GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(uname.getText().toString().equals("") && password.getText().toString().equals(""))
+                if(awesomeValidation.validate())
                 {
-                    Toast.makeText(SignInActivity.this,"Enter valid Username.",Toast.LENGTH_SHORT).show();
+                    String email = uname.getText().toString();
+                    String pass = password.getText().toString();
+
+                    final ProgressDialog dialog = new ProgressDialog(SignInActivity.this);
+                    dialog.setMessage("Loading...");
+                    dialog.setCancelable(true);
+                    dialog.show();
+
+                    Call<Login> LoginListCall = productDataService.getLoginData(email,pass);
+                    LoginListCall.enqueue(new Callback<Login>() {
+                        @Override
+                        public void onResponse(Call<Login> call, Response<Login> response) {
+                            dialog.dismiss();
+                            String status = response.body().getStatus();
+                            String message = response.body().getMessage();
+                            String UserId = response.body().getId();
+                            String Firstname = response.body().getFirstname();
+                            String Lastname = response.body().getLastname();
+                            String UserName = Firstname+" "+Lastname;
+                            if(status.equals("1"))
+                            {
+                                session.createLoginSession(UserId,UserName);
+                                Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                                startActivity(i);
+                                finish();
+                            }
+                            else
+                            {
+                                uname.setText("");
+                                password.setText("");
+                                Toast.makeText(SignInActivity.this,message,Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Login> call, Throwable t) {
+                            Toast.makeText(SignInActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-                else if (password.getText().toString().equals(""))
-                {
-                    Toast.makeText(SignInActivity.this,"Enter valid Password.",Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
     }

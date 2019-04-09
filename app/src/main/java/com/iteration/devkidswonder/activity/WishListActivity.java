@@ -4,8 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -20,11 +19,22 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.adapter.WishListAdapter;
+import com.iteration.devkidswonder.model.Wishlist;
+import com.iteration.devkidswonder.model.WishlistList;
+import com.iteration.devkidswonder.network.GetProductDataService;
+import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.iteration.devkidswonder.network.SessionManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WishListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,7 +44,7 @@ public class WishListActivity extends AppCompatActivity
     RecyclerView rvProductWishlist;
     LinearLayout llWishlistEmpty;
     String user_id;
-    String ip_address;
+    ArrayList<Wishlist> wishListProductListArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +57,11 @@ public class WishListActivity extends AppCompatActivity
         flag = session.checkLogin();
 
         HashMap<String,String> user = session.getUserDetails();
+        user_id = user.get(SessionManager.user_id);
         String user_name = user.get(SessionManager.user_name);
+
+        wishListProductListArray.clear();
+        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -92,6 +106,37 @@ public class WishListActivity extends AppCompatActivity
             rvProductWishlist.setVisibility(View.GONE);
         }
 
+        rvProductWishlist.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
+        rvProductWishlist.setLayoutManager(manager);
+
+        Call<WishlistList> WishlistListCall = productDataService.getWishlistData(user_id);
+        WishlistListCall.enqueue(new Callback<WishlistList>() {
+            @Override
+            public void onResponse(Call<WishlistList> call, Response<WishlistList> response) {
+                String status = response.body().getStatus();
+                wishListProductListArray = response.body().getWishlistList();
+                if (status.equals("1"))
+                {
+                    WishListAdapter wishListAdapter = new WishListAdapter(WishListActivity.this,wishListProductListArray,user_id);
+                    rvProductWishlist.setAdapter(wishListAdapter);
+                    llWishlistEmpty.setVisibility(View.GONE);
+                    rvProductWishlist.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    llWishlistEmpty.setVisibility(View.VISIBLE);
+                    rvProductWishlist.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<WishlistList> call, Throwable t) {
+                Toast.makeText(WishListActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         Button btnEmptyWhishlist = (Button)findViewById(R.id.btnEmptyWhishlist);
         btnEmptyWhishlist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +155,11 @@ public class WishListActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
+        Intent i = new Intent(WishListActivity.this,HomeActivity.class);
+        startActivity(i);
+        finishAffinity();
+
     }
 
     @Override
@@ -154,7 +204,7 @@ public class WishListActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_order)
         {
-            Intent i = new Intent(getApplicationContext(),OrderActivity.class);
+            Intent i = new Intent(getApplicationContext(), MyOrderActivity.class);
             startActivity(i);
         }
         else if (id == R.id.nav_rate)

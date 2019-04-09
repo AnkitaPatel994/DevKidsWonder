@@ -14,13 +14,33 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".activity.OrderPlacedActivity"
+            android:label="@string/title_activity_order_placed"
+            android:theme="@style/AppTheme.ActionBar"></activity>
+        <activity
+            android:name=".activity.OrderActivity"
+            android:label="@string/title_activity_order"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".activity.DeliveryActivity"
+            android:label="@string/title_activity_delivery"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".activity.AddShippingAddressActivity"
+            android:label="@string/title_activity_add_shipping_address"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".activity.AddAddressActivity"
+            android:label="@string/title_activity_add_address"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
             android:name=".activity.SubCategoryActivity"
             android:label="@string/title_activity_sub_category"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ChangePasswordActivity"
             android:label="@string/title_activity_change_password"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".activity.UpdateProfileActivity"
             android:label="@string/title_activity_update_profile"
@@ -30,7 +50,7 @@
             android:label="@string/title_activity_my_profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.OrderActivity"
+            android:name=".activity.MyOrderActivity"
             android:label="@string/title_activity_order"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

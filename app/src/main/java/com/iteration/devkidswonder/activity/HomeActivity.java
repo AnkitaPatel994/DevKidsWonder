@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,7 +21,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,7 +65,7 @@ public class HomeActivity extends AppCompatActivity
     ArrayList<Brand> BrandListArray = new ArrayList<>();
     ArrayList<Product> BestSellingListArray = new ArrayList<>();
 
-   SessionManager session;
+    SessionManager session;
     int flag = 0;
     String ip_address;
 
@@ -127,7 +125,6 @@ public class HomeActivity extends AppCompatActivity
         @SuppressLint("WifiManagerLeak")
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
         ip_address = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-        Toast.makeText(HomeActivity.this, ip_address, Toast.LENGTH_SHORT).show();
 
         GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
@@ -272,6 +269,7 @@ public class HomeActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        finishAffinity();
     }
 
     @Override
@@ -320,7 +318,7 @@ public class HomeActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_order)
         {
-            Intent i = new Intent(getApplicationContext(),OrderActivity.class);
+            Intent i = new Intent(getApplicationContext(), MyOrderActivity.class);
             startActivity(i);
         }
         else if (id == R.id.nav_rate)

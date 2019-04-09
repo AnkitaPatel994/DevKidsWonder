@@ -1,9 +1,10 @@
 package com.iteration.devkidswonder.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,11 +17,19 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.model.Customer;
+import com.iteration.devkidswonder.network.GetProductDataService;
+import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.iteration.devkidswonder.network.SessionManager;
 
 import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,6 +52,7 @@ public class MyProfileActivity extends AppCompatActivity
         flag = session.checkLogin();
 
         HashMap<String,String> user = session.getUserDetails();
+        user_id = user.get(SessionManager.user_id);
         String user_name = user.get(SessionManager.user_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -60,24 +70,24 @@ public class MyProfileActivity extends AppCompatActivity
         if (flag == 1)
         {
             txt_login.setText(user_name);
-            nav_header_ll.setOnClickListener(new View.OnClickListener() {
+            /*nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(MyProfileActivity.this,MyProfileActivity.class);
                     startActivity(i);
                 }
-            });
+            });*/
         }
         else if (flag == 0)
         {
             txt_login.setText("Login / Register");
-            nav_header_ll.setOnClickListener(new View.OnClickListener() {
+            /*nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(MyProfileActivity.this,SignInActivity.class);
                     startActivity(i);
                 }
-            });
+            });*/
         }
 
         txtprofilename = (TextView) findViewById(R.id.myprofile_name);
@@ -94,6 +104,41 @@ public class MyProfileActivity extends AppCompatActivity
                 Intent i = new Intent(MyProfileActivity.this,HomeActivity.class);
                 startActivity(i);
                 finish();
+            }
+        });
+        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+        Call<Customer> customerCall = productDataService.getCustomerData(user_id);
+        customerCall.enqueue(new Callback<Customer>() {
+            @Override
+            public void onResponse(Call<Customer> call, Response<Customer> response) {
+                String id = response.body().getId();
+                firstname = response.body().getFirstname();
+                lastname = response.body().getLastname();
+                email = response.body().getEmail();
+                contact = response.body().getContact();
+                address = response.body().getAddress();
+                city = response.body().getCity();
+                zipcode = response.body().getZipcode();
+
+                txtprofilename.setText(firstname + " " + lastname);
+                txtprofileemail.setText(email);
+                txtprofilemobileno.setText(contact);
+
+                if (address.equals(""))
+                {
+                    llHomeAddress.setVisibility(View.GONE);
+                }
+                else
+                {
+                    llHomeAddress.setVisibility(View.VISIBLE);
+                    txtprofileaddress.setText(address + "," + city + "," + zipcode);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Customer> call, Throwable t) {
+                Toast.makeText(MyProfileActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -117,14 +162,26 @@ public class MyProfileActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.menu_editprofile)
+        {
+            Intent i = new Intent(getApplicationContext(),UpdateProfileActivity.class);
+            i.putExtra("user_id",user_id);
+            i.putExtra("firstname",firstname);
+            i.putExtra("lastname",lastname);
+            i.putExtra("email",email);
+            i.putExtra("contact",contact);
+            i.putExtra("address",address);
+            i.putExtra("city",city);
+            i.putExtra("zipcode",zipcode);
+            startActivity(i);
+        }
+        else if (id == R.id.menu_changePassword)
+        {
+            Intent i = new Intent(getApplicationContext(),ChangePasswordActivity.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
@@ -136,22 +193,62 @@ public class MyProfileActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_home)
+        {
+            Intent i = new Intent(getApplicationContext(),HomeActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_cart)
+        {
+            Intent i = new Intent(getApplicationContext(),CartActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_wishlist)
+        {
+            Intent i = new Intent(getApplicationContext(),WishListActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_order)
+        {
+            Intent i = new Intent(getApplicationContext(), MyOrderActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_rate)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_share)
+        {
+            Intent i=new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            String body="https://play.google.com/store/apps/details?id=com.iteration.devkidswonder";
+            i.putExtra(Intent.EXTRA_SUBJECT,body);
+            i.putExtra(Intent.EXTRA_TEXT,body);
+            startActivity(Intent.createChooser(i,"Share using"));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private boolean MyStartActivity(Intent i) {
+        try
+        {
+            startActivity(i);
+            return true;
+        }
+        catch (ActivityNotFoundException e)
+        {
+            return false;
+        }
     }
 }

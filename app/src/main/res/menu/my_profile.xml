@@ -2,8 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:id="@+id/menu_changePassword"
+        android:icon="@drawable/ic_change_password"
+        android:title="Change Password"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_editprofile"
+        android:icon="@drawable/edit_profile_icon"
+        android:title="Edit"
+        app:showAsAction="ifRoom" />
 </menu>

@@ -6,62 +6,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.OrderActivity"
+    tools:context=".activity.DeliveryActivity"
     android:orientation="vertical"
-    tools:showIn="@layout/activity_order">
+    tools:showIn="@layout/activity_delivery">
 
     <ScrollView
+        android:layout_above="@+id/btnPlaceOrder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/btnContinuesOrder">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/txtDeliveryPersonName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:background="@color/colorWhite"
-                android:orientation="vertical">
+                android:layout_weight="1"
+                android:text="xyz"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Payment Method"
-                    android:textColor="@color/colorGreyDark"
-                    android:textSize="17sp" />
+            <TextView
+                android:id="@+id/txtDeliveryPersonAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="xyz"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="17sp" />
 
-                <RadioGroup
-                    android:id="@+id/rgPaymentMethod"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+            <Button
+                android:id="@+id/btnDeliveryChangeAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorTeal"
+                android:text="Change Address"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp" />
 
-                    <RadioButton
-                        android:id="@+id/rbCashonDelivery"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="Cash on Delivery" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorDivider"/>
 
-                    <RadioButton
-                        android:id="@+id/rbCreditCard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Credit Card" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvOrderList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                    <RadioButton
-                        android:id="@+id/rbDebitCard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Debit Card" />
-
-                </RadioGroup>
-
-            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorDivider"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,20 +109,12 @@
                         android:textSize="17sp" />
 
                     <TextView
+                        android:id="@+id/txtOCartPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="@string/RS"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="17sp" />
-                    <TextView
-                        android:id="@+id/txtConPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:text="199/-"
-                        android:layout_marginLeft="2dp"
+                        android:text="Rs. 199/-"
                         android:textColor="@color/colorBlack"
                         android:textSize="17sp" />
 
@@ -135,21 +137,12 @@
                         android:textSize="17sp" />
 
                     <TextView
+                        android:id="@+id/txtOShippingPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="right"
-                        android:text="@string/RS"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/txtConShippingPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:text="00/-"
-                        android:layout_marginLeft="2dp"
+                        android:text="FREE"
                         android:textColor="@color/colorBlack"
                         android:textSize="17sp" />
 
@@ -175,7 +168,7 @@
                         android:textSize="17sp" />
 
                     <TextView
-                        android:id="@+id/txtConTotalAmount"
+                        android:id="@+id/txtOTotalAmount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -188,18 +181,39 @@
 
             </LinearLayout>
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="8dp"
+                android:drawableLeft="@drawable/shield"
+                android:drawablePadding="10dp"
+                android:gravity="center"
+                android:paddingLeft="20sp"
+                android:paddingRight="40dp"
+                android:text="Safe and secure payment 100% Authentic Products"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/kids_and_baby_shopping" />
+
         </LinearLayout>
     </ScrollView>
 
     <Button
-        android:id="@+id/btnContinuesOrder"
+        android:id="@+id/btnPlaceOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F86E6E"
-        android:text="Continues Order"
+        android:background="@color/colorRed"
+        android:text="Place Order"
+        android:textAllCaps="false"
         android:layout_alignParentBottom="true"
         android:textColor="@color/colorWhite"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textSize="18sp" />
 
 </RelativeLayout>

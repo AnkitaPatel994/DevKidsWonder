@@ -2,12 +2,16 @@ package com.iteration.devkidswonder.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DeleteWishlist {
+import java.util.ArrayList;
+
+public class CartList {
 
     @SerializedName("status")
     private String status;
     @SerializedName("message")
     private String message;
+    @SerializedName("cart")
+    private ArrayList<Cart> cartList;
 
     public String getStatus() {
         return status;
@@ -23,5 +27,13 @@ public class DeleteWishlist {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public ArrayList<Cart> getCartList() {
+        return cartList;
+    }
+
+    public void setCartList(ArrayList<Cart> cartList) {
+        this.cartList = cartList;
     }
 }

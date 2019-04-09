@@ -4,8 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,43 +12,29 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
-import com.iteration.devkidswonder.adapter.CategoryAllListAdapter;
-import com.iteration.devkidswonder.model.Category;
-import com.iteration.devkidswonder.model.CategoryList;
-import com.iteration.devkidswonder.network.GetProductDataService;
-import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.iteration.devkidswonder.network.SessionManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class CategoryListActivity extends AppCompatActivity
+public class MyOrderActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    RecyclerView rvAllCategoryList;
-    ArrayList<Category> CatListArray = new ArrayList<>();
     SessionManager session;
     int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_list);
+        setContentView(R.layout.activity_my_order);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        session = new SessionManager(CategoryListActivity.this);
+        session = new SessionManager(MyOrderActivity.this);
         flag = session.checkLogin();
 
         HashMap<String,String> user = session.getUserDetails();
@@ -75,7 +59,7 @@ public class CategoryListActivity extends AppCompatActivity
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(CategoryListActivity.this,MyProfileActivity.class);
+                    Intent i = new Intent(MyOrderActivity.this,MyProfileActivity.class);
                     startActivity(i);
                 }
             });
@@ -86,37 +70,11 @@ public class CategoryListActivity extends AppCompatActivity
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(CategoryListActivity.this,SignInActivity.class);
+                    Intent i = new Intent(MyOrderActivity.this,SignInActivity.class);
                     startActivity(i);
                 }
             });
         }
-
-        rvAllCategoryList = (RecyclerView)findViewById(R.id.rvAllCategoryList);
-        rvAllCategoryList.setHasFixedSize(true);
-
-        RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),1);
-        rvAllCategoryList.setLayoutManager(manager);
-
-        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
-
-        Call<CategoryList> categoryListCall = productDataService.getCategoryData();
-
-        categoryListCall.enqueue(new Callback<CategoryList>() {
-            @Override
-            public void onResponse(Call<CategoryList> call, Response<CategoryList> response) {
-                CatListArray = response.body().getCategoryArrayList();
-                CategoryAllListAdapter categoryAllListAdapter = new CategoryAllListAdapter(CategoryListActivity.this,CatListArray);
-                rvAllCategoryList.setAdapter(categoryAllListAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<CategoryList> call, Throwable t) {
-                Toast.makeText(CategoryListActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
     }
 
     @Override
@@ -130,26 +88,13 @@ public class CategoryListActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.menu_search)
-        {
-
-        }
-        else if (id == R.id.menu_cart)
-        {
-            Intent i = new Intent(getApplicationContext(),CartActivity.class);
-            startActivity(i);
-        }
+        //noinspection SimplifiableIfStatement
 
         return super.onOptionsItemSelected(item);
     }
@@ -173,11 +118,6 @@ public class CategoryListActivity extends AppCompatActivity
         else if (id == R.id.nav_wishlist)
         {
             Intent i = new Intent(getApplicationContext(),WishListActivity.class);
-            startActivity(i);
-        }
-        else if (id == R.id.nav_order)
-        {
-            Intent i = new Intent(getApplicationContext(), MyOrderActivity.class);
             startActivity(i);
         }
         else if (id == R.id.nav_rate)

@@ -8,8 +8,8 @@ public class ProductSize {
     private String s_id;
     @SerializedName("s_pro_id")
     private String s_pro_id;
-    @SerializedName("size")
-    private String size;
+    @SerializedName("size_name")
+    private String size_name;
     @SerializedName("size_qty")
     private String size_qty;
     @SerializedName("size_price")
@@ -19,10 +19,10 @@ public class ProductSize {
     @SerializedName("size_chart_img")
     private String size_chart_img;
 
-    public ProductSize(String s_id, String s_pro_id, String size, String size_qty, String size_price, String size_discount, String size_chart_img) {
+    public ProductSize(String s_id, String s_pro_id, String size_name, String size_qty, String size_price, String size_discount, String size_chart_img) {
         this.s_id = s_id;
         this.s_pro_id = s_pro_id;
-        this.size = size;
+        this.size_name = size_name;
         this.size_qty = size_qty;
         this.size_price = size_price;
         this.size_discount = size_discount;
@@ -45,12 +45,12 @@ public class ProductSize {
         this.s_pro_id = s_pro_id;
     }
 
-    public String getSize() {
-        return size;
+    public String getSize_name() {
+        return size_name;
     }
 
-    public void setSize(String size) {
-        this.size = size;
+    public void setSize(String size_name) {
+        this.size_name = size_name;
     }
 
     public String getSize_qty() {

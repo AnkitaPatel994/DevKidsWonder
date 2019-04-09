@@ -2,12 +2,10 @@ package com.iteration.devkidswonder.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Customers {
-
-   @SerializedName("status")
+public class Message {
+    @SerializedName("status")
     private String status;
-
-   @SerializedName("message")
+    @SerializedName("message")
     private String message;
 
     public String getStatus() {
@@ -25,4 +23,5 @@ public class Customers {
     public void setMessage(String message) {
         this.message = message;
     }
+
 }

@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.activity.ProductDetailsActivity;
-import com.iteration.devkidswonder.model.InsertRecentViewProp;
+import com.iteration.devkidswonder.model.Message;
 import com.iteration.devkidswonder.model.Product;
 import com.iteration.devkidswonder.network.GetProductDataService;
 import com.iteration.devkidswonder.network.RetrofitInstance;
@@ -83,16 +83,16 @@ public class RecentviewListAdapter extends RecyclerView.Adapter<RecentviewListAd
             public void onClick(View v) {
 
                 GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
-                Call<InsertRecentViewProp> insertRecentViewPropCall = productDataService.getInsertRecentViewPropData(pro_id,ipAddress);
-                insertRecentViewPropCall.enqueue(new Callback<InsertRecentViewProp>() {
+                Call<Message> insertRecentViewPropCall = productDataService.getInsertRecentViewPropData(pro_id,ipAddress);
+                insertRecentViewPropCall.enqueue(new Callback<Message>() {
                     @Override
-                    public void onResponse(Call<InsertRecentViewProp> call, Response<InsertRecentViewProp> response) {
+                    public void onResponse(Call<Message> call, Response<Message> response) {
                         String Message = response.body().getMessage();
                         Log.d("Message",Message);
                     }
 
                     @Override
-                    public void onFailure(Call<InsertRecentViewProp> call, Throwable t) {
+                    public void onFailure(Call<Message> call, Throwable t) {
                         Toast.makeText(context, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
                     }
                 });
