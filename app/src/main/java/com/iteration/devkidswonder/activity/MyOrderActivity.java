@@ -4,6 +4,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -15,17 +17,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
+import com.iteration.devkidswonder.adapter.MyOrderListAdapter;
+import com.iteration.devkidswonder.model.CategoryList;
+import com.iteration.devkidswonder.model.Order;
+import com.iteration.devkidswonder.model.OrderList;
+import com.iteration.devkidswonder.network.GetProductDataService;
+import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.iteration.devkidswonder.network.SessionManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyOrderActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     SessionManager session;
     int flag = 0;
+    RecyclerView rvMyOrder;
+    ArrayList<Order> MyOrderProductListArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +54,7 @@ public class MyOrderActivity extends AppCompatActivity
         flag = session.checkLogin();
 
         HashMap<String,String> user = session.getUserDetails();
+        final String user_id = user.get(SessionManager.user_id);
         String user_name = user.get(SessionManager.user_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -75,6 +92,32 @@ public class MyOrderActivity extends AppCompatActivity
                 }
             });
         }
+
+        rvMyOrder = (RecyclerView)findViewById(R.id.rvMyOrder);
+        rvMyOrder.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
+        rvMyOrder.setLayoutManager(manager);
+
+        /*GetMyOrder myOrder = new GetMyOrder(user_id);
+        myOrder.execute();*/
+
+        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+        Call<OrderList> OrderListCall = productDataService.getOrderListData(user_id);
+        OrderListCall.enqueue(new Callback<OrderList>() {
+            @Override
+            public void onResponse(Call<OrderList> call, Response<OrderList> response) {
+                MyOrderProductListArray = response.body().getOrderList();
+                MyOrderListAdapter myOrderListAdapter = new MyOrderListAdapter(MyOrderActivity.this, MyOrderProductListArray,user_id);
+                rvMyOrder.setAdapter(myOrderListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<OrderList> call, Throwable t) {
+                Toast.makeText(MyOrderActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override

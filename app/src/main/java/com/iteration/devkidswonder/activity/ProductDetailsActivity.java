@@ -36,13 +36,16 @@ import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.adapter.CategoryInterestedListAdapter;
+import com.iteration.devkidswonder.adapter.ProductListAdapter;
 import com.iteration.devkidswonder.adapter.RecentviewListAdapter;
+import com.iteration.devkidswonder.adapter.SimilarProductListAdapter;
 import com.iteration.devkidswonder.model.Category;
 import com.iteration.devkidswonder.model.CategoryList;
 import com.iteration.devkidswonder.model.Message;
 import com.iteration.devkidswonder.model.Product;
 import com.iteration.devkidswonder.model.ProductImg;
 import com.iteration.devkidswonder.model.ProductImgList;
+import com.iteration.devkidswonder.model.ProductList;
 import com.iteration.devkidswonder.model.ProductSize;
 import com.iteration.devkidswonder.model.ProductSizeList;
 import com.iteration.devkidswonder.model.RecentViewList;
@@ -78,6 +81,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     ArrayList<String> productSizeListArray = new ArrayList<>();
     ArrayList<Category> CategoryListArray = new ArrayList<>();
     ArrayList<Product> RecentviewListArray = new ArrayList<>();
+    ArrayList<Product> SimilarProductListArray = new ArrayList<>();
     GetProductDataService productDataService;
 
     @Override
@@ -97,6 +101,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         productSizeListArray.clear();
         CategoryListArray.clear();
+        SimilarProductListArray.clear();
+        RecentviewListArray.clear();
 
         session = new SessionManager(ProductDetailsActivity.this);
         flag = session.checkLogin();
@@ -115,7 +121,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         ProductImgNameArray.clear();
 
         rs = ProductDetailsActivity.this.getResources().getString(R.string.RS);
-        String id = getIntent().getExtras().getString("id");
+        final String id = getIntent().getExtras().getString("id");
         pro_id = getIntent().getExtras().getString("pro_id");
         cate_id = getIntent().getExtras().getString("cate_id");
         String pro_title = getIntent().getExtras().getString("pro_title");
@@ -459,7 +465,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(ProductDetailsActivity.this,SubCategoryActivity.class);
-                i.putExtra("category_id",cate_id);
+                i.putExtra("cate_id",cate_id);
+                i.putExtra("brand_id","*");
+                i.putExtra("min_price","*");
+                i.putExtra("max_price","*");
                 startActivity(i);
             }
         });
@@ -470,8 +479,20 @@ public class ProductDetailsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),2);
         rvPDAllView.setLayoutManager(manager);
 
-        /*GetProductlist productlist = new GetProductlist();
-        productlist.execute();*/
+        Call<ProductList> ProductListCall = productDataService.getProductListData(cate_id,"*","*","*");
+        ProductListCall.enqueue(new Callback<ProductList>() {
+            @Override
+            public void onResponse(Call<ProductList> call, Response<ProductList> response) {
+                SimilarProductListArray  = response.body().getProductList();
+                SimilarProductListAdapter productListAdapter = new SimilarProductListAdapter(ProductDetailsActivity.this,SimilarProductListArray ,ipAddress);
+                rvPDAllView.setAdapter(productListAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<ProductList> call, Throwable t) {
+                Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         rvPDInterestedProductList  = (RecyclerView)findViewById(R.id.rvPDInterestedProductList);
         rvPDInterestedProductList.setHasFixedSize(true);
@@ -576,7 +597,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         if (id == R.id.menu_search)
         {
-
+            Intent i = new Intent(getApplicationContext(),SearchActivity.class);
+            startActivity(i);
         }
         else if (id == R.id.menu_cart)
         {

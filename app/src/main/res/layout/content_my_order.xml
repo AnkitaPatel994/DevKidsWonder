@@ -11,7 +11,7 @@
     tools:showIn="@layout/app_bar_my_order">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_order_recyclerView"
+        android:id="@+id/rvMyOrder"
         android:background="#d6d6d6"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

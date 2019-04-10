@@ -59,5 +59,8 @@
     <string name="title_activity_add_shipping_address">AddShippingAddressActivity</string>
     <string name="title_activity_delivery">DeliveryActivity</string>
     <string name="title_activity_order_placed">OrderPlacedActivity</string>
+    <string name="title_activity_order_shipped">OrderShippedActivity</string>
+    <string name="title_activity_order_delivered">OrderDeliveredActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
 
 </resources>

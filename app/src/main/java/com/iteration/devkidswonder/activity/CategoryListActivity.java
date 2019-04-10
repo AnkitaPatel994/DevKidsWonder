@@ -143,7 +143,8 @@ public class CategoryListActivity extends AppCompatActivity
 
         if (id == R.id.menu_search)
         {
-
+            Intent i = new Intent(getApplicationContext(),SearchActivity.class);
+            startActivity(i);
         }
         else if (id == R.id.menu_cart)
         {

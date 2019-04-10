@@ -1,5 +1,6 @@
 package com.iteration.devkidswonder.network;
 
+import com.iteration.devkidswonder.model.OrderList;
 import com.iteration.devkidswonder.model.BestSellingList;
 import com.iteration.devkidswonder.model.BrandList;
 import com.iteration.devkidswonder.model.CartList;
@@ -9,6 +10,7 @@ import com.iteration.devkidswonder.model.Customer;
 import com.iteration.devkidswonder.model.Message;
 import com.iteration.devkidswonder.model.Login;
 import com.iteration.devkidswonder.model.ProductImgList;
+import com.iteration.devkidswonder.model.ProductList;
 import com.iteration.devkidswonder.model.ProductSizeList;
 import com.iteration.devkidswonder.model.RecentViewList;
 import com.iteration.devkidswonder.model.SliderList;
@@ -146,5 +148,16 @@ public interface GetProductDataService {
     @FormUrlEncoded
     @POST("json_android/wishlist.php")
     Call<WishlistList> getWishlistData(@Field("customer_id") String customer_id);
+
+    @FormUrlEncoded
+    @POST("json_android/orderlist.php")
+    Call<OrderList> getOrderListData(@Field("customer_id") String customer_id);
+
+    @FormUrlEncoded
+    @POST("json_android/product.php")
+    Call<ProductList> getProductListData(@Field("cate_id") String cate_id,
+                                         @Field("brand_id") String brand_id,
+                                         @Field("min_price") String min_price,
+                                         @Field("max_price") String max_price);
 
 }

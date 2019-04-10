@@ -6,13 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.SubCategoryActivity"
+    tools:context=".activity.SearchActivity"
     android:orientation="vertical"
-    tools:showIn="@layout/app_bar_sub_category">
+    android:id="@+id/llSearch"
+    tools:showIn="@layout/activity_search">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvSubCategoryProduct"
+        android:id="@+id/rvSearch"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

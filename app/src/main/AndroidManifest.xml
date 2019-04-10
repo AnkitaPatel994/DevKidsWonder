@@ -14,9 +14,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".activity.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:theme="@style/AppTheme.ActionBar"></activity>
+        <activity
+            android:name=".activity.OrderDeliveredActivity"
+            android:label="@string/title_activity_order_delivered"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".activity.OrderShippedActivity"
+            android:label="@string/title_activity_order_shipped"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
             android:name=".activity.OrderPlacedActivity"
             android:label="@string/title_activity_order_placed"
-            android:theme="@style/AppTheme.ActionBar"></activity>
+            android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".activity.OrderActivity"
             android:label="@string/title_activity_order"
@@ -91,7 +103,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ProductDetailsActivity"
-            android:label="@string/title_activity_product_details"
+            android:label=""
             android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".activity.HomeActivity"

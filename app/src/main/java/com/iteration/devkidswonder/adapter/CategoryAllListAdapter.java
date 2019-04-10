@@ -66,7 +66,10 @@ public class CategoryAllListAdapter extends RecyclerView.Adapter<CategoryAllList
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, SubCategoryActivity.class);
-                i.putExtra("category_id",category_id);
+                i.putExtra("cate_id",category_id);
+                i.putExtra("brand_id","*");
+                i.putExtra("min_price","*");
+                i.putExtra("max_price","*");
                 context.startActivity(i);
             }
         });
