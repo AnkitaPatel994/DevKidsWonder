@@ -55,12 +55,12 @@
     <string name="title_activity_category_list">CategoryListActivity</string>
     <string name="title_activity_brand_list">BrandListActivity</string>
     <string name="title_activity_sub_category">SubCategoryActivity</string>
-    <string name="title_activity_add_address">AddAddressActivity</string>
-    <string name="title_activity_add_shipping_address">AddShippingAddressActivity</string>
-    <string name="title_activity_delivery">DeliveryActivity</string>
-    <string name="title_activity_order_placed">OrderPlacedActivity</string>
-    <string name="title_activity_order_shipped">OrderShippedActivity</string>
-    <string name="title_activity_order_delivered">OrderDeliveredActivity</string>
-    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_add_address">Add Address</string>
+    <string name="title_activity_add_shipping_address">AddShippingAddress</string>
+    <string name="title_activity_delivery">Delivery</string>
+    <string name="title_activity_order_placed">Order Placed</string>
+    <string name="title_activity_order_shipped">Order Shipped</string>
+    <string name="title_activity_order_delivered">Order Delivered</string>
+    <string name="title_activity_search">Search</string>
 
 </resources>

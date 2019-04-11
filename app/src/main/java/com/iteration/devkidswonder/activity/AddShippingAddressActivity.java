@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.model.Message;
 import com.iteration.devkidswonder.network.GetProductDataService;
@@ -27,6 +29,7 @@ public class AddShippingAddressActivity extends AppCompatActivity {
     String user_id,firstname,lastname,email,contact,Address,City,Pincode,fullAddress,TotalCartPrice,ShippingPrice;
     EditText txtShippingName,txtShippingAddress,txtShippingCity,txtShippingPincode;
     Button btnShippingSave;
+    AwesomeValidation awesomeValidation;
     GetProductDataService productDataService;
 
     @Override
@@ -52,6 +55,8 @@ public class AddShippingAddressActivity extends AppCompatActivity {
         TotalCartPrice = getIntent().getExtras().getString("TotalCartPrice");
         ShippingPrice = getIntent().getExtras().getString("ShippingPrice");
 
+        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+
         txtShippingName = (EditText)findViewById(R.id.txtShippingName);
         txtShippingName.setText(firstname +" "+lastname);
         txtShippingAddress = (EditText)findViewById(R.id.txtShippingAddress);
@@ -60,43 +65,50 @@ public class AddShippingAddressActivity extends AppCompatActivity {
         btnShippingSave = (Button)findViewById(R.id.btnShippingSave);
 
         fullAddress = txtShippingAddress.getText().toString()+", "+txtShippingCity.getText().toString()+", "+txtShippingPincode.getText().toString();
+
+        awesomeValidation.addValidation(this, R.id.txtShippingAddress, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", R.string.Address);
+        awesomeValidation.addValidation(this, R.id.txtShippingCity, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", R.string.City);
+        awesomeValidation.addValidation(this, R.id.txtShippingPincode, "^[1-9][0-9]{5}$", R.string.Pincode);
+
         productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
         btnShippingSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (awesomeValidation.validate())
+                {
 
-                final ProgressDialog dialog = new ProgressDialog(AddShippingAddressActivity.this);
-                dialog.setMessage("Loading...");
-                dialog.setCancelable(true);
-                dialog.show();
+                    final ProgressDialog dialog = new ProgressDialog(AddShippingAddressActivity.this);
+                    dialog.setMessage("Loading...");
+                    dialog.setCancelable(true);
+                    dialog.show();
 
-                Call<Message> InsertShippingCall = productDataService.getInsertShippingData(user_id,fullAddress);
-                InsertShippingCall.enqueue(new Callback<Message>() {
-                    @Override
-                    public void onResponse(Call<Message> call, Response<Message> response) {
-                        dialog.dismiss();
-                        String message = response.body().getMessage();
-                        Toast.makeText(AddShippingAddressActivity.this, message, Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(AddShippingAddressActivity.this,DeliveryActivity.class);
-                        i.putExtra("user_id",user_id);
-                        i.putExtra("firstname",firstname);
-                        i.putExtra("lastname",lastname);
-                        i.putExtra("email",email);
-                        i.putExtra("contact",contact);
-                        i.putExtra("address",txtShippingAddress.getText().toString());
-                        i.putExtra("city",txtShippingCity.getText().toString());
-                        i.putExtra("pincode",txtShippingPincode.getText().toString());
-                        i.putExtra("TotalCartPrice",TotalCartPrice);
-                        i.putExtra("ShippingPrice",ShippingPrice);
-                        startActivity(i);
-                    }
+                    Call<Message> InsertShippingCall = productDataService.getInsertShippingData(user_id, fullAddress);
+                    InsertShippingCall.enqueue(new Callback<Message>() {
+                        @Override
+                        public void onResponse(Call<Message> call, Response<Message> response) {
+                            dialog.dismiss();
+                            String message = response.body().getMessage();
+                            Toast.makeText(AddShippingAddressActivity.this, message, Toast.LENGTH_SHORT).show();
+                            Intent i = new Intent(AddShippingAddressActivity.this, DeliveryActivity.class);
+                            i.putExtra("user_id", user_id);
+                            i.putExtra("firstname", firstname);
+                            i.putExtra("lastname", lastname);
+                            i.putExtra("email", email);
+                            i.putExtra("contact", contact);
+                            i.putExtra("address", txtShippingAddress.getText().toString());
+                            i.putExtra("city", txtShippingCity.getText().toString());
+                            i.putExtra("pincode", txtShippingPincode.getText().toString());
+                            i.putExtra("TotalCartPrice", TotalCartPrice);
+                            i.putExtra("ShippingPrice", ShippingPrice);
+                            startActivity(i);
+                        }
 
-                    @Override
-                    public void onFailure(Call<Message> call, Throwable t) {
-                        Toast.makeText(AddShippingAddressActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
+                        @Override
+                        public void onFailure(Call<Message> call, Throwable t) {
+                            Toast.makeText(AddShippingAddressActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
 
