@@ -62,5 +62,6 @@
     <string name="title_activity_order_shipped">OrderShippedActivity</string>
     <string name="title_activity_order_delivered">OrderDeliveredActivity</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_filter">FilterActivity</string>
 
 </resources>

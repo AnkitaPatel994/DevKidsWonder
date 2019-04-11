@@ -147,7 +147,7 @@ public class SubCategoryActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.sub_category, menu);
         return true;
     }
 
@@ -155,12 +155,17 @@ public class SubCategoryActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.menu_search)
+        if (id == R.id.menu_filter_pro)
+        {
+            Intent i = new Intent(getApplicationContext(),FilterActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.menu_search_pro)
         {
             Intent i = new Intent(getApplicationContext(),SearchActivity.class);
             startActivity(i);
         }
-        else if (id == R.id.menu_cart)
+        else if (id == R.id.menu_cart_pro)
         {
             Intent i = new Intent(getApplicationContext(),CartActivity.class);
             startActivity(i);
