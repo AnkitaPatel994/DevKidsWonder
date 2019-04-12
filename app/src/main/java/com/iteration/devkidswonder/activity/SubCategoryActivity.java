@@ -47,7 +47,7 @@ public class SubCategoryActivity extends AppCompatActivity
     ArrayList<Product> ProductListArray = new ArrayList<>();
     SessionManager session;
     int flag = 0;
-    String ip_address;
+    String ip_address,cate_id,brand_id,min_price,max_price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +104,10 @@ public class SubCategoryActivity extends AppCompatActivity
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
         ip_address = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
-        String cate_id = getIntent().getExtras().getString("cate_id");
-        String brand_id = getIntent().getExtras().getString("brand_id");
-        String min_price = getIntent().getExtras().getString("min_price");
-        String max_price = getIntent().getExtras().getString("max_price");
+        cate_id = getIntent().getExtras().getString("cate_id");
+        brand_id = getIntent().getExtras().getString("brand_id");
+        min_price = getIntent().getExtras().getString("min_price");
+        max_price = getIntent().getExtras().getString("max_price");
 
         GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
@@ -158,6 +158,8 @@ public class SubCategoryActivity extends AppCompatActivity
         if (id == R.id.menu_filter_pro)
         {
             Intent i = new Intent(getApplicationContext(),FilterActivity.class);
+            i.putExtra("cate_id",cate_id);
+            i.putExtra("brand_id",brand_id);
             startActivity(i);
         }
         else if (id == R.id.menu_search_pro)

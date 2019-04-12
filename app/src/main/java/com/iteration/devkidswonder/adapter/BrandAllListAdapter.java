@@ -45,7 +45,7 @@ public class BrandAllListAdapter extends RecyclerView.Adapter<BrandAllListAdapte
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
         final String Brand_id = brandAllListArray.get(position).getBrand_id();
-        String Brand_name = brandAllListArray.get(position).getBrand_name();
+        final String Brand_name = brandAllListArray.get(position).getBrand_name();
         String Brand_img = brandAllListArray.get(position).getBrand_img();
 
         viewHolder.txtAllCatName.setText(Brand_name);
@@ -67,7 +67,9 @@ public class BrandAllListAdapter extends RecyclerView.Adapter<BrandAllListAdapte
             public void onClick(View v) {
                 Intent i = new Intent(context, SubCategoryActivity.class);
                 i.putExtra("cate_id","*");
+                i.putExtra("cate_name","*");
                 i.putExtra("brand_id",Brand_id);
+                i.putExtra("brand_name",Brand_name);
                 i.putExtra("min_price","*");
                 i.putExtra("max_price","*");
                 context.startActivity(i);

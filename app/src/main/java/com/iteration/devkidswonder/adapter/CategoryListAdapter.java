@@ -42,7 +42,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
         final String category_id = categoryListArray.get(position).getCategory_id();
-        String category_title = categoryListArray.get(position).getCategory_title();
+        final String category_title = categoryListArray.get(position).getCategory_title();
         String category_img = categoryListArray.get(position).getCategory_img();
 
         viewHolder.txtCatName.setText(category_title);
@@ -55,7 +55,9 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             public void onClick(View v) {
                 Intent i = new Intent(context, SubCategoryActivity.class);
                 i.putExtra("cate_id",category_id);
+                i.putExtra("cate_name",category_title);
                 i.putExtra("brand_id","*");
+                i.putExtra("brand_name","*");
                 i.putExtra("min_price","*");
                 i.putExtra("max_price","*");
                 context.startActivity(i);
