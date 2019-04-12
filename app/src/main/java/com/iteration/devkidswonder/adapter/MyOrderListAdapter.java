@@ -2,6 +2,7 @@ package com.iteration.devkidswonder.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.activity.OrderDeliveredActivity;
 import com.iteration.devkidswonder.activity.OrderPlacedActivity;
 import com.iteration.devkidswonder.activity.OrderShippedActivity;
+import com.iteration.devkidswonder.activity.ProductDetailsActivity;
 import com.iteration.devkidswonder.model.Order;
 import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.squareup.picasso.Picasso;
@@ -45,6 +47,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
+        String rs = context.getResources().getString(R.string.RS);
         final String order_pro_id = myOrderProductListArray.get(position).getOrder_pro_id();
         String pro_title = myOrderProductListArray.get(position).getPro_title();
         String order_qty = myOrderProductListArray.get(position).getOrder_qty();
@@ -58,9 +61,12 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
         viewHolder.txtOTitle.setText(pro_title);
         viewHolder.txtOCartQty.setText(order_qty);
         viewHolder.txtOSizeCart.setText(order_size);
-        viewHolder.txtOProductPrice.setText(pro_price);
-        viewHolder.txtOCuttedPrice.setText(pro_oprice);
-        viewHolder.txtOProductOff.setText(pro_discount);
+        viewHolder.txtOProductPrice.setText(rs+pro_price);
+        viewHolder.txtOCuttedPrice.setText(rs+pro_oprice);
+        viewHolder.txtOProductOff.setText(pro_discount+"%off");
+
+        viewHolder.txtOCuttedPrice.setPaintFlags(viewHolder.txtOCuttedPrice.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+
 
         Picasso.with(context).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivProImg);
         viewHolder.btnTrackOrder.setVisibility(View.VISIBLE);
