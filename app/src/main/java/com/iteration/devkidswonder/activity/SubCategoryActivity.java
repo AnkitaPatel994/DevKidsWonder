@@ -47,7 +47,7 @@ public class SubCategoryActivity extends AppCompatActivity
     ArrayList<Product> ProductListArray = new ArrayList<>();
     SessionManager session;
     int flag = 0;
-    String ip_address,cate_id,brand_id,min_price,max_price;
+    String ip_address,cate_id,cate_name,brand_id,brand_name,min_price,max_price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,9 @@ public class SubCategoryActivity extends AppCompatActivity
         ip_address = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
         cate_id = getIntent().getExtras().getString("cate_id");
+        cate_name = getIntent().getExtras().getString("cate_name");
         brand_id = getIntent().getExtras().getString("brand_id");
+        brand_name = getIntent().getExtras().getString("brand_name");
         min_price = getIntent().getExtras().getString("min_price");
         max_price = getIntent().getExtras().getString("max_price");
 
@@ -121,9 +123,19 @@ public class SubCategoryActivity extends AppCompatActivity
         ProductListCall.enqueue(new Callback<ProductList>() {
             @Override
             public void onResponse(Call<ProductList> call, Response<ProductList> response) {
-                ProductListArray = response.body().getProductList();
-                ProductListAdapter productListAdapter = new ProductListAdapter(SubCategoryActivity.this,ProductListArray,ip_address);
-                rvSubCategoryProduct.setAdapter(productListAdapter);
+                String Status = response.body().getStatus();
+                String Message = response.body().getMessage();
+                if (Status.equals("1"))
+                {
+                    ProductListArray = response.body().getProductList();
+                    ProductListAdapter productListAdapter = new ProductListAdapter(SubCategoryActivity.this,ProductListArray,ip_address);
+                    rvSubCategoryProduct.setAdapter(productListAdapter);
+                }
+                else
+                {
+                    Toast.makeText(SubCategoryActivity.this, Message, Toast.LENGTH_SHORT).show();
+                }
+
             }
 
             @Override
@@ -159,7 +171,11 @@ public class SubCategoryActivity extends AppCompatActivity
         {
             Intent i = new Intent(getApplicationContext(),FilterActivity.class);
             i.putExtra("cate_id",cate_id);
+            i.putExtra("cate_name",cate_name);
             i.putExtra("brand_id",brand_id);
+            i.putExtra("brand_name",brand_name);
+            i.putExtra("min_price",min_price);
+            i.putExtra("max_price",max_price);
             startActivity(i);
         }
         else if (id == R.id.menu_search_pro)

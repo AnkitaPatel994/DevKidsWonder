@@ -13,6 +13,7 @@ public class SessionManager {
 
     public static final String user_id = "user_id";
     public static final String user_name = "user_name";
+    public static final String user_email = "user_email";
 
     // Sharedpref file name
     private static final String PREF_NAME = "userdetail";
@@ -35,7 +36,7 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    public void createLoginSession(String userId, String userName) {
+    public void createLoginSession(String userId, String userName, String userEmail) {
 
         try {
 
@@ -43,6 +44,7 @@ public class SessionManager {
             // Storing name in pref
             editor.putString(user_id, userId);
             editor.putString(user_name, userName);
+            editor.putString(user_email, userEmail);
 
             // commit changes
             editor.commit();
@@ -73,6 +75,7 @@ public class SessionManager {
 
         user.put(user_id, pref.getString(user_id, null));
         user.put(user_name, pref.getString(user_name, null));
+        user.put(user_email, pref.getString(user_email, null));
 
         return user;
     }
@@ -109,6 +112,7 @@ public class SessionManager {
     public void RemoveUserdata() {
         editor.remove(user_id);
         editor.remove(user_name);
+        editor.remove(user_email);
 
         editor.commit();
     }

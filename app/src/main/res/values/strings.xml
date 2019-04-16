@@ -37,6 +37,8 @@
     <string name="City">Enter City</string>
     <string name="Pincode">Enter Pincode</string>
     <string name="MobileNo">Enter Mobile Number</string>
+    <string name="old_password">Enter Old Password For Ex Xyz@123</string>
+    <string name="new_password">Enter New Password For Ex Xyz@123</string>
     <!--==== SignUp ===-->
 
     <!--==== SignIn ===-->

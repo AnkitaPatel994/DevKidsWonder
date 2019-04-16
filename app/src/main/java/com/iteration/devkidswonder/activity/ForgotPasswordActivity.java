@@ -6,11 +6,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.iteration.devkidswonder.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
@@ -31,14 +34,20 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        final AwesomeValidation awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         etEmail = (EditText)findViewById(R.id.etEmail);
+        awesomeValidation.addValidation(this, R.id.etEmail, Patterns.EMAIL_ADDRESS, R.string.Email);
         btnVerification = (Button)findViewById(R.id.btnVerification);
 
         btnVerification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ForgotPasswordActivity.this,OTPActivity.class);
-                startActivity(i);
+                if(awesomeValidation.validate())
+                {
+                    Intent i = new Intent(ForgotPasswordActivity.this,OTPActivity.class);
+                    startActivity(i);
+                }
+
             }
         });
     }

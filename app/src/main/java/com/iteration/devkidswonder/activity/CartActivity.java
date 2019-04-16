@@ -632,7 +632,7 @@ public class CartActivity extends AppCompatActivity
                 txtCartPrice.setText(cart_total);
                 if(Integer.parseInt(cart_total) <= 700)
                 {
-                    ShippingPrice = "60";
+                    ShippingPrice = "69";
                 }
                 else
                 {

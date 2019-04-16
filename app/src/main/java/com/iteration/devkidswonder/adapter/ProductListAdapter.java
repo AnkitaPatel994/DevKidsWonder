@@ -74,6 +74,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         viewHolder.txtsubprice.setText(rs+pro_price);
         viewHolder.txtsubcuttedprice.setText(rs+pro_oprice);
         viewHolder.txtsubcuttedprice.setPaintFlags(viewHolder.txtsubcuttedprice.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+        viewHolder.txtsuboffer.setText(pro_discount);
 
         Picasso.with(context).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivsubProductImg);
 

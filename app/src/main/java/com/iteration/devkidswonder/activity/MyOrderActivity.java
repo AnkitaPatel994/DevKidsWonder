@@ -80,6 +80,29 @@ public class MyOrderActivity extends AppCompatActivity
                     startActivity(i);
                 }
             });
+
+            rvMyOrder = (RecyclerView)findViewById(R.id.rvMyOrder);
+            rvMyOrder.setHasFixedSize(true);
+
+            RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
+            rvMyOrder.setLayoutManager(manager);
+
+            GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+            Call<OrderList> OrderListCall = productDataService.getOrderListData(user_id);
+            OrderListCall.enqueue(new Callback<OrderList>() {
+                @Override
+                public void onResponse(Call<OrderList> call, Response<OrderList> response) {
+                    MyOrderProductListArray = response.body().getOrderList();
+                    MyOrderListAdapter myOrderListAdapter = new MyOrderListAdapter(MyOrderActivity.this, MyOrderProductListArray,user_id);
+                    rvMyOrder.setAdapter(myOrderListAdapter);
+                }
+
+                @Override
+                public void onFailure(Call<OrderList> call, Throwable t) {
+                    Toast.makeText(MyOrderActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
         else if (flag == 0)
         {
@@ -93,30 +116,7 @@ public class MyOrderActivity extends AppCompatActivity
             });
         }
 
-        rvMyOrder = (RecyclerView)findViewById(R.id.rvMyOrder);
-        rvMyOrder.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
-        rvMyOrder.setLayoutManager(manager);
-
-        /*GetMyOrder myOrder = new GetMyOrder(user_id);
-        myOrder.execute();*/
-
-        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
-        Call<OrderList> OrderListCall = productDataService.getOrderListData(user_id);
-        OrderListCall.enqueue(new Callback<OrderList>() {
-            @Override
-            public void onResponse(Call<OrderList> call, Response<OrderList> response) {
-                MyOrderProductListArray = response.body().getOrderList();
-                MyOrderListAdapter myOrderListAdapter = new MyOrderListAdapter(MyOrderActivity.this, MyOrderProductListArray,user_id);
-                rvMyOrder.setAdapter(myOrderListAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<OrderList> call, Throwable t) {
-                Toast.makeText(MyOrderActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
 

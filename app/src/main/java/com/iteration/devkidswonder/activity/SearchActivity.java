@@ -61,7 +61,7 @@ public class SearchActivity extends AppCompatActivity {
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),1);
         rvSearch.setLayoutManager(manager);
 
-        Call<ProductList> ProductListCall = productDataService.getProductListData("*","*","*","*");
+        Call<ProductList> ProductListCall = productDataService.getProductListData("*","*","1","15000");
         ProductListCall.enqueue(new Callback<ProductList>() {
             @Override
             public void onResponse(Call<ProductList> call, Response<ProductList> response) {

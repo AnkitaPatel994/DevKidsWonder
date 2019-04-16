@@ -61,8 +61,8 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
                 i.putExtra("cate_name","*");
                 i.putExtra("brand_id",Brand_id);
                 i.putExtra("brand_name",Brand_name);
-                i.putExtra("min_price","*");
-                i.putExtra("max_price","*");
+                i.putExtra("min_price","1");
+                i.putExtra("max_price","15000");
                 context.startActivity(i);
             }
         });

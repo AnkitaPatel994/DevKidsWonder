@@ -24,6 +24,7 @@
             android:layout_marginTop="70dp"
             android:background="@drawable/splashnamelogo"
             android:padding="10dp" />
+
     </LinearLayout>
 
     <RelativeLayout
@@ -48,6 +49,7 @@
             android:layout_marginTop="50dp"
             android:paddingLeft="10dp"
             android:textSize="22dp"/>
+
     </RelativeLayout>
 
     <Button

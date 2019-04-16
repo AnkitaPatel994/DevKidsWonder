@@ -12,7 +12,6 @@ import com.iteration.devkidswonder.model.Login;
 import com.iteration.devkidswonder.model.ProductImgList;
 import com.iteration.devkidswonder.model.ProductList;
 import com.iteration.devkidswonder.model.ProductSizeList;
-import com.iteration.devkidswonder.model.RecentViewList;
 import com.iteration.devkidswonder.model.SliderList;
 import com.iteration.devkidswonder.model.WishlistList;
 
@@ -83,7 +82,7 @@ public interface GetProductDataService {
 
     @FormUrlEncoded
     @POST("json_android/recentview.php")
-    Call<RecentViewList> getRecentViewListData(@Field("ip_add") String ip_add);
+    Call<ProductList> getRecentViewListData(@Field("ip_add") String ip_add);
 
     @FormUrlEncoded
     @POST("json_android/login.php")
@@ -132,6 +131,7 @@ public interface GetProductDataService {
     @FormUrlEncoded
     @POST("json_android/insertorder.php")
     Call<Message> getInsertOrderData(@Field("customer_id") String customer_id,
+                                     @Field("user_email") String user_email,
                                      @Field("pro_id") String pro_id,
                                      @Field("pro_quantity") String pro_quantity,
                                      @Field("shipping_method") String shipping_method,
@@ -159,5 +159,18 @@ public interface GetProductDataService {
                                          @Field("brand_id") String brand_id,
                                          @Field("min_price") String min_price,
                                          @Field("max_price") String max_price);
+
+    @FormUrlEncoded
+    @POST("json_android/similarproduct.php")
+    Call<ProductList> getSimilarProductListData(@Field("cate_id") String cate_id,
+                                                       @Field("pro_id") String brand_id);
+
+    @FormUrlEncoded
+    @POST("json_android/changepassword.php")
+    Call<Message> getChangePasswordData(@Field("user_id") String user_id,
+                                        @Field("email") String email,
+                                        @Field("contact") String contact,
+                                        @Field("old_password") String old_password,
+                                        @Field("new_password") String new_password);
 
 }

@@ -95,9 +95,10 @@ public class SignInActivity extends AppCompatActivity {
                             String Firstname = response.body().getFirstname();
                             String Lastname = response.body().getLastname();
                             String UserName = Firstname+" "+Lastname;
+                            String UserEmail = response.body().getEmail();
                             if(status.equals("1"))
                             {
-                                session.createLoginSession(UserId,UserName);
+                                session.createLoginSession(UserId,UserName,UserEmail);
                                 Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                                 startActivity(i);
                                 finish();

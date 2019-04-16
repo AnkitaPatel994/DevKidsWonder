@@ -70,8 +70,8 @@ public class CategoryAllListAdapter extends RecyclerView.Adapter<CategoryAllList
                 i.putExtra("cate_name",category_title);
                 i.putExtra("brand_id","*");
                 i.putExtra("brand_name","*");
-                i.putExtra("min_price","*");
-                i.putExtra("max_price","*");
+                i.putExtra("min_price","1");
+                i.putExtra("max_price","15000");
                 context.startActivity(i);
             }
         });

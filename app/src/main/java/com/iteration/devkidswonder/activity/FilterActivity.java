@@ -2,6 +2,8 @@ package com.iteration.devkidswonder.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -55,8 +57,8 @@ public class FilterActivity extends AppCompatActivity {
     ArrayList<String> BrandIdArray = new ArrayList<>();
     ArrayList<String> BrandNameArray = new ArrayList<>();
     GetProductDataService productDataService;
-    String CategoryId,BrandId;
     Button btnFilter;
+    String min_price,max_price,cate_id,brand_id,cate_name,brand_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,17 +72,54 @@ public class FilterActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        String cate_id = getIntent().getExtras().getString("cate_id");
-        String brand_id = getIntent().getExtras().getString("brand_id");
+        rangeseekbar = (RangeSeekBar)findViewById(R.id.rangeseekbar);
+        txtCategory = (TextView) findViewById(R.id.txtCategory);
+        txtBrand = (TextView) findViewById(R.id.txtBrand);
+        llFilterCategory = (LinearLayout)findViewById(R.id.llFilterCategory);
+        llFilterBrand = (LinearLayout)findViewById(R.id.llFilterBrand);
 
-        Toast.makeText(FilterActivity.this, cate_id+brand_id, Toast.LENGTH_SHORT).show();
+        cate_id = getIntent().getExtras().getString("cate_id");
+        if(cate_id.equals("*"))
+        {
+            cate_id = "*";
+        }
+        cate_name = getIntent().getExtras().getString("cate_name");
+        if(cate_name.equals("*"))
+        {
+            txtCategory.setText("All Category");
+        }
+        else
+        {
+            txtCategory.setText(cate_name);
+        }
+        brand_id = getIntent().getExtras().getString("brand_id");
+        if(brand_id.equals("*"))
+        {
+            brand_id = "*";
+        }
+        brand_name = getIntent().getExtras().getString("brand_name");
+        if(brand_name.equals("*"))
+        {
+            txtBrand.setText("All Brand");
+        }
+        else
+        {
+            txtBrand.setText(brand_name);
+        }
+        min_price = getIntent().getExtras().getString("min_price");
+        max_price = getIntent().getExtras().getString("max_price");
 
         productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
         txtMinPrice = (TextView) findViewById(R.id.txtMinPrice);
+        txtMinPrice.setText(min_price);
         txtMaxPrice = (TextView) findViewById(R.id.txtMaxPrice);
+        txtMaxPrice.setText(max_price);
 
-        rangeseekbar = (RangeSeekBar)findViewById(R.id.rangeseekbar);
+        int min = Integer.parseInt(min_price);
+        int max = Integer.parseInt(max_price);
+        rangeseekbar.setSelectedMinValue(min);
+        rangeseekbar.setSelectedMaxValue(max);
 
         rangeseekbar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
@@ -88,17 +127,15 @@ public class FilterActivity extends AppCompatActivity {
                 Number min_value = bar.getSelectedMinValue();
                 Number max_value = bar.getSelectedMaxValue();
 
-                int min =(int)min_value;
-                int max =(int)max_value;
+                min_price = String.valueOf((int)min_value);
+                max_price = String.valueOf((int)max_value);
 
-                txtMinPrice.setText(String.valueOf(min));
-                txtMaxPrice.setText(String.valueOf(max));
+                txtMinPrice.setText(min_price);
+                txtMaxPrice.setText(max_price);
             }
         });
 
-        txtCategory = (TextView) findViewById(R.id.txtCategory);
-        txtBrand = (TextView) findViewById(R.id.txtBrand);
-        llFilterCategory = (LinearLayout)findViewById(R.id.llFilterCategory);
+
 
         llFilterCategory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,14 +144,16 @@ public class FilterActivity extends AppCompatActivity {
                 CategoryIdArray.clear();
                 CategoryNameArray.clear();
                 final Dialog dialog = new Dialog(FilterActivity.this,android.R.style.Theme_Light_NoTitleBar);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setContentView(R.layout.type_dialog);
                 dialog.setCancelable(true);
                 TextView txtTypeName = (TextView)dialog.findViewById(R.id.txtTypeName);
                 txtTypeName.setText("Category");
                 ImageView ivTypeClose = (ImageView)dialog.findViewById(R.id.ivTypeClose);
                 final ListView lvListType = (ListView)dialog.findViewById(R.id.lvListType);
+
                 lvListType.setChoiceMode(lvListType.CHOICE_MODE_SINGLE);
+
                 ivTypeClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -133,15 +172,16 @@ public class FilterActivity extends AppCompatActivity {
                             String Cat_Name = CategoryArray.get(i).getCategory_title();
                             CategoryNameArray.add(Cat_Name);
                         }
+
                         final ArrayAdapter<String> CategoryAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_single_choice, CategoryNameArray);
                         lvListType.setAdapter(CategoryAdapter);
                         lvListType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                String value = CategoryAdapter.getItem(position);
-                                CategoryId = CategoryIdArray.get(position);
+                                cate_name = CategoryAdapter.getItem(position);
+                                cate_id = CategoryIdArray.get(position);
                                 dialog.dismiss();
-                                txtCategory.setText(value);
+                                txtCategory.setText(cate_name);
                             }
                         });
 
@@ -156,7 +196,7 @@ public class FilterActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-        llFilterBrand = (LinearLayout)findViewById(R.id.llFilterBrand);
+
         llFilterBrand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -195,10 +235,10 @@ public class FilterActivity extends AppCompatActivity {
                         lvListType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                String value = BrandAdapter.getItem(position);
-                                BrandId = BrandIdArray.get(position);
+                                brand_name = BrandAdapter.getItem(position);
+                                brand_id = BrandIdArray.get(position);
                                 dialog.dismiss();
-                                txtBrand.setText(value);
+                                txtBrand.setText(brand_name);
                             }
                         });
 
@@ -220,10 +260,18 @@ public class FilterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String minva = txtMinPrice.getText().toString();
                 String maxva = txtMaxPrice.getText().toString();
-                String CatId = CategoryId;
-                String BrId = BrandId;
+                String Catname = txtCategory.getText().toString();
+                String Brname = txtBrand.getText().toString();
 
-                Toast.makeText(FilterActivity.this, minva+maxva+CatId+BrId, Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(),SubCategoryActivity.class);
+                i.putExtra("cate_id",cate_id);
+                i.putExtra("cate_name",Catname);
+                i.putExtra("brand_id",brand_id);
+                i.putExtra("brand_name",Brname);
+                i.putExtra("min_price",minva);
+                i.putExtra("max_price",maxva);
+                startActivity(i);
+
             }
         });
 

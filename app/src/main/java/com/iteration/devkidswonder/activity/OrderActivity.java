@@ -19,8 +19,10 @@ import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.model.Message;
 import com.iteration.devkidswonder.network.GetProductDataService;
 import com.iteration.devkidswonder.network.RetrofitInstance;
+import com.iteration.devkidswonder.network.SessionManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,13 +34,13 @@ public class OrderActivity extends AppCompatActivity {
     ArrayList<String> OrderProQtyArray = new ArrayList<>();
     ArrayList<String> OrderProSizeArray = new ArrayList<>();
     ArrayList<String> OrderProPriceArray = new ArrayList<>();
-    String user_id,TotalCartPrice,ShippingPrice,rs,PaymentMethod;
+    String user_id,TotalCartPrice,ShippingPrice,rs,PaymentMethod,user_email;
     TextView txtConPrice,txtConShippingPrice,txtConTotalAmount;
     RadioGroup rgPaymentMethod;
     RadioButton rbCashonDelivery,rbCreditCard,rbDebitCard;
     Button btnContinuesOrder;
     GetProductDataService productDataService;
-
+    SessionManager session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +53,13 @@ public class OrderActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        session = new SessionManager(OrderActivity.this);
+
         productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
         rs = getResources().getString(R.string.RS);
+
+        HashMap<String,String> user = session.getUserDetails();
+        user_email = user.get(SessionManager.user_email);
 
         user_id = getIntent().getExtras().getString("user_id");
         TotalCartPrice = getIntent().getExtras().getString("TotalCartPrice");
@@ -107,14 +114,11 @@ public class OrderActivity extends AppCompatActivity {
                     String shipping_method = ShippingPrice;
                     String payment_method = PaymentMethod;
                     String order_size = OrderProSizeArray.get(i);
-                    int price = Integer.parseInt(OrderProPriceArray.get(i))+Integer.parseInt(pro_quantity);
+                    int price = Integer.parseInt(OrderProPriceArray.get(i))*Integer.parseInt(pro_quantity);
                     String order_price = String.valueOf(price);
                     String order_total = String.valueOf(amount);
 
-                    /*GetOrder order = new GetOrder(customer_id,pro_id,pro_quantity,shipping_method,payment_method,order_size,order_price,order_total);
-                    order.execute();*/
-
-                    Call<Message> InsertOrderCall = productDataService.getInsertOrderData(customer_id,pro_id,pro_quantity,shipping_method,payment_method,order_size,order_price,order_total);
+                    Call<Message> InsertOrderCall = productDataService.getInsertOrderData(customer_id,user_email,pro_id,pro_quantity,shipping_method,payment_method,order_size,order_price,order_total);
                     InsertOrderCall.enqueue(new Callback<Message>() {
                         @Override
                         public void onResponse(Call<Message> call, Response<Message> response) {

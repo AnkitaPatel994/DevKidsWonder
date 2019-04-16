@@ -88,7 +88,7 @@ public class AddShippingAddressActivity extends AppCompatActivity {
                         public void onResponse(Call<Message> call, Response<Message> response) {
                             dialog.dismiss();
                             String message = response.body().getMessage();
-                            Toast.makeText(AddShippingAddressActivity.this, message, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(AddShippingAddressActivity.this, message, Toast.LENGTH_SHORT).show();
                             Intent i = new Intent(AddShippingAddressActivity.this, DeliveryActivity.class);
                             i.putExtra("user_id", user_id);
                             i.putExtra("firstname", firstname);

@@ -37,8 +37,6 @@ import android.widget.Toast;
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.adapter.CategoryInterestedListAdapter;
 import com.iteration.devkidswonder.adapter.ProductListAdapter;
-import com.iteration.devkidswonder.adapter.RecentviewListAdapter;
-import com.iteration.devkidswonder.adapter.SimilarProductListAdapter;
 import com.iteration.devkidswonder.model.Category;
 import com.iteration.devkidswonder.model.CategoryList;
 import com.iteration.devkidswonder.model.Message;
@@ -48,7 +46,6 @@ import com.iteration.devkidswonder.model.ProductImgList;
 import com.iteration.devkidswonder.model.ProductList;
 import com.iteration.devkidswonder.model.ProductSize;
 import com.iteration.devkidswonder.model.ProductSizeList;
-import com.iteration.devkidswonder.model.RecentViewList;
 import com.iteration.devkidswonder.network.GetProductDataService;
 import com.iteration.devkidswonder.network.Pager;
 import com.iteration.devkidswonder.network.RetrofitInstance;
@@ -256,9 +253,18 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 ProductSizeCall.enqueue(new Callback<ProductSizeList>() {
                     @Override
                     public void onResponse(Call<ProductSizeList> call, Response<ProductSizeList> response) {
-                        ProductSizeArrayList = response.body().getProductSizeList();
-                        ProductSizeAdapter productSizeAdapter = new ProductSizeAdapter(ProductSizeArrayList,txtProductPrice);
-                        rvPDProductSize.setAdapter(productSizeAdapter);
+                        String Status  = response.body().getStatus();
+                        String Message  = response.body().getMessage();
+                        if (Status.equals("1"))
+                        {
+                            ProductSizeArrayList = response.body().getProductSizeList();
+                            ProductSizeAdapter productSizeAdapter = new ProductSizeAdapter(ProductSizeArrayList,txtProductPrice);
+                            rvPDProductSize.setAdapter(productSizeAdapter);
+                        }
+                        else
+                        {
+                            Toast.makeText(ProductDetailsActivity.this, Message, Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -467,8 +473,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 Intent i = new Intent(ProductDetailsActivity.this,SubCategoryActivity.class);
                 i.putExtra("cate_id",cate_id);
                 i.putExtra("brand_id","*");
-                i.putExtra("min_price","*");
-                i.putExtra("max_price","*");
+                i.putExtra("min_price","1");
+                i.putExtra("max_price","15000");
                 startActivity(i);
             }
         });
@@ -479,13 +485,22 @@ public class ProductDetailsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),2);
         rvPDAllView.setLayoutManager(manager);
 
-        Call<ProductList> ProductListCall = productDataService.getProductListData(cate_id,"*","*","*");
+        Call<ProductList> ProductListCall = productDataService.getSimilarProductListData(cate_id,pro_id);
         ProductListCall.enqueue(new Callback<ProductList>() {
             @Override
             public void onResponse(Call<ProductList> call, Response<ProductList> response) {
-                SimilarProductListArray  = response.body().getProductList();
-                SimilarProductListAdapter productListAdapter = new SimilarProductListAdapter(ProductDetailsActivity.this,SimilarProductListArray ,ipAddress);
-                rvPDAllView.setAdapter(productListAdapter);
+                String Status  = response.body().getStatus();
+                String Message  = response.body().getMessage();
+                if (Status.equals("1"))
+                {
+                    SimilarProductListArray  = response.body().getProductList();
+                    ProductListAdapter productListAdapter = new ProductListAdapter(ProductDetailsActivity.this,SimilarProductListArray ,ipAddress);
+                    rvPDAllView.setAdapter(productListAdapter);
+                }
+                else
+                {
+                    Toast.makeText(ProductDetailsActivity.this, Message, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -523,17 +538,26 @@ public class ProductDetailsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager manager2 = new LinearLayoutManager(ProductDetailsActivity.this,LinearLayoutManager.HORIZONTAL,false);
         rvPDRecentView.setLayoutManager(manager2);
 
-        Call<RecentViewList> recentViewListCall = productDataService.getRecentViewListData(ipAddress);
-        recentViewListCall.enqueue(new Callback<RecentViewList>() {
+        Call<ProductList> recentViewListCall = productDataService.getRecentViewListData(ipAddress);
+        recentViewListCall.enqueue(new Callback<ProductList>() {
             @Override
-            public void onResponse(Call<RecentViewList> call, Response<RecentViewList> response) {
-                RecentviewListArray = response.body().getRecentviewList();
-                RecentviewListAdapter recentviewListAdapter = new RecentviewListAdapter(ProductDetailsActivity.this,RecentviewListArray,ipAddress);
-                rvPDRecentView.setAdapter(recentviewListAdapter);
+            public void onResponse(Call<ProductList> call, Response<ProductList> response) {
+                String Status = response.body().getStatus();
+                String Message = response.body().getMessage();
+                if (Status.equals("1"))
+                {
+                    RecentviewListArray = response.body().getProductList();
+                    ProductListAdapter recentviewListAdapter = new ProductListAdapter(ProductDetailsActivity.this,RecentviewListArray,ipAddress);
+                    rvPDRecentView.setAdapter(recentviewListAdapter);
+                }
+                else
+                {
+                    Toast.makeText(ProductDetailsActivity.this, Message, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<RecentViewList> call, Throwable t) {
+            public void onFailure(Call<ProductList> call, Throwable t) {
                 Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });

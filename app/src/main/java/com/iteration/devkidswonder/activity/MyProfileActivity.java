@@ -181,6 +181,9 @@ public class MyProfileActivity extends AppCompatActivity
         else if (id == R.id.menu_changePassword)
         {
             Intent i = new Intent(getApplicationContext(),ChangePasswordActivity.class);
+            i.putExtra("user_id",user_id);
+            i.putExtra("email",email);
+            i.putExtra("contact",contact);
             startActivity(i);
         }
 

@@ -21,8 +21,10 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/llBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="25dp"
                 android:orientation="vertical">
 
                 <FrameLayout
@@ -37,7 +39,7 @@
                         <android.support.v4.view.ViewPager
                             android:id="@+id/vpPagerImgSlider"
                             android:layout_width="match_parent"
-                            android:layout_height="500dp" />
+                            android:layout_height="400dp" />
 
                         <android.support.design.widget.TabLayout
                             android:id="@+id/tabIndicator"
@@ -500,21 +502,20 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/llBtn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:orientation="horizontal"
                 android:layout_alignParentBottom="true">
 
-                <Button
+                <!--<Button
                     android:id="@+id/btnPDAddCart"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="50dp"
                     android:text="Add to Cart"
                     android:textSize="16sp"
                     android:background="@color/colorBtnCart"
                     android:textColor="@color/colorWhite"
-                    android:textAllCaps="false"/>
+                    android:textAllCaps="false"/>-->
 
                 <!--<Button
                     android:id="@+id/btnPDBuy"
