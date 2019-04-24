@@ -43,11 +43,16 @@ public class SignUpActivity extends AppCompatActivity {
 
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
+        String mobile = getIntent().getExtras().getString("mobile");
+        String email = getIntent().getExtras().getString("email");
+
         txtname = (EditText) findViewById(R.id.etfnameReg);
         txtlastname = (EditText) findViewById(R.id.etLnameReg);
         txtemail = (EditText) findViewById(R.id.etEmailReg);
+        txtemail.setText(email);
         txtpassword = (EditText) findViewById(R.id.etPasswordReg);
         txtmobile_no = (EditText) findViewById(R.id.etPhonenoReg);
+        txtmobile_no.setText(mobile);
         btnReg = (Button) findViewById(R.id.btnRegister);
         btnAlreadyLogin = (Button) findViewById(R.id.btnAlreadyLogin);
 

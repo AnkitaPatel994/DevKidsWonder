@@ -2,12 +2,14 @@ package com.iteration.devkidswonder.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Message {
+public class SendOtp {
 
     @SerializedName("status")
     private String status;
     @SerializedName("message")
     private String message;
+    @SerializedName("otp")
+    private String otp;
 
     public String getStatus() {
         return status;
@@ -25,4 +27,11 @@ public class Message {
         this.message = message;
     }
 
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
 }

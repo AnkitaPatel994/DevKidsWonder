@@ -1,5 +1,6 @@
 package com.iteration.devkidswonder.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
 
@@ -31,6 +33,9 @@ public class OTPActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
 
+        final String email = getIntent().getExtras().getString("email");
+        final String otp = getIntent().getExtras().getString("otp");
+
         etOTP = (EditText)findViewById(R.id.etOTP);
         btnResendOTP = (Button)findViewById(R.id.btnResendOTP);
         btnSubmitOTP = (Button)findViewById(R.id.btnSubmitOTP);
@@ -46,8 +51,27 @@ public class OTPActivity extends AppCompatActivity {
         btnSubmitOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i =new Intent(OTPActivity.this,ResetActivity.class);
-                startActivity(i);
+
+                String txtOtp = etOTP.getText().toString();
+
+                final ProgressDialog dialog = new ProgressDialog(OTPActivity.this);
+                dialog.setMessage("Loading...");
+                dialog.setCancelable(true);
+                dialog.show();
+
+                if (txtOtp.equals(otp))
+                {
+                    dialog.dismiss();
+                    Intent i =new Intent(OTPActivity.this,ResetActivity.class);
+                    i.putExtra("email",email);
+                    startActivity(i);
+                }
+                else
+                {
+                    dialog.dismiss();
+                    Toast.makeText(OTPActivity.this,"Otp Not match",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }

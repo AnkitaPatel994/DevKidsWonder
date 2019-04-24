@@ -12,6 +12,7 @@ import com.iteration.devkidswonder.model.Login;
 import com.iteration.devkidswonder.model.ProductImgList;
 import com.iteration.devkidswonder.model.ProductList;
 import com.iteration.devkidswonder.model.ProductSizeList;
+import com.iteration.devkidswonder.model.SendOtp;
 import com.iteration.devkidswonder.model.SliderList;
 import com.iteration.devkidswonder.model.WishlistList;
 
@@ -172,5 +173,18 @@ public interface GetProductDataService {
                                         @Field("contact") String contact,
                                         @Field("old_password") String old_password,
                                         @Field("new_password") String new_password);
+
+    @FormUrlEncoded
+    @POST("json_android/sendotp.php")
+    Call<SendOtp> getSendOtpData(@Field("email") String email);
+
+    @FormUrlEncoded
+    @POST("json_android/resetpassword.php")
+    Call<Message> getResetPasswordData(@Field("email") String email,
+                                        @Field("password") String password);
+
+    @FormUrlEncoded
+    @POST("json_android/sendmobileotp.php")
+    Call<SendOtp> getMobileSendOtpData(@Field("mobile") String mobile);
 
 }

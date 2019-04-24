@@ -36,7 +36,7 @@
         android:layout_marginTop="80dp">
 
         <EditText
-            android:id="@+id/etUserNameLogin"
+            android:id="@+id/txtResetNewPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
@@ -47,6 +47,7 @@
             android:hint="New Password"
             android:paddingLeft="10dp"
             android:textSize="15sp" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -59,7 +60,7 @@
         android:layout_marginTop="40dp">
 
         <EditText
-            android:id="@+id/etUserNameLogn"
+            android:id="@+id/txtResetConformPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentTop="true"

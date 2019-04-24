@@ -66,4 +66,8 @@
     <string name="title_activity_order_delivered">Order Delivered</string>
     <string name="title_activity_search">Search</string>
 
+    <string name="reload"><u>Reload page</u></string>
+    <string name="title_activity_mobile_otp">MobileOTPActivity</string>
+    <string name="title_activity_email_otp">EmailOTPActivity</string>
+
 </resources>

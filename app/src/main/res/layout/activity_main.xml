@@ -45,4 +45,37 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/lnSnackbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#363434"
+        android:gravity="center"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="No Connection"
+            android:layout_weight="1"
+            android:textColor="@color/colorWhite"
+            android:textSize="15dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="@string/reload"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+
 </RelativeLayout>
