@@ -15,7 +15,6 @@ import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.activity.OrderDeliveredActivity;
 import com.iteration.devkidswonder.activity.OrderPlacedActivity;
 import com.iteration.devkidswonder.activity.OrderShippedActivity;
-import com.iteration.devkidswonder.activity.ProductDetailsActivity;
 import com.iteration.devkidswonder.model.Order;
 import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.squareup.picasso.Picasso;
@@ -27,7 +26,6 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
     Context context;
     ArrayList<Order> myOrderProductListArray;
     String user_id;
-    View v;
 
     public MyOrderListAdapter(Context context, ArrayList<Order> myOrderProductListArray, String user_id) {
         this.context = context;
@@ -37,7 +35,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        v = LayoutInflater.from(viewGroup.getContext())
+        View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.order_pro_list, viewGroup, false);
 
         ViewHolder viewHolder = new ViewHolder(v);

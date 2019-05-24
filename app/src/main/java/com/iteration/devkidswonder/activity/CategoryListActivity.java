@@ -50,6 +50,8 @@ public class CategoryListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        CatListArray.clear();
+
         session = new SessionManager(CategoryListActivity.this);
         flag = session.checkLogin();
 
@@ -101,7 +103,6 @@ public class CategoryListActivity extends AppCompatActivity
         GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
         Call<CategoryList> categoryListCall = productDataService.getCategoryData();
-
         categoryListCall.enqueue(new Callback<CategoryList>() {
             @Override
             public void onResponse(Call<CategoryList> call, Response<CategoryList> response) {
@@ -179,6 +180,34 @@ public class CategoryListActivity extends AppCompatActivity
         else if (id == R.id.nav_order)
         {
             Intent i = new Intent(getApplicationContext(), MyOrderActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_website)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("http://devkidswonder.com"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("http://devkidswonder.com"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_aboutus)
+        {
+            Intent i = new Intent(getApplicationContext(), AboutUsActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_contactus)
+        {
+            Intent i = new Intent(getApplicationContext(), ContactUsActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_terms)
+        {
+            Intent i = new Intent(getApplicationContext(), TermsActivity.class);
             startActivity(i);
         }
         else if (id == R.id.nav_rate)

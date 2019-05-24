@@ -23,7 +23,7 @@ import retrofit2.Response;
 public class UpdateProfileActivity extends AppCompatActivity {
 
     Button btnEditProfile;
-    EditText update_fname,update_lastname,update_number,update_email,update_address,update_city,update_pincode;
+    EditText update_fname,update_lastname,update_number,update_email,update_address,update_city,update_state,update_country,update_pincode;
     String user_id;
 
     @Override
@@ -39,6 +39,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
         update_email = (EditText)findViewById(R.id.update_email);
         update_address = (EditText)findViewById(R.id.update_address);
         update_city = (EditText)findViewById(R.id.update_city);
+        update_state = (EditText)findViewById(R.id.update_state);
+        update_country = (EditText)findViewById(R.id.update_country);
         update_pincode = (EditText)findViewById(R.id.update_pincode);
         btnEditProfile = (Button) findViewById(R.id.btnEditProfile);
 
@@ -55,6 +57,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
         String contact = getIntent().getExtras().getString("contact");
         String address = getIntent().getExtras().getString("address");
         String city = getIntent().getExtras().getString("city");
+        String state = getIntent().getExtras().getString("state");
+        String country = getIntent().getExtras().getString("country");
         String zipcode = getIntent().getExtras().getString("zipcode");
 
         update_fname.setText(firstname);
@@ -63,6 +67,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
         update_number.setText(contact);
         update_address.setText(address);
         update_city.setText(city);
+        update_state.setText(state);
+        update_country.setText(country);
         update_pincode.setText(zipcode);
 
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +81,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 String contact_e = update_number.getText().toString();
                 String address_e = update_address.getText().toString();
                 String city_e = update_city.getText().toString();
+                String state_e = update_state.getText().toString();
+                String country_e = update_country.getText().toString();
                 String zipcode_e = update_pincode.getText().toString();
 
                 final ProgressDialog dialog = new ProgressDialog(UpdateProfileActivity.this);
@@ -82,7 +90,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 dialog.setCancelable(true);
                 dialog.show();
 
-                Call<Message> EditCustomerCall = productDataService.getEditCustomerData(user_id,firstname_e,lastname_e,email_e,contact_e,address_e,city_e,zipcode_e);
+                Call<Message> EditCustomerCall = productDataService.getEditCustomerData(user_id,firstname_e,lastname_e,email_e,contact_e,address_e,city_e,state_e,country_e,zipcode_e);
                 EditCustomerCall.enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {

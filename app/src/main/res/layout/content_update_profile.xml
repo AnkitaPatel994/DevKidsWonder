@@ -54,17 +54,13 @@
                 android:layout_marginTop="50dp"
                 android:text="First Name"
                 android:textColor="@color/colorBlack"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/update_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_margin="8dp"
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:hint="Enter FirstName"
@@ -74,28 +70,21 @@
                 android:id="@+id/lname_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="24dp"
                 android:text="Last Name"
                 android:textColor="@color/colorBlack"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/update_name" />
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/update_lastname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="8dp"
                 android:ems="10"
                 android:textColor="@color/colorBlack"
                 android:inputType="textPersonName"
-                android:hint="Enter LastName"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lname_tv" />
+                android:hint="Enter LastName" />
 
             <TextView
                 android:id="@+id/mn_tv"
@@ -105,25 +94,18 @@
                 android:layout_marginTop="24dp"
                 android:text="Mobile Number"
                 android:textColor="@color/colorBlack"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/update_lastname" />
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/update_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_margin="8dp"
                 android:ems="10"
                 android:maxLength="10"
                 android:textColor="@color/colorBlack"
                 android:inputType="number"
-                android:hint="Enter Mobile Number"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mn_tv" />
+                android:hint="Enter Mobile Number" />
 
             <TextView
                 android:id="@+id/email_tv"
@@ -133,24 +115,17 @@
                 android:layout_marginTop="24dp"
                 android:text="Email id"
                 android:textColor="@color/colorBlack"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/update_number" />
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/update_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="8dp"
                 android:ems="10"
                 android:textColor="@color/colorBlack"
                 android:inputType="textEmailAddress"
-                android:hint="Enter Email"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/update_email" />
+                android:hint="Enter Email" />
 
             <TextView
                 android:id="@+id/address_tv"
@@ -160,24 +135,17 @@
                 android:layout_marginTop="24dp"
                 android:text="Address"
                 android:textColor="@color/colorBlack"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/update_number" />
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/update_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="8dp"
                 android:ems="10"
                 android:textColor="@color/colorBlack"
                 android:inputType="textMultiLine"
-                android:hint="Enter Address"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/update_email" />
+                android:hint="Enter Address" />
 
             <TextView
                 android:id="@+id/city_tv"
@@ -187,24 +155,57 @@
                 android:layout_marginTop="24dp"
                 android:text="City"
                 android:textColor="@color/colorBlack"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/update_address" />
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/update_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="8dp"
                 android:ems="10"
                 android:textColor="@color/colorBlack"
                 android:inputType="text"
-                android:hint="Enter City"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/update_address" />
+                android:hint="Enter City" />
+
+            <TextView
+                android:id="@+id/state_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:text="State"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/update_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:ems="10"
+                android:textColor="@color/colorBlack"
+                android:inputType="text"
+                android:hint="Enter State" />
+
+            <TextView
+                android:id="@+id/country_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:text="Country"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/update_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:ems="10"
+                android:textColor="@color/colorBlack"
+                android:inputType="text"
+                android:hint="Enter Country" />
 
             <TextView
                 android:id="@+id/pincode_tv"
@@ -214,24 +215,17 @@
                 android:layout_marginTop="24dp"
                 android:text="Pincode"
                 android:textColor="@color/colorBlack"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/update_city" />
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/update_pincode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="8dp"
                 android:ems="10"
                 android:textColor="@color/colorBlack"
                 android:inputType="number"
-                android:hint="Enter Pincode"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/update_city" />
+                android:hint="Enter Pincode" />
 
             <Button
                 android:id="@+id/btnEditProfile"
@@ -243,7 +237,6 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="17sp"
                 android:layout_marginBottom="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/update_email"
                 tools:layout_editor_absoluteX="117dp" />
 
         </LinearLayout>

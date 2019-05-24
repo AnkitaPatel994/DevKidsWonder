@@ -7,25 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iteration.devkidswonder.R;
-import com.iteration.devkidswonder.activity.HomeActivity;
 import com.iteration.devkidswonder.activity.SubCategoryActivity;
 import com.iteration.devkidswonder.model.Brand;
-import com.iteration.devkidswonder.model.Category;
 import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.ViewHolder> {
 
     Context context;
     ArrayList<Brand> brandListArray;
-    View v;
 
     public BrandListAdapter(Context context, ArrayList<Brand> brandListArray) {
         this.context = context;
@@ -34,7 +30,7 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        v = LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.brand_list, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(v);
@@ -53,7 +49,7 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
         Picasso.with(context).load(RetrofitInstance.BASE_URL +Brand_img).into(viewHolder.ivBrandImg);
 
 
-        v.setOnClickListener(new View.OnClickListener() {
+        viewHolder.llBrandList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, SubCategoryActivity.class);
@@ -77,12 +73,14 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
 
         ImageView ivBrandImg;
         TextView txtBrandName;
+        LinearLayout llBrandList;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             ivBrandImg = (ImageView)itemView.findViewById(R.id.ivBrandImg);
             txtBrandName = (TextView)itemView.findViewById(R.id.txtBrandName);
+            llBrandList = (LinearLayout) itemView.findViewById(R.id.llBrandList);
         }
     }
 }

@@ -3,8 +3,6 @@ package com.iteration.devkidswonder.activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,7 +35,7 @@ public class DeliveryActivity extends AppCompatActivity {
     TextView txtDeliveryPersonName,txtDeliveryPersonAddress,txtOCartPrice,txtOShippingPrice,txtOTotalAmount;
     Button btnDeliveryChangeAddress,btnPlaceOrder;
     RecyclerView rvOrderList;
-    String user_id,rs,firstname,lastname,email,contact,Address,City,Pincode,TotalCartPrice,ShippingPrice;
+    String user_id,rs,firstname,lastname,email,contact,Address,City,State,Country,Pincode,TotalCartPrice,ShippingPrice;
     ArrayList<Cart> cartProductListArray = new ArrayList<>();
     ArrayList<String> OrderProIdArray = new ArrayList<>();
     ArrayList<String> OrderProQtyArray = new ArrayList<>();
@@ -65,6 +63,8 @@ public class DeliveryActivity extends AppCompatActivity {
         contact = getIntent().getExtras().getString("contact");
         Address = getIntent().getExtras().getString("address");
         City = getIntent().getExtras().getString("city");
+        State = getIntent().getExtras().getString("state");
+        Country = getIntent().getExtras().getString("country");
         Pincode = getIntent().getExtras().getString("pincode");
         TotalCartPrice = getIntent().getExtras().getString("TotalCartPrice");
         ShippingPrice = getIntent().getExtras().getString("ShippingPrice");
@@ -76,7 +76,7 @@ public class DeliveryActivity extends AppCompatActivity {
         txtDeliveryPersonName = (TextView)findViewById(R.id.txtDeliveryPersonName);
         txtDeliveryPersonName.setText(firstname+" "+lastname);
         txtDeliveryPersonAddress = (TextView)findViewById(R.id.txtDeliveryPersonAddress);
-        txtDeliveryPersonAddress.setText(Address+", "+City+", "+Pincode);
+        txtDeliveryPersonAddress.setText(Address+", "+City+", "+ State +", "+ Country +", "+Pincode);
 
         txtOCartPrice.setText(rs+TotalCartPrice);
         txtOShippingPrice.setText(rs+ShippingPrice);
@@ -95,6 +95,8 @@ public class DeliveryActivity extends AppCompatActivity {
                 i.putExtra("contact",contact);
                 i.putExtra("address",Address);
                 i.putExtra("city",City);
+                i.putExtra("state",State);
+                i.putExtra("country",Country);
                 i.putExtra("pincode",Pincode);
                 i.putExtra("TotalCartPrice",TotalCartPrice);
                 i.putExtra("ShippingPrice",ShippingPrice);

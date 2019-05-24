@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iteration.devkidswonder.R;
@@ -17,13 +18,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class CategoryInterestedListAdapter extends RecyclerView.Adapter<CategoryInterestedListAdapter.ViewHolder> {
 
     Context context;
     ArrayList<Category> categoryListArray;
-    View v;
 
     public CategoryInterestedListAdapter(Context context, ArrayList<Category> categoryListArray) {
         this.context = context;
@@ -32,7 +30,7 @@ public class CategoryInterestedListAdapter extends RecyclerView.Adapter<Category
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        v = LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.int_category_list, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(v);
@@ -51,7 +49,7 @@ public class CategoryInterestedListAdapter extends RecyclerView.Adapter<Category
         Picasso.with(context).load(RetrofitInstance.BASE_URL +category_img).into(viewHolder.ivcpProductImg);
 
 
-        v.setOnClickListener(new View.OnClickListener() {
+        viewHolder.llIntCategoryList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, SubCategoryActivity.class);
@@ -75,12 +73,14 @@ public class CategoryInterestedListAdapter extends RecyclerView.Adapter<Category
 
         ImageView ivcpProductImg;
         TextView txtcpProductCatName;
+        LinearLayout llIntCategoryList;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             ivcpProductImg = (ImageView) itemView.findViewById(R.id.ivcpProductImg);
             txtcpProductCatName = (TextView)itemView.findViewById(R.id.txtcpProductCatName);
+            llIntCategoryList = (LinearLayout) itemView.findViewById(R.id.llIntCategoryList);
         }
     }
 }

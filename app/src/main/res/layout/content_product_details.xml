@@ -398,7 +398,7 @@
                             android:id="@+id/txtProductDeliveryDays"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3-4 days"/>
+                            android:text="3-5 working days"/>
 
                         <View
                             android:id="@+id/divider9"
@@ -485,7 +485,7 @@
                     </LinearLayout>
 
                     <Button
-                        android:id="@+id/button"
+                        android:id="@+id/btnShare"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="share"/>

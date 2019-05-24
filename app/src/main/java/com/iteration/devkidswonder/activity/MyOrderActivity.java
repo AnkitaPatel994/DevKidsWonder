@@ -4,24 +4,23 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.adapter.MyOrderListAdapter;
-import com.iteration.devkidswonder.model.CategoryList;
 import com.iteration.devkidswonder.model.Order;
 import com.iteration.devkidswonder.model.OrderList;
 import com.iteration.devkidswonder.network.GetProductDataService;
@@ -92,9 +91,18 @@ public class MyOrderActivity extends AppCompatActivity
             OrderListCall.enqueue(new Callback<OrderList>() {
                 @Override
                 public void onResponse(Call<OrderList> call, Response<OrderList> response) {
-                    MyOrderProductListArray = response.body().getOrderList();
-                    MyOrderListAdapter myOrderListAdapter = new MyOrderListAdapter(MyOrderActivity.this, MyOrderProductListArray,user_id);
-                    rvMyOrder.setAdapter(myOrderListAdapter);
+                    String status = response.body().getStatus();
+                    String message = response.body().getMessage();
+                    if (status.equals("1"))
+                    {
+                        MyOrderProductListArray = response.body().getOrderList();
+                        MyOrderListAdapter myOrderListAdapter = new MyOrderListAdapter(MyOrderActivity.this, MyOrderProductListArray,user_id);
+                        rvMyOrder.setAdapter(myOrderListAdapter);
+                    }
+                    else
+                    {
+                        Toast.makeText(MyOrderActivity.this, message, Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -161,6 +169,34 @@ public class MyOrderActivity extends AppCompatActivity
         else if (id == R.id.nav_wishlist)
         {
             Intent i = new Intent(getApplicationContext(),WishListActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_website)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("http://devkidswonder.com"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("http://devkidswonder.com"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_aboutus)
+        {
+            Intent i = new Intent(getApplicationContext(), AboutUsActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_contactus)
+        {
+            Intent i = new Intent(getApplicationContext(), ContactUsActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_terms)
+        {
+            Intent i = new Intent(getApplicationContext(), TermsActivity.class);
             startActivity(i);
         }
         else if (id == R.id.nav_rate)

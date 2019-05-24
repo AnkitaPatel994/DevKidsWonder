@@ -23,6 +23,27 @@
 
     </group>
 
+    <item android:title="Quick Links">
+        <menu>
+            <item
+                android:id="@+id/nav_website"
+                android:icon="@drawable/ic_earth"
+                android:title="Website" />
+            <item
+                android:id="@+id/nav_aboutus"
+                android:icon="@drawable/ic_about"
+                android:title="About us" />
+            <item
+                android:id="@+id/nav_contactus"
+                android:icon="@drawable/ic_contactus"
+                android:title="Contact us" />
+            <item
+                android:id="@+id/nav_terms"
+                android:icon="@drawable/ic_terms"
+                android:title="Terms and Condition" />
+        </menu>
+    </item>
+
     <group android:id="@+id/r">
         <item
             android:id="@+id/nav_rate"

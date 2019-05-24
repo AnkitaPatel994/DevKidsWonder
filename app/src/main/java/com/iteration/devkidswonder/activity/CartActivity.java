@@ -192,6 +192,8 @@ public class CartActivity extends AppCompatActivity
                     String contact = response.body().getContact();
                     String address = response.body().getAddress();
                     String city = response.body().getCity();
+                    String state = response.body().getState();
+                    String country = response.body().getCountry();
                     String zipcode = response.body().getZipcode();
                     if (address.equals(""))
                     {
@@ -213,6 +215,8 @@ public class CartActivity extends AppCompatActivity
                         i.putExtra("lastname",lastname);
                         i.putExtra("address",address);
                         i.putExtra("city",city);
+                        i.putExtra("state",state);
+                        i.putExtra("country",country);
                         i.putExtra("pincode",zipcode);
                         i.putExtra("TotalCartPrice",txtCartPrice.getText().toString());
                         i.putExtra("ShippingPrice",txtShippingPrice.getText().toString());
@@ -283,6 +287,34 @@ public class CartActivity extends AppCompatActivity
         else if (id == R.id.nav_order)
         {
             Intent i = new Intent(getApplicationContext(), MyOrderActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_website)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("http://devkidswonder.com"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("http://devkidswonder.com"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_aboutus)
+        {
+            Intent i = new Intent(getApplicationContext(), AboutUsActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_contactus)
+        {
+            Intent i = new Intent(getApplicationContext(), ContactUsActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_terms)
+        {
+            Intent i = new Intent(getApplicationContext(), TermsActivity.class);
             startActivity(i);
         }
         else if (id == R.id.nav_rate)

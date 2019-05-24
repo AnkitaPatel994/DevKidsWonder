@@ -18,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -137,6 +138,21 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         tabIndicator = (TabLayout)findViewById(R.id.tabIndicator);
         tabIndicator.setupWithViewPager(vpPagerImgSlider);
+
+        Button btnShare = (Button)findViewById(R.id.btnShare);
+        btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String message = RetrofitInstance.BASE_URL+"single_product.php?pro_id="+pro_id;
+                Log.d("message",""+message);
+                Intent i=new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                String body = message;
+                i.putExtra(Intent.EXTRA_SUBJECT,body);
+                i.putExtra(Intent.EXTRA_TEXT,body);
+                startActivity(Intent.createChooser(i,"Share using"));
+            }
+        });
 
         Call<ProductImgList> ProductImgListCall = productDataService.getProductImgListData(pro_id);
         ProductImgListCall.enqueue(new Callback<ProductImgList>() {
@@ -636,7 +652,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private class ProductSizeAdapter extends RecyclerView.Adapter<ProductSizeAdapter.ViewHolder>{
 
         ArrayList<ProductSize> productSizeArrayList;
-        View v;
         TextView txtProductPrice;
 
         public ProductSizeAdapter(ArrayList<ProductSize> productSizeArrayList, TextView txtProductPrice) {
@@ -646,7 +661,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            v = LayoutInflater.from(viewGroup.getContext())
+            View v = LayoutInflater.from(viewGroup.getContext())
                     .inflate(R.layout.product_size_list, viewGroup, false);
 
             ViewHolder viewHolder = new ViewHolder(v);
@@ -670,7 +685,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             viewHolder.txtPSizePrize.setText(rs+size_price);
             viewHolder.txtPSizeQty.setText("Only "+size_qty+" left in stock.");
 
-            v.setOnClickListener(new View.OnClickListener() {
+            viewHolder.llSizeList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -710,11 +725,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             TextView txtPSizeName,txtPSizePrize,txtPSizeQty;
+            LinearLayout llSizeList;
             public ViewHolder(View itemView) {
                 super(itemView);
                 txtPSizeName = (TextView) itemView.findViewById(R.id.txtPSizeName);
                 txtPSizePrize = (TextView) itemView.findViewById(R.id.txtPSizePrize);
                 txtPSizeQty = (TextView) itemView.findViewById(R.id.txtPSizeQty);
+                llSizeList = (LinearLayout) itemView.findViewById(R.id.llSizeList);
             }
         }
     }

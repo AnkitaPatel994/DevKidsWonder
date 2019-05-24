@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iteration.devkidswonder.R;
-import com.iteration.devkidswonder.activity.BrandListActivity;
 import com.iteration.devkidswonder.activity.SubCategoryActivity;
 import com.iteration.devkidswonder.model.Brand;
-import com.iteration.devkidswonder.model.Category;
 import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.jackandphantom.circularimageview.RoundedImage;
 import com.squareup.picasso.Picasso;
@@ -25,7 +24,6 @@ public class BrandAllListAdapter extends RecyclerView.Adapter<BrandAllListAdapte
 
     Context context;
     ArrayList<Brand> brandAllListArray;
-    View v;
 
     public BrandAllListAdapter(Context context, ArrayList<Brand> brandAllListArray) {
         this.context = context;
@@ -34,7 +32,7 @@ public class BrandAllListAdapter extends RecyclerView.Adapter<BrandAllListAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        v = LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.category_all_list, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(v);
@@ -62,9 +60,10 @@ public class BrandAllListAdapter extends RecyclerView.Adapter<BrandAllListAdapte
         Picasso.with(context).load(RetrofitInstance.BASE_URL +Brand_img).into(viewHolder.ivAllCatImg);
 
 
-        v.setOnClickListener(new View.OnClickListener() {
+        viewHolder.llCatListBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Brand_id", "" + Brand_id);
                 Intent i = new Intent(context, SubCategoryActivity.class);
                 i.putExtra("cate_id","*");
                 i.putExtra("cate_name","*");

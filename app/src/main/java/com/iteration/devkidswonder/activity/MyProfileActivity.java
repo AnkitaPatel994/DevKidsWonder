@@ -35,7 +35,7 @@ public class MyProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView txtprofilename,txtprofileemail,txtprofilemobileno,txtprofileaddress;
-    String firstname, lastname, email, contact, address, city, zipcode;
+    String firstname, lastname, email, contact, address, city, state, country, zipcode;
     SessionManager session;
     int flag = 0;
     String user_id;
@@ -118,6 +118,8 @@ public class MyProfileActivity extends AppCompatActivity
                 contact = response.body().getContact();
                 address = response.body().getAddress();
                 city = response.body().getCity();
+                state = response.body().getState();
+                country = response.body().getCountry();
                 zipcode = response.body().getZipcode();
 
                 txtprofilename.setText(firstname + " " + lastname);
@@ -131,7 +133,7 @@ public class MyProfileActivity extends AppCompatActivity
                 else
                 {
                     llHomeAddress.setVisibility(View.VISIBLE);
-                    txtprofileaddress.setText(address + "," + city + "," + zipcode);
+                    txtprofileaddress.setText(address + "," + city + "," + state + "," + country + "," + zipcode);
                 }
 
             }
@@ -175,6 +177,8 @@ public class MyProfileActivity extends AppCompatActivity
             i.putExtra("contact",contact);
             i.putExtra("address",address);
             i.putExtra("city",city);
+            i.putExtra("state",state);
+            i.putExtra("country",country);
             i.putExtra("zipcode",zipcode);
             startActivity(i);
         }
@@ -214,6 +218,34 @@ public class MyProfileActivity extends AppCompatActivity
         else if (id == R.id.nav_order)
         {
             Intent i = new Intent(getApplicationContext(), MyOrderActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_website)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("http://devkidswonder.com"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("http://devkidswonder.com"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_aboutus)
+        {
+            Intent i = new Intent(getApplicationContext(), AboutUsActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_contactus)
+        {
+            Intent i = new Intent(getApplicationContext(), ContactUsActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_terms)
+        {
+            Intent i = new Intent(getApplicationContext(), TermsActivity.class);
             startActivity(i);
         }
         else if (id == R.id.nav_rate)

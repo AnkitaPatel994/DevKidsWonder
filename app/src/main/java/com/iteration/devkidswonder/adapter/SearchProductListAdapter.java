@@ -6,26 +6,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Optional;
-
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.activity.ProductDetailsActivity;
 import com.iteration.devkidswonder.model.Product;
+
+import java.util.ArrayList;
 
 public class SearchProductListAdapter extends RecyclerView.Adapter<SearchProductListAdapter.ViewHolder> implements Filterable{
 
     Context context;
     ArrayList<Product> searchProductListArray;
     ArrayList<Product> SearchListFilter;
-    View v;
 
     public SearchProductListAdapter(Context context, ArrayList<Product> searchProductListArray) {
         this.context = context;
@@ -35,7 +31,7 @@ public class SearchProductListAdapter extends RecyclerView.Adapter<SearchProduct
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        v = LayoutInflater.from(viewGroup.getContext())
+        View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.search_product_list, viewGroup, false);
 
         ViewHolder viewHolder = new ViewHolder(v);
@@ -63,7 +59,7 @@ public class SearchProductListAdapter extends RecyclerView.Adapter<SearchProduct
 
         viewHolder.txtProductName.setText(pro_title);
 
-        v.setOnClickListener(new View.OnClickListener() {
+        viewHolder.llSearchProductList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, ProductDetailsActivity.class);
@@ -94,9 +90,11 @@ public class SearchProductListAdapter extends RecyclerView.Adapter<SearchProduct
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtProductName;
+        LinearLayout llSearchProductList;
         public ViewHolder(View itemView) {
             super(itemView);
             txtProductName = (TextView)itemView.findViewById(R.id.txtProductName);
+            llSearchProductList = (LinearLayout) itemView.findViewById(R.id.llSearchProductList);
         }
     }
 

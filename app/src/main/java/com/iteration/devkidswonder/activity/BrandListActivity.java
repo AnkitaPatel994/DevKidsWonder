@@ -4,18 +4,18 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,10 +50,12 @@ public class BrandListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        BrandAllListArray.clear();
+
         session = new SessionManager(BrandListActivity.this);
         flag = session.checkLogin();
 
-        HashMap<String,String> user = session.getUserDetails();
+        HashMap<String, String> user = session.getUserDetails();
         String user_name = user.get(SessionManager.user_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -66,36 +68,33 @@ public class BrandListActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerview = navigationView.getHeaderView(0);
-        TextView txt_login = (TextView)headerview.findViewById(R.id.txt_login);
-        LinearLayout nav_header_ll = (LinearLayout)headerview.findViewById(R.id.nav_header_ll);
+        TextView txt_login = (TextView) headerview.findViewById(R.id.txt_login);
+        LinearLayout nav_header_ll = (LinearLayout) headerview.findViewById(R.id.nav_header_ll);
 
-        if (flag == 1)
-        {
+        if (flag == 1) {
             txt_login.setText(user_name);
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(BrandListActivity.this,MyProfileActivity.class);
+                    Intent i = new Intent(BrandListActivity.this, MyProfileActivity.class);
                     startActivity(i);
                 }
             });
-        }
-        else if (flag == 0)
-        {
+        } else if (flag == 0) {
             txt_login.setText("Login / Register");
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(BrandListActivity.this,SignInActivity.class);
+                    Intent i = new Intent(BrandListActivity.this, SignInActivity.class);
                     startActivity(i);
                 }
             });
         }
 
-        rvAllBrandList = (RecyclerView)findViewById(R.id.rvAllBrandList);
+        rvAllBrandList = (RecyclerView) findViewById(R.id.rvAllBrandList);
         rvAllBrandList.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),1);
+        RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 1);
         rvAllBrandList.setLayoutManager(manager);
 
         GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
@@ -106,7 +105,7 @@ public class BrandListActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<BrandList> call, Response<BrandList> response) {
                 BrandAllListArray = response.body().getBrandArrayList();
-                BrandAllListAdapter brandAllListAdapter = new BrandAllListAdapter(BrandListActivity.this,BrandAllListArray);
+                BrandAllListAdapter brandAllListAdapter = new BrandAllListAdapter(BrandListActivity.this, BrandAllListArray);
                 rvAllBrandList.setAdapter(brandAllListAdapter);
             }
 
@@ -140,14 +139,11 @@ public class BrandListActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        if (id == R.id.menu_search)
-        {
-            Intent i = new Intent(getApplicationContext(),SearchActivity.class);
+        if (id == R.id.menu_search) {
+            Intent i = new Intent(getApplicationContext(), SearchActivity.class);
             startActivity(i);
-        }
-        else if (id == R.id.menu_cart)
-        {
-            Intent i = new Intent(getApplicationContext(),CartActivity.class);
+        } else if (id == R.id.menu_cart) {
+            Intent i = new Intent(getApplicationContext(), CartActivity.class);
             startActivity(i);
         }
 
@@ -160,47 +156,52 @@ public class BrandListActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home)
-        {
-            Intent i = new Intent(getApplicationContext(),HomeActivity.class);
+        if (id == R.id.nav_home) {
+            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(i);
-        }
-        else if (id == R.id.nav_cart)
-        {
-            Intent i = new Intent(getApplicationContext(),CartActivity.class);
+        } else if (id == R.id.nav_cart) {
+            Intent i = new Intent(getApplicationContext(), CartActivity.class);
             startActivity(i);
-        }
-        else if (id == R.id.nav_wishlist)
-        {
-            Intent i = new Intent(getApplicationContext(),WishListActivity.class);
+        } else if (id == R.id.nav_wishlist) {
+            Intent i = new Intent(getApplicationContext(), WishListActivity.class);
             startActivity(i);
-        }
-        else if (id == R.id.nav_order)
-        {
+        } else if (id == R.id.nav_order) {
             Intent i = new Intent(getApplicationContext(), MyOrderActivity.class);
             startActivity(i);
-        }
-        else if (id == R.id.nav_rate)
-        {
-            Intent i=new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
-            if(!MyStartActivity(i))
-            {
-                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
-                if(!MyStartActivity(i))
-                {
-                    Log.d("Like","Could not open browser");
+        } else if (id == R.id.nav_website) {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("http://devkidswonder.com"));
+            if (!MyStartActivity(i)) {
+                i.setData(Uri.parse("http://devkidswonder.com"));
+                if (!MyStartActivity(i)) {
+                    Log.d("Like", "Could not open browser");
                 }
             }
-        }
-        else if (id == R.id.nav_share)
-        {
-            Intent i=new Intent(Intent.ACTION_SEND);
+        } else if (id == R.id.nav_aboutus) {
+            Intent i = new Intent(getApplicationContext(), AboutUsActivity.class);
+            startActivity(i);
+        } else if (id == R.id.nav_contactus) {
+            Intent i = new Intent(getApplicationContext(), ContactUsActivity.class);
+            startActivity(i);
+        } else if (id == R.id.nav_terms) {
+            Intent i = new Intent(getApplicationContext(), TermsActivity.class);
+            startActivity(i);
+        } else if (id == R.id.nav_rate) {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
+            if (!MyStartActivity(i)) {
+                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.iteration.devkidswonder"));
+                if (!MyStartActivity(i)) {
+                    Log.d("Like", "Could not open browser");
+                }
+            }
+        } else if (id == R.id.nav_share) {
+            Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
-            String body="https://play.google.com/store/apps/details?id=com.iteration.devkidswonder";
-            i.putExtra(Intent.EXTRA_SUBJECT,body);
-            i.putExtra(Intent.EXTRA_TEXT,body);
-            startActivity(Intent.createChooser(i,"Share using"));
+            String body = "https://play.google.com/store/apps/details?id=com.iteration.devkidswonder";
+            i.putExtra(Intent.EXTRA_SUBJECT, body);
+            i.putExtra(Intent.EXTRA_TEXT, body);
+            startActivity(Intent.createChooser(i, "Share using"));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -209,13 +210,10 @@ public class BrandListActivity extends AppCompatActivity
     }
 
     private boolean MyStartActivity(Intent i) {
-        try
-        {
+        try {
             startActivity(i);
             return true;
-        }
-        catch (ActivityNotFoundException e)
-        {
+        } catch (ActivityNotFoundException e) {
             return false;
         }
     }

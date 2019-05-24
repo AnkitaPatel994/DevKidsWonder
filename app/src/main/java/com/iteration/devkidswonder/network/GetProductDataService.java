@@ -103,6 +103,8 @@ public interface GetProductDataService {
                                       @Field("contact") String contact,
                                       @Field("address") String address,
                                       @Field("city") String city,
+                                      @Field("state") String state,
+                                      @Field("country") String country,
                                       @Field("zipcode") String zipcode);
 
     @FormUrlEncoded

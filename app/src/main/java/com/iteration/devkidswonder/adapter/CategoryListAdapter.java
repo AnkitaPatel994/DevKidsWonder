@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iteration.devkidswonder.R;
@@ -22,7 +23,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
     Context context;
     ArrayList<Category> categoryListArray;
-    View v;
 
     public CategoryListAdapter(Context context, ArrayList<Category> categoryListArray) {
         this.context = context;
@@ -31,7 +31,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        v = LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.category_list, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(v);
@@ -50,7 +50,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         Picasso.with(context).load(RetrofitInstance.BASE_URL +category_img).into(viewHolder.ivCatImg);
 
 
-        v.setOnClickListener(new View.OnClickListener() {
+        viewHolder.llCategoryList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, SubCategoryActivity.class);
@@ -74,12 +74,14 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
         CircleImageView ivCatImg;
         TextView txtCatName;
+        LinearLayout llCategoryList;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             ivCatImg = (CircleImageView)itemView.findViewById(R.id.ivCatImg);
             txtCatName = (TextView)itemView.findViewById(R.id.txtCatName);
+            llCategoryList = (LinearLayout) itemView.findViewById(R.id.llCategoryList);
         }
     }
 }

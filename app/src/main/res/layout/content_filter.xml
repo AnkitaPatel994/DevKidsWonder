@@ -308,6 +308,4 @@
         android:backgroundTint="@color/colorOrange"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-
-
 </RelativeLayout>

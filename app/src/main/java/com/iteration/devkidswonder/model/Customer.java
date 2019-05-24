@@ -2,8 +2,6 @@ package com.iteration.devkidswonder.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-
 public class Customer {
 
     @SerializedName("status")
@@ -24,6 +22,10 @@ public class Customer {
     private String address;
     @SerializedName("city")
     private String city;
+    @SerializedName("state")
+    private String state;
+    @SerializedName("country")
+    private String country;
     @SerializedName("zipcode")
     private String zipcode;
 
@@ -97,6 +99,22 @@ public class Customer {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getZipcode() {

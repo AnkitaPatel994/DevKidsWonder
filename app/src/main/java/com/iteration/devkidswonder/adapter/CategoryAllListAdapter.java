@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +20,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class CategoryAllListAdapter extends RecyclerView.Adapter<CategoryAllListAdapter.ViewHolder> {
 
     Context context;
     ArrayList<Category> categoryListArray;
-    View v;
 
     public CategoryAllListAdapter(Context context, ArrayList<Category> categoryListArray) {
         this.context = context;
@@ -34,7 +33,7 @@ public class CategoryAllListAdapter extends RecyclerView.Adapter<CategoryAllList
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        v = LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.category_all_list, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(v);
@@ -42,7 +41,7 @@ public class CategoryAllListAdapter extends RecyclerView.Adapter<CategoryAllList
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final ViewHolder viewHolder, int position) {
 
         final String category_id = categoryListArray.get(position).getCategory_id();
         final String category_title = categoryListArray.get(position).getCategory_title();
@@ -50,31 +49,32 @@ public class CategoryAllListAdapter extends RecyclerView.Adapter<CategoryAllList
 
         viewHolder.txtAllCatName.setText(category_title);
 
-        if ((position % 2) == 0)
-        {
-            viewHolder.llCatListBg.setBackground(ContextCompat.getDrawable(context,R.color.colorPEACH));
-        }
-        else
-        {
-            viewHolder.llCatListBg.setBackground(ContextCompat.getDrawable(context,R.color.colorllBg));
-        }
-
-        Picasso.with(context).load(RetrofitInstance.BASE_URL +category_img).into(viewHolder.ivAllCatImg);
 
 
-        v.setOnClickListener(new View.OnClickListener() {
+        viewHolder.llCatListBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("category_id", "" + category_id);
                 Intent i = new Intent(context, SubCategoryActivity.class);
-                i.putExtra("cate_id",category_id);
-                i.putExtra("cate_name",category_title);
-                i.putExtra("brand_id","*");
-                i.putExtra("brand_name","*");
-                i.putExtra("min_price","1");
-                i.putExtra("max_price","15000");
+                i.putExtra("cate_id", category_id);
+                i.putExtra("cate_name", category_title);
+                i.putExtra("brand_id", "*");
+                i.putExtra("brand_name", "*");
+                i.putExtra("min_price", "1");
+                i.putExtra("max_price", "15000");
                 context.startActivity(i);
             }
         });
+        if ((position % 2) == 0) {
+            viewHolder.llCatListBg.setBackground(ContextCompat.getDrawable(context, R.color.colorPEACH));
+        } else {
+            viewHolder.llCatListBg.setBackground(ContextCompat.getDrawable(context, R.color.colorllBg));
+        }
+
+        Picasso.with(context).load(RetrofitInstance.BASE_URL + category_img).into(viewHolder.ivAllCatImg);
+
+
+
     }
 
     @Override
@@ -91,9 +91,9 @@ public class CategoryAllListAdapter extends RecyclerView.Adapter<CategoryAllList
         public ViewHolder(View itemView) {
             super(itemView);
 
-            llCatListBg = (LinearLayout)itemView.findViewById(R.id.llCatListBg);
-            ivAllCatImg = (RoundedImage)itemView.findViewById(R.id.ivAllCatImg);
-            txtAllCatName = (TextView)itemView.findViewById(R.id.txtAllCatName);
+            llCatListBg = (LinearLayout) itemView.findViewById(R.id.llCatListBg);
+            ivAllCatImg = (RoundedImage) itemView.findViewById(R.id.ivAllCatImg);
+            txtAllCatName = (TextView) itemView.findViewById(R.id.txtAllCatName);
         }
     }
 }

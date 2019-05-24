@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,6 @@ public class BestSellingProductListAdapter extends RecyclerView.Adapter<BestSell
 
     Context context;
     ArrayList<Product> bestSellingListArray;
-    View v;
     String ip_address;
 
     public BestSellingProductListAdapter(Context context, ArrayList<Product> bestSellingListArray, String ip_address) {
@@ -41,7 +41,7 @@ public class BestSellingProductListAdapter extends RecyclerView.Adapter<BestSell
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        v = LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.seller_product_list, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(v);
@@ -76,7 +76,7 @@ public class BestSellingProductListAdapter extends RecyclerView.Adapter<BestSell
 
         Picasso.with(context).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivSellerProductImg);
 
-        v.setOnClickListener(new View.OnClickListener() {
+        viewHolder.llSellerProductList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
@@ -123,6 +123,7 @@ public class BestSellingProductListAdapter extends RecyclerView.Adapter<BestSell
 
         ImageView ivSellerProductImg;
         TextView txtSellerProductName,txtSellerProductPrize,txtSellerProductOPrize,txtSellerProductOffer;
+        LinearLayout llSellerProductList;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -132,6 +133,7 @@ public class BestSellingProductListAdapter extends RecyclerView.Adapter<BestSell
             txtSellerProductPrize = (TextView)itemView.findViewById(R.id.txtSellerProductPrize);
             txtSellerProductOPrize = (TextView)itemView.findViewById(R.id.txtSellerProductOPrize);
             txtSellerProductOffer = (TextView)itemView.findViewById(R.id.txtSellerProductOffer);
+            llSellerProductList = (LinearLayout) itemView.findViewById(R.id.llSellerProductList);
 
         }
     }

@@ -21,7 +21,6 @@ import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.activity.ProductDetailsActivity;
 import com.iteration.devkidswonder.activity.WishListActivity;
 import com.iteration.devkidswonder.model.Message;
-import com.iteration.devkidswonder.model.Product;
 import com.iteration.devkidswonder.model.Wishlist;
 import com.iteration.devkidswonder.network.GetProductDataService;
 import com.iteration.devkidswonder.network.RetrofitInstance;
@@ -38,8 +37,6 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
     Context context;
     ArrayList<Wishlist> wishListProductListArray;
     String user_id;
-    View v;
-    //Dialog dialog;
     GetProductDataService productDataService;
 
     public WishListAdapter(Context context, ArrayList<Wishlist> wishListProductListArray, String user_id) {
@@ -50,7 +47,7 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        v = LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.whishlist_product_list, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(v);

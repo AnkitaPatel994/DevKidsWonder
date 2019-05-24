@@ -9,12 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.activity.ProductDetailsActivity;
-import com.iteration.devkidswonder.activity.SubCategoryActivity;
 import com.iteration.devkidswonder.model.Message;
 import com.iteration.devkidswonder.model.Product;
 import com.iteration.devkidswonder.network.GetProductDataService;
@@ -31,7 +31,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     Context context;
     ArrayList<Product> productListArray;
-    View v;
     String ip_address;
 
     public ProductListAdapter(Context context, ArrayList<Product> productListArray, String ip_address) {
@@ -42,7 +41,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        v = LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.product_list, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(v);
@@ -78,7 +77,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
         Picasso.with(context).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivsubProductImg);
 
-        v.setOnClickListener(new View.OnClickListener() {
+        viewHolder.llProductList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
@@ -125,6 +124,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
         ImageView ivsubProductImg;
         TextView txtSubProductName,txtsubrating,txtsubprice,txtsubcuttedprice,txtsuboffer;
+        LinearLayout llProductList;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -135,6 +135,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             txtsubprice = (TextView)itemView.findViewById(R.id.txtsubprice);
             txtsubcuttedprice = (TextView)itemView.findViewById(R.id.txtsubcuttedprice);
             txtsuboffer = (TextView)itemView.findViewById(R.id.txtsuboffer);
+            llProductList = (LinearLayout) itemView.findViewById(R.id.llProductList);
 
         }
     }

@@ -3,8 +3,6 @@ package com.iteration.devkidswonder.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -45,6 +43,7 @@ public class MobileOTPActivity extends AppCompatActivity {
 
         txtMMobileNo = (EditText)findViewById(R.id.txtMMobileNo);
         txtMOTP = (EditText)findViewById(R.id.txtMOTP);
+
         btnMSubmitOTP = (Button) findViewById(R.id.btnMSubmitOTP);
         btnMResendOTP = (Button) findViewById(R.id.btnMResendOTP);
         btnMobileVerification = (Button) findViewById(R.id.btnMobileVerification);
@@ -116,7 +115,11 @@ public class MobileOTPActivity extends AppCompatActivity {
                 if (motp.equals(otp))
                 {
                     dialog.dismiss();
-                    Intent i = new Intent(MobileOTPActivity.this,EmailOTPActivity.class);
+                    /*Intent i = new Intent(MobileOTPActivity.this,EmailOTPActivity.class);
+                    i.putExtra("mobile",txtMMobileNo.getText().toString());
+                    startActivity(i);*/
+
+                    Intent i = new Intent(MobileOTPActivity.this,SignUpActivity.class);
                     i.putExtra("mobile",txtMMobileNo.getText().toString());
                     startActivity(i);
                 }
