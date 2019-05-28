@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,8 @@ import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.adapter.BrandAllListAdapter;
 import com.iteration.devkidswonder.model.Brand;
 import com.iteration.devkidswonder.model.BrandList;
+import com.iteration.devkidswonder.model.Cart;
+import com.iteration.devkidswonder.model.CartList;
 import com.iteration.devkidswonder.network.GetProductDataService;
 import com.iteration.devkidswonder.network.RetrofitInstance;
 import com.iteration.devkidswonder.network.SessionManager;
@@ -42,6 +45,9 @@ public class BrandListActivity extends AppCompatActivity
     ArrayList<Brand> BrandAllListArray = new ArrayList<>();
     SessionManager session;
     int flag = 0;
+    TextView textCartItemCount;
+    int mCartItemCount = 1;
+    ArrayList<Cart> cartProductListArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +61,10 @@ public class BrandListActivity extends AppCompatActivity
         session = new SessionManager(BrandListActivity.this);
         flag = session.checkLogin();
 
+        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+
         HashMap<String, String> user = session.getUserDetails();
+        String user_id = user.get(SessionManager.user_id);
         String user_name = user.get(SessionManager.user_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -71,7 +80,8 @@ public class BrandListActivity extends AppCompatActivity
         TextView txt_login = (TextView) headerview.findViewById(R.id.txt_login);
         LinearLayout nav_header_ll = (LinearLayout) headerview.findViewById(R.id.nav_header_ll);
 
-        if (flag == 1) {
+        if (flag == 1)
+        {
             txt_login.setText(user_name);
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -80,7 +90,34 @@ public class BrandListActivity extends AppCompatActivity
                     startActivity(i);
                 }
             });
-        } else if (flag == 0) {
+
+            Call<CartList> CartListCall = productDataService.getCartData(user_id);
+            CartListCall.enqueue(new Callback<CartList>() {
+                @Override
+                public void onResponse(Call<CartList> call, Response<CartList> response) {
+                    String status = response.body().getStatus();
+                    if (status.equals("1"))
+                    {
+                        cartProductListArray = response.body().getCartList();
+                        mCartItemCount = cartProductListArray.size();
+                        textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                        Log.d("CartItemCount",""+mCartItemCount);
+                    }
+                    else
+                    {
+                        mCartItemCount = 0;
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CartList> call, Throwable t) {
+                    mCartItemCount = 0;
+                }
+            });
+
+        }
+        else if (flag == 0)
+        {
             txt_login.setText("Login / Register");
             nav_header_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -89,6 +126,7 @@ public class BrandListActivity extends AppCompatActivity
                     startActivity(i);
                 }
             });
+            mCartItemCount = 0;
         }
 
         rvAllBrandList = (RecyclerView) findViewById(R.id.rvAllBrandList);
@@ -96,8 +134,6 @@ public class BrandListActivity extends AppCompatActivity
 
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(), 1);
         rvAllBrandList.setLayoutManager(manager);
-
-        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
         Call<BrandList> brandListCall = productDataService.getBrandData();
 
@@ -118,6 +154,13 @@ public class BrandListActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        startActivity(getIntent());
+        finish();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -131,7 +174,37 @@ public class BrandListActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+
+        final MenuItem menuItem = menu.findItem(R.id.menu_cart);
+
+        View actionView = MenuItemCompat.getActionView(menuItem);
+        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+
+        setupBadge();
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
+
         return true;
+    }
+
+    private void setupBadge() {
+        if (textCartItemCount != null) {
+            if (mCartItemCount == 0) {
+                if (textCartItemCount.getVisibility() != View.GONE) {
+                    textCartItemCount.setVisibility(View.GONE);
+                }
+            } else {
+                textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                    textCartItemCount.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     @Override

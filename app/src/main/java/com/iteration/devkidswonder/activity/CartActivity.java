@@ -137,9 +137,9 @@ public class CartActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<CartList> call, Response<CartList> response) {
                 String status = response.body().getStatus();
-                cartProductListArray = response.body().getCartList();
                 if (status.equals("1"))
                 {
+                    cartProductListArray = response.body().getCartList();
                     CartProductListAdapter cartProductListAdapter = new CartProductListAdapter(cartProductListArray);
                     rvCart.setAdapter(cartProductListAdapter);
                     llCartEmpty.setVisibility(View.GONE);

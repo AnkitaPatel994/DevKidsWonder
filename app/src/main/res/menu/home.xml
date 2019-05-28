@@ -11,5 +11,6 @@
         android:id="@+id/menu_cart"
         android:icon="@drawable/ic_shopping_cart_black_24dp"
         android:title="Cart"
+        app:actionLayout="@layout/custom_action_item_layout"
         app:showAsAction="ifRoom" />
 </menu>

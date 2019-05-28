@@ -65,6 +65,10 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
 
         viewHolder.txtOCuttedPrice.setPaintFlags(viewHolder.txtOCuttedPrice.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
 
+        if (order_status.equals("Delivered"))
+        {
+            viewHolder.btnTrackOrder.setVisibility(View.GONE);
+        }
 
         Picasso.with(context).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivProImg);
         viewHolder.btnTrackOrder.setVisibility(View.VISIBLE);

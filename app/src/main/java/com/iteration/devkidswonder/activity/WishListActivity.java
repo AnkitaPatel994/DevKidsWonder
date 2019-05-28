@@ -4,18 +4,19 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.adapter.WishListAdapter;
+import com.iteration.devkidswonder.model.Cart;
+import com.iteration.devkidswonder.model.CartList;
 import com.iteration.devkidswonder.model.Wishlist;
 import com.iteration.devkidswonder.model.WishlistList;
 import com.iteration.devkidswonder.network.GetProductDataService;
@@ -45,6 +48,9 @@ public class WishListActivity extends AppCompatActivity
     LinearLayout llWishlistEmpty;
     String user_id;
     ArrayList<Wishlist> wishListProductListArray = new ArrayList<>();
+    TextView textCartItemCount;
+    int mCartItemCount = 1;
+    ArrayList<Cart> cartProductListArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +97,31 @@ public class WishListActivity extends AppCompatActivity
             });
             llWishlistEmpty.setVisibility(View.GONE);
             rvProductWishlist.setVisibility(View.VISIBLE);
+
+            Call<CartList> CartListCall = productDataService.getCartData(user_id);
+            CartListCall.enqueue(new Callback<CartList>() {
+                @Override
+                public void onResponse(Call<CartList> call, Response<CartList> response) {
+                    String status = response.body().getStatus();
+                    if (status.equals("1"))
+                    {
+                        cartProductListArray = response.body().getCartList();
+                        mCartItemCount = cartProductListArray.size();
+                        textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                        Log.d("CartItemCount",""+mCartItemCount);
+                    }
+                    else
+                    {
+                        mCartItemCount = 0;
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CartList> call, Throwable t) {
+                    Toast.makeText(WishListActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
         else if (flag == 0)
         {
@@ -104,6 +135,7 @@ public class WishListActivity extends AppCompatActivity
             });
             llWishlistEmpty.setVisibility(View.VISIBLE);
             rvProductWishlist.setVisibility(View.GONE);
+            mCartItemCount = 0;
         }
 
         rvProductWishlist.setHasFixedSize(true);
@@ -148,6 +180,12 @@ public class WishListActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        startActivity(getIntent());
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -166,7 +204,37 @@ public class WishListActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.cart, menu);
+
+        final MenuItem menuItem = menu.findItem(R.id.menu_cart_wish);
+
+        View actionView = MenuItemCompat.getActionView(menuItem);
+        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+
+        setupBadge();
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
+
         return true;
+    }
+
+    private void setupBadge() {
+        if (textCartItemCount != null) {
+            if (mCartItemCount == 0) {
+                if (textCartItemCount.getVisibility() != View.GONE) {
+                    textCartItemCount.setVisibility(View.GONE);
+                }
+            } else {
+                textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                    textCartItemCount.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     @Override

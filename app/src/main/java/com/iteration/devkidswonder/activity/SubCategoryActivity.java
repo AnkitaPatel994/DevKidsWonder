@@ -8,6 +8,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,8 @@ import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.adapter.ProductListAdapter;
+import com.iteration.devkidswonder.model.Cart;
+import com.iteration.devkidswonder.model.CartList;
 import com.iteration.devkidswonder.model.Product;
 import com.iteration.devkidswonder.model.ProductList;
 import com.iteration.devkidswonder.network.GetProductDataService;
@@ -46,6 +49,9 @@ public class SubCategoryActivity extends AppCompatActivity
     SessionManager session;
     int flag = 0;
     String ip_address,cate_id,cate_name,brand_id,brand_name,min_price,max_price;
+    TextView textCartItemCount;
+    int mCartItemCount = 1;
+    ArrayList<Cart> cartProductListArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,10 @@ public class SubCategoryActivity extends AppCompatActivity
         session = new SessionManager(SubCategoryActivity.this);
         flag = session.checkLogin();
 
+        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+
         HashMap<String,String> user = session.getUserDetails();
+        String user_id = user.get(SessionManager.user_id);
         String user_name = user.get(SessionManager.user_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -83,6 +92,30 @@ public class SubCategoryActivity extends AppCompatActivity
                     startActivity(i);
                 }
             });
+
+            Call<CartList> CartListCall = productDataService.getCartData(user_id);
+            CartListCall.enqueue(new Callback<CartList>() {
+                @Override
+                public void onResponse(Call<CartList> call, Response<CartList> response) {
+                    String status = response.body().getStatus();
+                    if (status.equals("1"))
+                    {
+                        cartProductListArray = response.body().getCartList();
+                        mCartItemCount = cartProductListArray.size();
+                        textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                        Log.d("CartItemCount",""+mCartItemCount);
+                    }
+                    else
+                    {
+                        mCartItemCount = 0;
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CartList> call, Throwable t) {
+                    Toast.makeText(SubCategoryActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         else if (flag == 0)
         {
@@ -94,6 +127,7 @@ public class SubCategoryActivity extends AppCompatActivity
                     startActivity(i);
                 }
             });
+            mCartItemCount = 0;
         }
 
         @SuppressLint("WifiManagerLeak")
@@ -107,7 +141,7 @@ public class SubCategoryActivity extends AppCompatActivity
         min_price = getIntent().getExtras().getString("min_price");
         max_price = getIntent().getExtras().getString("max_price");
 
-        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+
 
         rvSubCategoryProduct = (RecyclerView)findViewById(R.id.rvSubCategoryProduct);
         rvSubCategoryProduct.setHasFixedSize(true);
@@ -144,6 +178,13 @@ public class SubCategoryActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        startActivity(getIntent());
+        finish();
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -157,7 +198,37 @@ public class SubCategoryActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.sub_category, menu);
+
+        final MenuItem menuItem = menu.findItem(R.id.menu_cart_pro);
+
+        View actionView = MenuItemCompat.getActionView(menuItem);
+        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+
+        setupBadge();
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
+
         return true;
+    }
+
+    private void setupBadge() {
+        if (textCartItemCount != null) {
+            if (mCartItemCount == 0) {
+                if (textCartItemCount.getVisibility() != View.GONE) {
+                    textCartItemCount.setVisibility(View.GONE);
+                }
+            } else {
+                textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                    textCartItemCount.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     @Override

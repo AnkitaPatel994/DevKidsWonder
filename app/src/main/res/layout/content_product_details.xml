@@ -554,7 +554,8 @@
                         android:id="@+id/imageView6"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        app:srcCompat="@drawable/im11" />
+                        app:srcCompat="@drawable/im11"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/txtSimilarProduct"
