@@ -53,6 +53,7 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, SubCategoryActivity.class);
+                i.putExtra("pro_name","*");
                 i.putExtra("cate_id","*");
                 i.putExtra("cate_name","*");
                 i.putExtra("brand_id",Brand_id);

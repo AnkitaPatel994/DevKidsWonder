@@ -65,6 +65,7 @@ public class BrandAllListAdapter extends RecyclerView.Adapter<BrandAllListAdapte
             public void onClick(View v) {
                 Log.d("Brand_id", "" + Brand_id);
                 Intent i = new Intent(context, SubCategoryActivity.class);
+                i.putExtra("pro_name","*");
                 i.putExtra("cate_id","*");
                 i.putExtra("cate_name","*");
                 i.putExtra("brand_id",Brand_id);

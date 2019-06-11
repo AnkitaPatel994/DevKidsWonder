@@ -56,6 +56,7 @@ public class CategoryAllListAdapter extends RecyclerView.Adapter<CategoryAllList
             public void onClick(View v) {
                 Log.d("category_id", "" + category_id);
                 Intent i = new Intent(context, SubCategoryActivity.class);
+                i.putExtra("pro_name","*");
                 i.putExtra("cate_id", category_id);
                 i.putExtra("cate_name", category_title);
                 i.putExtra("brand_id", "*");

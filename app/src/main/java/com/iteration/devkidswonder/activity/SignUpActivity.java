@@ -44,7 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
         String mobile = getIntent().getExtras().getString("mobile");
-        //String email = getIntent().getExtras().getString("email");
+        /*String email = getIntent().getExtras().getString("email");*/
 
         txtname = (EditText) findViewById(R.id.etfnameReg);
         txtlastname = (EditText) findViewById(R.id.etLnameReg);
@@ -59,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
         awesomeValidation.addValidation(this, R.id.etfnameReg, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", R.string.firstname);
         awesomeValidation.addValidation(this, R.id.etLnameReg, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", R.string.lname);
         awesomeValidation.addValidation(this, R.id.etEmailReg, Patterns.EMAIL_ADDRESS, R.string.Email);
-        awesomeValidation.addValidation(this, R.id.etPasswordReg, "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})", R.string.Password);
+        //awesomeValidation.addValidation(this, R.id.etPasswordReg, "", R.string.Password);
         //awesomeValidation.addValidation(this, R.id.etPhonenoReg, "^[2-9]{2}[0-9]{8}$", R.string.mobileNo);
 
         btnAlreadyLogin.setOnClickListener(new View.OnClickListener() {
@@ -83,27 +83,34 @@ public class SignUpActivity extends AppCompatActivity {
                     String contact = txtmobile_no.getText().toString().trim();
                     String password = txtpassword.getText().toString().trim();
 
-                    final ProgressDialog dialog = new ProgressDialog(SignUpActivity.this);
-                    dialog.setMessage("Loading...");
-                    dialog.setCancelable(true);
-                    dialog.show();
+                    if (!password.equals(""))
+                    {
+                        final ProgressDialog dialog = new ProgressDialog(SignUpActivity.this);
+                        dialog.setMessage("Loading...");
+                        dialog.setCancelable(true);
+                        dialog.show();
 
-                    Call<Message> customerCall = productDataService.getCustomerListData(firstname,lastname,email,contact,password);
-                    customerCall.enqueue(new Callback<Message>() {
-                        @Override
-                        public void onResponse(Call<Message> call, Response<Message> response) {
-                            dialog.dismiss();
-                            String message = response.body().getMessage();
-                            Toast.makeText(SignUpActivity.this,message , Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(SignUpActivity.this,SignInActivity.class);
-                            startActivity(i);
-                        }
+                        Call<Message> customerCall = productDataService.getCustomerListData(firstname,lastname,email,contact,password);
+                        customerCall.enqueue(new Callback<Message>() {
+                            @Override
+                            public void onResponse(Call<Message> call, Response<Message> response) {
+                                dialog.dismiss();
+                                String message = response.body().getMessage();
+                                Toast.makeText(SignUpActivity.this,message , Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(SignUpActivity.this,SignInActivity.class);
+                                startActivity(i);
+                            }
 
-                        @Override
-                        public void onFailure(Call<Message> call, Throwable t) {
-                            Toast.makeText(SignUpActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<Message> call, Throwable t) {
+                                Toast.makeText(SignUpActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        Toast.makeText(SignUpActivity.this,"Password not empty...",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

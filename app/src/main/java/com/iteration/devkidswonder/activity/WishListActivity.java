@@ -51,6 +51,7 @@ public class WishListActivity extends AppCompatActivity
     TextView textCartItemCount;
     int mCartItemCount = 1;
     ArrayList<Cart> cartProductListArray = new ArrayList<>();
+    GetProductDataService productDataService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class WishListActivity extends AppCompatActivity
         String user_name = user.get(SessionManager.user_name);
 
         wishListProductListArray.clear();
-        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+        productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -97,31 +98,6 @@ public class WishListActivity extends AppCompatActivity
             });
             llWishlistEmpty.setVisibility(View.GONE);
             rvProductWishlist.setVisibility(View.VISIBLE);
-
-            Call<CartList> CartListCall = productDataService.getCartData(user_id);
-            CartListCall.enqueue(new Callback<CartList>() {
-                @Override
-                public void onResponse(Call<CartList> call, Response<CartList> response) {
-                    String status = response.body().getStatus();
-                    if (status.equals("1"))
-                    {
-                        cartProductListArray = response.body().getCartList();
-                        mCartItemCount = cartProductListArray.size();
-                        textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
-                        Log.d("CartItemCount",""+mCartItemCount);
-                    }
-                    else
-                    {
-                        mCartItemCount = 0;
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<CartList> call, Throwable t) {
-                    Toast.makeText(WishListActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                }
-            });
-
         }
         else if (flag == 0)
         {
@@ -135,7 +111,6 @@ public class WishListActivity extends AppCompatActivity
             });
             llWishlistEmpty.setVisibility(View.VISIBLE);
             rvProductWishlist.setVisibility(View.GONE);
-            mCartItemCount = 0;
         }
 
         rvProductWishlist.setHasFixedSize(true);
@@ -223,17 +198,49 @@ public class WishListActivity extends AppCompatActivity
     }
 
     private void setupBadge() {
-        if (textCartItemCount != null) {
-            if (mCartItemCount == 0) {
-                if (textCartItemCount.getVisibility() != View.GONE) {
+        if (flag == 1)
+        {
+            Call<CartList> CartListCall = productDataService.getCartData(user_id);
+            CartListCall.enqueue(new Callback<CartList>() {
+                @Override
+                public void onResponse(Call<CartList> call, Response<CartList> response) {
+                    String status = response.body().getStatus();
+                    if (status.equals("1"))
+                    {
+                        cartProductListArray = response.body().getCartList();
+                        mCartItemCount = cartProductListArray.size();
+                        if (textCartItemCount != null) {
+                            if (mCartItemCount == 0) {
+                                if (textCartItemCount.getVisibility() != View.GONE) {
+                                    textCartItemCount.setVisibility(View.GONE);
+                                }
+                            } else {
+                                textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                                if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                                    textCartItemCount.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        mCartItemCount = 0;
+                        textCartItemCount.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CartList> call, Throwable t) {
+                    mCartItemCount = 0;
                     textCartItemCount.setVisibility(View.GONE);
                 }
-            } else {
-                textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
-                if (textCartItemCount.getVisibility() != View.VISIBLE) {
-                    textCartItemCount.setVisibility(View.VISIBLE);
-                }
-            }
+            });
+
+        }
+        else if (flag == 0)
+        {
+            mCartItemCount = 0;
+            textCartItemCount.setVisibility(View.GONE);
         }
     }
 

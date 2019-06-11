@@ -3,8 +3,6 @@ package com.iteration.devkidswonder.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.iteration.devkidswonder.R;
-import com.iteration.devkidswonder.model.CategoryList;
 import com.iteration.devkidswonder.model.Login;
 import com.iteration.devkidswonder.network.GetProductDataService;
 import com.iteration.devkidswonder.network.RetrofitInstance;
@@ -51,7 +48,7 @@ public class SignInActivity extends AppCompatActivity {
         signUp=(Button)findViewById(R.id.btnSignUp);
 
         awesomeValidation.addValidation(this, R.id.etUserNameLogin, Patterns.EMAIL_ADDRESS, R.string.uname);
-        awesomeValidation.addValidation(this, R.id.etPasswordLogin, "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})", R.string.Psw);
+        //awesomeValidation.addValidation(this, R.id.etPasswordLogin, "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{6,20})", R.string.Psw);
 
         forgotpass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,43 +76,51 @@ public class SignInActivity extends AppCompatActivity {
                     String email = uname.getText().toString();
                     String pass = password.getText().toString();
 
-                    final ProgressDialog dialog = new ProgressDialog(SignInActivity.this);
-                    dialog.setMessage("Loading...");
-                    dialog.setCancelable(true);
-                    dialog.show();
+                    if (!pass.equals(""))
+                    {
+                        final ProgressDialog dialog = new ProgressDialog(SignInActivity.this);
+                        dialog.setMessage("Loading...");
+                        dialog.setCancelable(true);
+                        dialog.show();
 
-                    Call<Login> LoginListCall = productDataService.getLoginData(email,pass);
-                    LoginListCall.enqueue(new Callback<Login>() {
-                        @Override
-                        public void onResponse(Call<Login> call, Response<Login> response) {
-                            dialog.dismiss();
-                            String status = response.body().getStatus();
-                            String message = response.body().getMessage();
-                            String UserId = response.body().getId();
-                            String Firstname = response.body().getFirstname();
-                            String Lastname = response.body().getLastname();
-                            String UserName = Firstname+" "+Lastname;
-                            String UserEmail = response.body().getEmail();
-                            if(status.equals("1"))
-                            {
-                                session.createLoginSession(UserId,UserName,UserEmail);
-                                Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                                startActivity(i);
-                                finish();
+                        Call<Login> LoginListCall = productDataService.getLoginData(email,pass);
+                        LoginListCall.enqueue(new Callback<Login>() {
+                            @Override
+                            public void onResponse(Call<Login> call, Response<Login> response) {
+                                dialog.dismiss();
+                                String status = response.body().getStatus();
+                                String message = response.body().getMessage();
+                                String UserId = response.body().getId();
+                                String Firstname = response.body().getFirstname();
+                                String Lastname = response.body().getLastname();
+                                String UserName = Firstname+" "+Lastname;
+                                String UserEmail = response.body().getEmail();
+                                if(status.equals("1"))
+                                {
+                                    session.createLoginSession(UserId,UserName,UserEmail);
+                                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+                                    startActivity(i);
+                                    finish();
+                                }
+                                else
+                                {
+                                    uname.setText("");
+                                    password.setText("");
+                                    Toast.makeText(SignInActivity.this,message,Toast.LENGTH_SHORT).show();
+                                }
                             }
-                            else
-                            {
-                                uname.setText("");
-                                password.setText("");
-                                Toast.makeText(SignInActivity.this,message,Toast.LENGTH_SHORT).show();
-                            }
-                        }
 
-                        @Override
-                        public void onFailure(Call<Login> call, Throwable t) {
-                            Toast.makeText(SignInActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<Login> call, Throwable t) {
+                                Toast.makeText(SignInActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        Toast.makeText(SignInActivity.this,"Password not empty...",Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
             }

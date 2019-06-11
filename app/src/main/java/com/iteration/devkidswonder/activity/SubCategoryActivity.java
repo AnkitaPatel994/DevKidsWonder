@@ -45,13 +45,15 @@ public class SubCategoryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     RecyclerView rvSubCategoryProduct;
+    LinearLayout ivSearch;
     ArrayList<Product> ProductListArray = new ArrayList<>();
     SessionManager session;
     int flag = 0;
-    String ip_address,cate_id,cate_name,brand_id,brand_name,min_price,max_price;
+    String ip_address,pro_name,user_id,user_name,cate_id,cate_name,brand_id,brand_name,min_price,max_price;
     TextView textCartItemCount;
     int mCartItemCount = 1;
     ArrayList<Cart> cartProductListArray = new ArrayList<>();
+    GetProductDataService productDataService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +65,11 @@ public class SubCategoryActivity extends AppCompatActivity
         session = new SessionManager(SubCategoryActivity.this);
         flag = session.checkLogin();
 
-        GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
+        productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
         HashMap<String,String> user = session.getUserDetails();
-        String user_id = user.get(SessionManager.user_id);
-        String user_name = user.get(SessionManager.user_name);
+        user_id = user.get(SessionManager.user_id);
+        user_name = user.get(SessionManager.user_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -92,30 +94,6 @@ public class SubCategoryActivity extends AppCompatActivity
                     startActivity(i);
                 }
             });
-
-            Call<CartList> CartListCall = productDataService.getCartData(user_id);
-            CartListCall.enqueue(new Callback<CartList>() {
-                @Override
-                public void onResponse(Call<CartList> call, Response<CartList> response) {
-                    String status = response.body().getStatus();
-                    if (status.equals("1"))
-                    {
-                        cartProductListArray = response.body().getCartList();
-                        mCartItemCount = cartProductListArray.size();
-                        textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
-                        Log.d("CartItemCount",""+mCartItemCount);
-                    }
-                    else
-                    {
-                        mCartItemCount = 0;
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<CartList> call, Throwable t) {
-                    Toast.makeText(SubCategoryActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                }
-            });
         }
         else if (flag == 0)
         {
@@ -127,13 +105,13 @@ public class SubCategoryActivity extends AppCompatActivity
                     startActivity(i);
                 }
             });
-            mCartItemCount = 0;
         }
 
         @SuppressLint("WifiManagerLeak")
         WifiManager wm = (WifiManager) getSystemService(WIFI_SERVICE);
         ip_address = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
+        pro_name = getIntent().getExtras().getString("pro_name");
         cate_id = getIntent().getExtras().getString("cate_id");
         cate_name = getIntent().getExtras().getString("cate_name");
         brand_id = getIntent().getExtras().getString("brand_id");
@@ -141,7 +119,7 @@ public class SubCategoryActivity extends AppCompatActivity
         min_price = getIntent().getExtras().getString("min_price");
         max_price = getIntent().getExtras().getString("max_price");
 
-
+        ivSearch = (LinearLayout) findViewById(R.id.ivSearch);
 
         rvSubCategoryProduct = (RecyclerView)findViewById(R.id.rvSubCategoryProduct);
         rvSubCategoryProduct.setHasFixedSize(true);
@@ -149,7 +127,7 @@ public class SubCategoryActivity extends AppCompatActivity
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),2);
         rvSubCategoryProduct.setLayoutManager(manager);
 
-        Call<ProductList> ProductListCall = productDataService.getProductListData(cate_id,brand_id,min_price,max_price);
+        Call<ProductList> ProductListCall = productDataService.getProductListData(pro_name,cate_id,brand_id,min_price,max_price);
         ProductListCall.enqueue(new Callback<ProductList>() {
             @Override
             public void onResponse(Call<ProductList> call, Response<ProductList> response) {
@@ -161,10 +139,14 @@ public class SubCategoryActivity extends AppCompatActivity
                     ProductListArray = response.body().getProductList();
                     ProductListAdapter productListAdapter = new ProductListAdapter(SubCategoryActivity.this,ProductListArray,ip_address);
                     rvSubCategoryProduct.setAdapter(productListAdapter);
+                    rvSubCategoryProduct.setVisibility(View.VISIBLE);
+                    ivSearch.setVisibility(View.GONE);
                 }
                 else
                 {
                     Toast.makeText(SubCategoryActivity.this, Message, Toast.LENGTH_SHORT).show();
+                    rvSubCategoryProduct.setVisibility(View.GONE);
+                    ivSearch.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -217,17 +199,49 @@ public class SubCategoryActivity extends AppCompatActivity
     }
 
     private void setupBadge() {
-        if (textCartItemCount != null) {
-            if (mCartItemCount == 0) {
-                if (textCartItemCount.getVisibility() != View.GONE) {
+        if (flag == 1)
+        {
+            Call<CartList> CartListCall = productDataService.getCartData(user_id);
+            CartListCall.enqueue(new Callback<CartList>() {
+                @Override
+                public void onResponse(Call<CartList> call, Response<CartList> response) {
+                    String status = response.body().getStatus();
+                    if (status.equals("1"))
+                    {
+                        cartProductListArray = response.body().getCartList();
+                        mCartItemCount = cartProductListArray.size();
+                        if (textCartItemCount != null) {
+                            if (mCartItemCount == 0) {
+                                if (textCartItemCount.getVisibility() != View.GONE) {
+                                    textCartItemCount.setVisibility(View.GONE);
+                                }
+                            } else {
+                                textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                                if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                                    textCartItemCount.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        mCartItemCount = 0;
+                        textCartItemCount.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CartList> call, Throwable t) {
+                    mCartItemCount = 0;
                     textCartItemCount.setVisibility(View.GONE);
                 }
-            } else {
-                textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
-                if (textCartItemCount.getVisibility() != View.VISIBLE) {
-                    textCartItemCount.setVisibility(View.VISIBLE);
-                }
-            }
+            });
+
+        }
+        else if (flag == 0)
+        {
+            mCartItemCount = 0;
+            textCartItemCount.setVisibility(View.GONE);
         }
     }
 
@@ -238,6 +252,7 @@ public class SubCategoryActivity extends AppCompatActivity
         if (id == R.id.menu_filter_pro)
         {
             Intent i = new Intent(getApplicationContext(),FilterActivity.class);
+            i.putExtra("pro_name",pro_name);
             i.putExtra("cate_id",cate_id);
             i.putExtra("cate_name",cate_name);
             i.putExtra("brand_id",brand_id);

@@ -64,6 +64,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:layout_marginTop="16dp"
+                android:visibility="gone"
                 android:text="Your Order was shipped . we will notify you when it has been Deliver to you" />
 
             <View

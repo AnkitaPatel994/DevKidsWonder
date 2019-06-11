@@ -1,9 +1,7 @@
 package com.iteration.devkidswonder.activity;
 
-import android.graphics.drawable.ColorDrawable;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
-import com.iteration.devkidswonder.adapter.ProductListAdapter;
 import com.iteration.devkidswonder.adapter.SearchProductListAdapter;
 import com.iteration.devkidswonder.model.Product;
 import com.iteration.devkidswonder.model.ProductList;
@@ -35,6 +32,7 @@ public class SearchActivity extends AppCompatActivity {
 
     EditText txtSearch;
     ImageView ivClose;
+    LinearLayout btnSSearch;
     RecyclerView rvSearch;
     ArrayList<Product> SearchProductListArray = new ArrayList<>();
     SearchProductListAdapter searchProductListAdapter;
@@ -55,13 +53,15 @@ public class SearchActivity extends AppCompatActivity {
 
         GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
+        btnSSearch = (LinearLayout)findViewById(R.id.btnSSearch);
+
         rvSearch = (RecyclerView)findViewById(R.id.rvSearch);
         rvSearch.setHasFixedSize(true);
 
         RecyclerView.LayoutManager manager = new GridLayoutManager(getApplicationContext(),1);
         rvSearch.setLayoutManager(manager);
 
-        Call<ProductList> ProductListCall = productDataService.getProductListData("*","*","1","15000");
+        Call<ProductList> ProductListCall = productDataService.getProductListData("*","*","*","1","15000");
         ProductListCall.enqueue(new Callback<ProductList>() {
             @Override
             public void onResponse(Call<ProductList> call, Response<ProductList> response) {
@@ -99,6 +99,30 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 searchProductListAdapter.getFilter().filter(s.toString());
+            }
+        });
+
+        btnSSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!txtSearch.getText().toString().equals(""))
+                {
+                    Intent i = new Intent(SearchActivity.this, SubCategoryActivity.class);
+                    i.putExtra("pro_name",txtSearch.getText().toString());
+                    i.putExtra("cate_id","*");
+                    i.putExtra("cate_name","*");
+                    i.putExtra("brand_id","*");
+                    i.putExtra("brand_name","*");
+                    i.putExtra("min_price","1");
+                    i.putExtra("max_price","15000");
+                    startActivity(i);
+                }
+                else
+                {
+                    Toast.makeText(SearchActivity.this, "Textbox not Empty!...", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

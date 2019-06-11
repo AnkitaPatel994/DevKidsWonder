@@ -54,6 +54,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, SubCategoryActivity.class);
+                i.putExtra("pro_name","*");
                 i.putExtra("cate_id",category_id);
                 i.putExtra("cate_name",category_title);
                 i.putExtra("brand_id","*");

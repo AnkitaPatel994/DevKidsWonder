@@ -1,35 +1,24 @@
 package com.iteration.devkidswonder.activity;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iteration.devkidswonder.R;
-import com.iteration.devkidswonder.adapter.BrandListAdapter;
-import com.iteration.devkidswonder.adapter.CategoryListAdapter;
 import com.iteration.devkidswonder.model.Brand;
 import com.iteration.devkidswonder.model.BrandList;
 import com.iteration.devkidswonder.model.Category;
@@ -58,7 +47,7 @@ public class FilterActivity extends AppCompatActivity {
     ArrayList<String> BrandNameArray = new ArrayList<>();
     GetProductDataService productDataService;
     Button btnFilter;
-    String min_price,max_price,cate_id,brand_id,cate_name,brand_name;
+    String min_price,max_price,pro_name,cate_id,brand_id,cate_name,brand_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +67,7 @@ public class FilterActivity extends AppCompatActivity {
         llFilterCategory = (LinearLayout)findViewById(R.id.llFilterCategory);
         llFilterBrand = (LinearLayout)findViewById(R.id.llFilterBrand);
 
+        pro_name = getIntent().getExtras().getString("pro_name");
         cate_id = getIntent().getExtras().getString("cate_id");
         if(cate_id.equals("*"))
         {
@@ -264,6 +254,7 @@ public class FilterActivity extends AppCompatActivity {
                 String Brname = txtBrand.getText().toString();
 
                 Intent i = new Intent(getApplicationContext(),SubCategoryActivity.class);
+                i.putExtra("pro_name",pro_name);
                 i.putExtra("cate_id",cate_id);
                 i.putExtra("cate_name",Catname);
                 i.putExtra("brand_id",brand_id);

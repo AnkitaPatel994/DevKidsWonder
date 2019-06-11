@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.iteration.devkidswonder.R;
@@ -70,8 +71,13 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
             viewHolder.btnTrackOrder.setVisibility(View.GONE);
         }
 
+        if (order_status.equals("Confirmed"))
+        {
+            viewHolder.llOrderProList.setVisibility(View.GONE);
+        }
+
         Picasso.with(context).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivProImg);
-        viewHolder.btnTrackOrder.setVisibility(View.VISIBLE);
+
         viewHolder.btnTrackOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +119,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
         ImageView ivProImg;
         Button btnTrackOrder;
         TextView txtOTitle,txtOSizeCart,txtOCartQty,txtOProductPrice,txtOCuttedPrice,txtOProductOff;
+        LinearLayout llOrderProList;
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -124,6 +131,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
             txtOCuttedPrice = (TextView) itemView.findViewById(R.id.txtOCuttedPrice);
             txtOProductOff = (TextView) itemView.findViewById(R.id.txtOProductOff);
             btnTrackOrder = (Button) itemView.findViewById(R.id.btnTrackOrder);
+            llOrderProList = (LinearLayout) itemView.findViewById(R.id.llOrderProList);
 
         }
     }

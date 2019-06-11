@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +65,7 @@ import retrofit2.Response;
 
 public class ProductDetailsActivity extends AppCompatActivity {
 
-    LinearLayout llPDWishlist,llPDPSizeChart,llPDPSize;
+    LinearLayout llPDWishlist,llPDPSizeChart,llPDPSize,llRating;
     RecyclerView rvPDAllView,rvPDInterestedProductList,rvPDRecentView,rvPDProductSize;
     String cate_id,ipAddress,pro_id,rs,user_id;
     ViewPager vpPagerImgSlider;
@@ -205,6 +206,79 @@ public class ProductDetailsActivity extends AppCompatActivity {
         Button btnProductCheck = (Button)findViewById(R.id.btnProductCheck);
         Button btnPDAddCart = (Button)findViewById(R.id.btnPDAddCart);
         llPDPSizeChart = (LinearLayout)findViewById(R.id.llPDPSizeChart);
+
+        llRating = (LinearLayout)findViewById(R.id.llRating);
+        llRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (flag == 1)
+                {
+                    final Dialog dialog = new Dialog(ProductDetailsActivity.this,android.R.style.Theme_Light_NoTitleBar);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                    dialog.setContentView(R.layout.rating_dialog);
+                    dialog.setCancelable(true);
+
+                    final RatingBar rbProductRating = (RatingBar)dialog.findViewById(R.id.rbProductRating);
+                    final EditText txtProductReview = (EditText)dialog.findViewById(R.id.txtProductReview);
+                    TextView txtBtnDCancel = (TextView)dialog.findViewById(R.id.txtBtnDCancel);
+                    TextView txtBtnDSubmit = (TextView)dialog.findViewById(R.id.txtBtnDSubmit);
+
+                    txtBtnDCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    txtBtnDSubmit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            String ProductRating = String.valueOf(rbProductRating.getRating());
+                            String ProductReview = txtProductReview.getText().toString();
+
+                            final ProgressDialog pd = new ProgressDialog(ProductDetailsActivity.this);
+                            pd.setMessage("Loading...");
+                            pd.setCancelable(true);
+                            pd.show();
+
+                            Call<Message> InsertRatingCall = productDataService.getInsertRatingData(user_id,pro_id,ProductRating,ProductReview);
+                            InsertRatingCall.enqueue(new Callback<Message>() {
+                                @Override
+                                public void onResponse(Call<Message> call, Response<Message> response) {
+                                    String status = response.body().getStatus();
+                                    String message = response.body().getMessage();
+                                    if (status.equals("1"))
+                                    {
+                                        pd.dismiss();
+                                        dialog.dismiss();
+                                        startActivity(getIntent());
+                                    }
+                                    else
+                                    {
+                                        Toast.makeText(ProductDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Message> call, Throwable t) {
+                                    Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        }
+                    });
+
+                    dialog.show();
+                }
+                else if (flag == 0)
+                {
+                    Intent i = new Intent(ProductDetailsActivity.this,SignInActivity.class);
+                    startActivity(i);
+                }
+            }
+        });
 
         TextView txtProduct_view_all = (TextView)findViewById(R.id.txtProduct_view_all);
 
@@ -364,30 +438,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     ivPdWishRed.setVisibility(View.GONE);
                     ivPdWishBlack.setVisibility(View.VISIBLE);
                     Toast.makeText(ProductDetailsActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            Call<CartList> CartListCall = productDataService.getCartData(user_id);
-            CartListCall.enqueue(new Callback<CartList>() {
-                @Override
-                public void onResponse(Call<CartList> call, Response<CartList> response) {
-                    String status = response.body().getStatus();
-                    if (status.equals("1"))
-                    {
-                        cartProductListArray = response.body().getCartList();
-                        mCartItemCount = cartProductListArray.size();
-                        textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
-                        Log.d("CartItemCount",""+mCartItemCount);
-                    }
-                    else
-                    {
-                        mCartItemCount = 0;
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<CartList> call, Throwable t) {
-                    mCartItemCount = 0;
                 }
             });
 
@@ -676,17 +726,49 @@ public class ProductDetailsActivity extends AppCompatActivity {
     }
 
     private void setupBadge() {
-        if (textCartItemCount != null) {
-            if (mCartItemCount == 0) {
-                if (textCartItemCount.getVisibility() != View.GONE) {
+        if (flag == 1)
+        {
+            Call<CartList> CartListCall = productDataService.getCartData(user_id);
+            CartListCall.enqueue(new Callback<CartList>() {
+                @Override
+                public void onResponse(Call<CartList> call, Response<CartList> response) {
+                    String status = response.body().getStatus();
+                    if (status.equals("1"))
+                    {
+                        cartProductListArray = response.body().getCartList();
+                        mCartItemCount = cartProductListArray.size();
+                        if (textCartItemCount != null) {
+                            if (mCartItemCount == 0) {
+                                if (textCartItemCount.getVisibility() != View.GONE) {
+                                    textCartItemCount.setVisibility(View.GONE);
+                                }
+                            } else {
+                                textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                                if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                                    textCartItemCount.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        mCartItemCount = 0;
+                        textCartItemCount.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<CartList> call, Throwable t) {
+                    mCartItemCount = 0;
                     textCartItemCount.setVisibility(View.GONE);
                 }
-            } else {
-                textCartItemCount.setText(String.valueOf(Math.min(mCartItemCount, 99)));
-                if (textCartItemCount.getVisibility() != View.VISIBLE) {
-                    textCartItemCount.setVisibility(View.VISIBLE);
-                }
-            }
+            });
+
+        }
+        else if (flag == 0)
+        {
+            mCartItemCount = 0;
+            textCartItemCount.setVisibility(View.GONE);
         }
     }
 

@@ -156,9 +156,17 @@ public interface GetProductDataService {
     @POST("json_android/orderlist.php")
     Call<OrderList> getOrderListData(@Field("customer_id") String customer_id);
 
-    @FormUrlEncoded
+    /*@FormUrlEncoded
     @POST("json_android/product.php")
     Call<ProductList> getProductListData(@Field("cate_id") String cate_id,
+                                         @Field("brand_id") String brand_id,
+                                         @Field("min_price") String min_price,
+                                         @Field("max_price") String max_price);*/
+
+    @FormUrlEncoded
+    @POST("json_android/searchproduct.php")
+    Call<ProductList> getProductListData(@Field("pro_name") String pro_name,
+                                         @Field("cate_id") String cate_id,
                                          @Field("brand_id") String brand_id,
                                          @Field("min_price") String min_price,
                                          @Field("max_price") String max_price);
@@ -188,5 +196,12 @@ public interface GetProductDataService {
     @FormUrlEncoded
     @POST("json_android/sendmobileotp.php")
     Call<SendOtp> getMobileSendOtpData(@Field("mobile") String mobile);
+
+    @FormUrlEncoded
+    @POST("json_android/insertrating.php")
+    Call<Message> getInsertRatingData(@Field("rating_customer_id") String rating_customer_id,
+                                      @Field("rating_pro_id") String rating_pro_id,
+                                      @Field("rating") String rating,
+                                      @Field("review") String review);
 
 }

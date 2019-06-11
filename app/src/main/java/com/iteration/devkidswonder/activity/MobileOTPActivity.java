@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.iteration.devkidswonder.R;
 import com.iteration.devkidswonder.model.SendOtp;
 import com.iteration.devkidswonder.network.GetProductDataService;
@@ -25,6 +27,7 @@ public class MobileOTPActivity extends AppCompatActivity {
     EditText txtMMobileNo,txtMOTP;
     Button btnMResendOTP,btnMobileVerification,btnMSubmitOTP;
     String otp;
+    AwesomeValidation awesomeValidation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +42,14 @@ public class MobileOTPActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
 
+        awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+
         final GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
 
         txtMMobileNo = (EditText)findViewById(R.id.txtMMobileNo);
         txtMOTP = (EditText)findViewById(R.id.txtMOTP);
+
+        awesomeValidation.addValidation(this, R.id.txtMMobileNo, "^[2-9]{2}[0-9]{8}$", R.string.mobileNo);
 
         btnMSubmitOTP = (Button) findViewById(R.id.btnMSubmitOTP);
         btnMResendOTP = (Button) findViewById(R.id.btnMResendOTP);
@@ -56,39 +63,42 @@ public class MobileOTPActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final String mobile = txtMMobileNo.getText().toString();
+                if (awesomeValidation.validate())
+                {
+                    final String mobile = txtMMobileNo.getText().toString();
 
-                final ProgressDialog dialog = new ProgressDialog(MobileOTPActivity.this);
-                dialog.setMessage("Loading...");
-                dialog.setCancelable(true);
-                dialog.show();
+                    final ProgressDialog dialog = new ProgressDialog(MobileOTPActivity.this);
+                    dialog.setMessage("Loading...");
+                    dialog.setCancelable(true);
+                    dialog.show();
 
-                Call<SendOtp> SendOtpCall = productDataService.getMobileSendOtpData(mobile);
-                SendOtpCall.enqueue(new Callback<SendOtp>() {
-                    @Override
-                    public void onResponse(Call<SendOtp> call, Response<SendOtp> response) {
-                        dialog.dismiss();
-                        String status = response.body().getStatus();
-                        String message = response.body().getMessage();
-                        if(status.equals("1"))
-                        {
-                            otp = response.body().getOtp();
-                            btnMobileVerification.setVisibility(View.GONE);
-                            txtMOTP.setVisibility(View.VISIBLE);
-                            btnMResendOTP.setVisibility(View.VISIBLE);
-                            btnMSubmitOTP.setVisibility(View.VISIBLE);
+                    Call<SendOtp> SendOtpCall = productDataService.getMobileSendOtpData(mobile);
+                    SendOtpCall.enqueue(new Callback<SendOtp>() {
+                        @Override
+                        public void onResponse(Call<SendOtp> call, Response<SendOtp> response) {
+                            dialog.dismiss();
+                            String status = response.body().getStatus();
+                            String message = response.body().getMessage();
+                            if(status.equals("1"))
+                            {
+                                otp = response.body().getOtp();
+                                btnMobileVerification.setVisibility(View.GONE);
+                                txtMOTP.setVisibility(View.VISIBLE);
+                                btnMResendOTP.setVisibility(View.VISIBLE);
+                                btnMSubmitOTP.setVisibility(View.VISIBLE);
+                            }
+                            else
+                            {
+                                Toast.makeText(MobileOTPActivity.this,message,Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        else
-                        {
-                            Toast.makeText(MobileOTPActivity.this,message,Toast.LENGTH_SHORT).show();
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<SendOtp> call, Throwable t) {
-                        Toast.makeText(MobileOTPActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<SendOtp> call, Throwable t) {
+                            Toast.makeText(MobileOTPActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
 
             }
         });
