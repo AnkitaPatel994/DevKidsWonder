@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:gravity="center"
-                android:text="Order Placed Sucessfully"
+                android:text="Your Order has been Placed Sucessfully"
                 android:textColor="#f24f99"
                 android:textSize="18sp"
                 android:textStyle="bold"/>

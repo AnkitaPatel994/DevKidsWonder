@@ -8,6 +8,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.OrderActivity"
     android:orientation="vertical"
+    android:background="@color/colorWhite"
     tools:showIn="@layout/activity_order">
 
     <ScrollView
@@ -18,46 +19,51 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="15dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:background="@color/colorWhite"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Payment Method"
-                    android:textColor="@color/colorGreyDark"
+                    android:padding="15dp"
+                    android:text="Payment Information"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/llbox"
                     android:textSize="17sp" />
 
                 <RadioGroup
                     android:id="@+id/rgPaymentMethod"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
 
                     <RadioButton
                         android:id="@+id/rbCashonDelivery"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:checked="true"
+                        android:paddingLeft="5dp"
                         android:text="Cash on Delivery" />
 
                     <RadioButton
                         android:id="@+id/rbCreditCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Credit Card" />
+                        android:text="Credit Card"
+                        android:paddingLeft="5dp" />
 
                     <RadioButton
                         android:id="@+id/rbDebitCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Debit Card" />
+                        android:text="Debit Card"
+                        android:paddingLeft="5dp" />
 
                 </RadioGroup>
 
@@ -66,23 +72,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:background="@color/colorWhite"
+                android:background="@drawable/textbox"
+                android:layout_marginTop="15dp"
                 android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Payment Details"
-                    android:textColor="@color/colorGreyDark"
-                    android:textSize="17sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -94,7 +86,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Value of product:"
+                        android:text="Order Subtotal:"
                         android:textColor="@color/colorBlack"
                         android:textSize="17sp" />
 
@@ -118,13 +110,16 @@
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/colorDivider" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingBottom="10dp">
+                    android:padding="10dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -157,6 +152,88 @@
 
                 <View
                     android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/colorDivider" />
+
+                <LinearLayout
+                    android:id="@+id/llCouponcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Coupon Discount:"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="@string/RS"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/txtConShippingCouponPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="00/-"
+                        android:layout_marginLeft="2dp"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorDivider" />
+
+                <LinearLayout
+                    android:id="@+id/llChange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Change:"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:text="@string/RS"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/txtChange"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="100/-"
+                        android:layout_marginLeft="2dp"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/colorDivider" />
 
@@ -171,8 +248,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Total Amount:"
-                        android:textColor="@color/colorGreyDark"
-                        android:textSize="17sp" />
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/txtConTotalAmount"
@@ -181,8 +259,9 @@
                         android:layout_weight="1"
                         android:gravity="right"
                         android:text="Rs. 199/-"
-                        android:textColor="@color/colorGreyDark"
-                        android:textSize="17sp" />
+                        android:textColor="@color/colorBlack"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 

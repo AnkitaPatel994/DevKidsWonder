@@ -29,7 +29,6 @@
                 app:srcCompat="@drawable/tracking" />
 
             <ImageView
-                android:id="@+id/imageView4"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:layout_marginTop="16dp"
@@ -37,18 +36,16 @@
                 app:srcCompat="@drawable/second_phase" />
 
             <TextView
-                android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:gravity="center"
-                android:text="Order Shipped Sucessfully"
+                android:text="Your Order has been Shipped Sucessfully"
                 android:textColor="#4b2fb7"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Thank You For Your Order"
@@ -58,7 +55,6 @@
 
 
             <TextView
-                android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

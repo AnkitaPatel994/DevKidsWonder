@@ -62,6 +62,40 @@
                 android:layout_marginBottom="10dp"
                 android:background="@color/colorDivider"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/txtCouponCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:hint="Enter Coupon Code"
+                    android:layout_weight="1"
+                    android:background="@drawable/textbox"/>
+
+                <Button
+                    android:id="@+id/btnVerification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorWhite"
+                    android:backgroundTint="@color/colorBtnCart"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="2"
+                    android:text="Verification" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/colorDivider"/>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvOrderList"
                 android:layout_width="match_parent"
@@ -113,7 +147,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Value of product:"
+                        android:text="Order Subtotal:"
                         android:textColor="@color/colorBlack"
                         android:textSize="17sp" />
 
@@ -152,6 +186,35 @@
                         android:layout_weight="1"
                         android:gravity="right"
                         android:text="FREE"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llCoupon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Coupon Discount:"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/txtOCouponPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
                         android:textColor="@color/colorBlack"
                         android:textSize="17sp" />
 
