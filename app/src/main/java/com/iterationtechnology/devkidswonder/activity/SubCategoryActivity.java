@@ -15,7 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
 import android.text.format.Formatter;
+import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -78,6 +80,19 @@ public class SubCategoryActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        Menu menu = navigationView.getMenu();
+
+        MenuItem SocialMediaLinks = menu.findItem(R.id.nvSocialMediaLinks);
+        SpannableString social = new SpannableString(SocialMediaLinks.getTitle());
+        social.setSpan(new TextAppearanceSpan(this, R.style.NavigationTitle), 0, social.length(), 0);
+        SocialMediaLinks.setTitle(social);
+
+        MenuItem QuickLinks = menu.findItem(R.id.nvQuickLinks);
+        SpannableString quick = new SpannableString(QuickLinks.getTitle());
+        quick.setSpan(new TextAppearanceSpan(this, R.style.NavigationTitle), 0, quick.length(), 0);
+        QuickLinks.setTitle(quick);
+
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerview = navigationView.getHeaderView(0);
@@ -133,9 +148,10 @@ public class SubCategoryActivity extends AppCompatActivity
             public void onResponse(Call<ProductList> call, Response<ProductList> response) {
                 ProductListArray.clear();
                 String Status = response.body().getStatus();
-                String Message = response.body().getMessage();
+                String message = response.body().getMessage();
                 if (Status.equals("1"))
                 {
+                    Log.d("message",""+message);
                     ProductListArray = response.body().getProductList();
                     ProductListAdapter productListAdapter = new ProductListAdapter(SubCategoryActivity.this,ProductListArray,ip_address);
                     rvSubCategoryProduct.setAdapter(productListAdapter);
@@ -144,7 +160,7 @@ public class SubCategoryActivity extends AppCompatActivity
                 }
                 else
                 {
-                    Toast.makeText(SubCategoryActivity.this, Message, Toast.LENGTH_SHORT).show();
+                    Log.d("message",""+message);
                     rvSubCategoryProduct.setVisibility(View.GONE);
                     ivSearch.setVisibility(View.VISIBLE);
                 }
@@ -326,8 +342,60 @@ public class SubCategoryActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_terms)
         {
-            Intent i = new Intent(getApplicationContext(), TermsActivity.class);
+            Intent i = new Intent(getApplicationContext(), LegalActivity.class);
             startActivity(i);
+        }
+        else if (id == R.id.nav_facebook)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://www.facebook.com/devkidswonder"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://www.facebook.com/devkidswonder"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_instagram)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://www.instagram.com/devkidswonder/"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://www.instagram.com/devkidswonder/"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_pinterest)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://in.pinterest.com/devkidswonder/?eq=devkidswonder&etslf=10776"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://in.pinterest.com/devkidswonder/?eq=devkidswonder&etslf=10776"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_youtube)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://www.youtube.com/channel/UCaSh7Xl_PwIYQrjHel5pqZg"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://www.youtube.com/channel/UCaSh7Xl_PwIYQrjHel5pqZg"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
         }
         else if (id == R.id.nav_rate)
         {

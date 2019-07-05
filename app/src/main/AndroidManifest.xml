@@ -8,16 +8,42 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher_foreground"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activity.ConformOrderActivity"
+            android:label="@string/title_activity_conform_order"
+            android:theme="@style/AppTheme.ActionBar"></activity>
+        <activity
+            android:name=".activity.RefundPolicyActivity"
+            android:label="@string/title_activity_refund_policy"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".activity.ShippingPolicyActivity"
+            android:label="@string/title_activity_shipping_policy"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".activity.PrivacyPolicyActivity"
+            android:label="@string/title_activity_privacy_policy"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".activity.ReturnPolicyActivity"
+            android:label="@string/title_activity_return_policy"
+            android:theme="@style/AppTheme.ActionBar" />
+        <activity
+            android:name=".activity.LegalActivity"
+            android:label="@string/title_activity_legal"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.TermsActivity"
             android:label="@string/title_activity_terms"
-            android:theme="@style/AppTheme.ActionBar"/>
+            android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".activity.AboutUsActivity"
             android:label="@string/title_activity_about_us"

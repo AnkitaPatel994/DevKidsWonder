@@ -194,7 +194,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     Log.d("message",""+message);
                 }
 
-
             }
 
             @Override
@@ -303,13 +302,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                     String message = response.body().getMessage();
                                     if (status.equals("1"))
                                     {
+                                        Log.d("message",""+message);
                                         pd.dismiss();
                                         dialog.dismiss();
                                         startActivity(getIntent());
                                     }
                                     else
                                     {
-                                        Toast.makeText(ProductDetailsActivity.this, message, Toast.LENGTH_SHORT).show();
+                                        Log.d("message",""+message);
                                     }
                                 }
 
@@ -511,8 +511,16 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         DeleteWishlistCall.enqueue(new Callback<Message>() {
                             @Override
                             public void onResponse(Call<Message> call, Response<Message> response) {
+                                String Status = response.body().getStatus();
                                 String message = response.body().getMessage();
-                                Toast.makeText(ProductDetailsActivity.this,message,Toast.LENGTH_SHORT).show();
+                                if (Status.equals("1"))
+                                {
+                                    Log.d("message",""+message);
+                                }
+                                else
+                                {
+                                    Log.d("message",""+message);
+                                }
                             }
 
                             @Override
@@ -639,16 +647,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ProductList> call, Response<ProductList> response) {
                 String Status  = response.body().getStatus();
-                String Message  = response.body().getMessage();
+                String message  = response.body().getMessage();
                 if (Status.equals("1"))
                 {
+                    Log.d("message",""+message);
                     SimilarProductListArray  = response.body().getProductList();
                     ProductListAdapter productListAdapter = new ProductListAdapter(ProductDetailsActivity.this,SimilarProductListArray ,ipAddress);
                     rvPDAllView.setAdapter(productListAdapter);
                 }
                 else
                 {
-                    Toast.makeText(ProductDetailsActivity.this, Message, Toast.LENGTH_SHORT).show();
+                    Log.d("message",""+message);
                 }
             }
 
@@ -702,16 +711,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ProductList> call, Response<ProductList> response) {
                 String Status = response.body().getStatus();
-                String Message = response.body().getMessage();
+                String message = response.body().getMessage();
                 if (Status.equals("1"))
                 {
+                    Log.d("message",""+message);
                     RecentviewListArray = response.body().getProductList();
                     ProductListAdapter recentviewListAdapter = new ProductListAdapter(ProductDetailsActivity.this,RecentviewListArray,ipAddress);
                     rvPDRecentView.setAdapter(recentviewListAdapter);
                 }
                 else
                 {
-                    Toast.makeText(ProductDetailsActivity.this, Message, Toast.LENGTH_SHORT).show();
+                    Log.d("message",""+message);
                 }
             }
 
@@ -735,9 +745,18 @@ public class ProductDetailsActivity extends AppCompatActivity {
             public void onResponse(Call<Message> call, Response<Message> response) {
                 dialog.dismiss();
                 String Status = response.body().getStatus();
-                Toast.makeText(ProductDetailsActivity.this, "Added to cart", Toast.LENGTH_SHORT).show();
-                finish();
-                startActivity(getIntent());
+                String message = response.body().getMessage();
+                if (Status.equals("1"))
+                {
+                    Log.d("message",""+message);
+                    Toast.makeText(ProductDetailsActivity.this, "Added to cart", Toast.LENGTH_SHORT).show();
+                    finish();
+                    startActivity(getIntent());
+                }
+                else
+                {
+                    Log.d("message",""+message);
+                }
             }
 
             @Override
@@ -752,10 +771,20 @@ public class ProductDetailsActivity extends AppCompatActivity {
         InsertWishlistCall.enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
+
                 String Status = response.body().getStatus();
-                Toast.makeText(ProductDetailsActivity.this, "Added to wishlist", Toast.LENGTH_SHORT).show();
-                ivPdWishRed.setVisibility(View.VISIBLE);
-                ivPdWishBlack.setVisibility(View.GONE);
+                String message = response.body().getMessage();
+                if (Status.equals("1"))
+                {
+                    Log.d("message",""+message);
+                    Toast.makeText(ProductDetailsActivity.this, "Added to wishlist", Toast.LENGTH_SHORT).show();
+                    ivPdWishRed.setVisibility(View.VISIBLE);
+                    ivPdWishBlack.setVisibility(View.GONE);
+                }
+                else
+                {
+                    Log.d("message",""+message);
+                }
             }
 
             @Override

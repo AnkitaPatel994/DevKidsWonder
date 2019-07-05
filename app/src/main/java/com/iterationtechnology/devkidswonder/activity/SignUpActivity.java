@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -95,10 +96,18 @@ public class SignUpActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<Message> call, Response<Message> response) {
                                 dialog.dismiss();
+                                String Status = response.body().getStatus();
                                 String message = response.body().getMessage();
-                                Toast.makeText(SignUpActivity.this,message , Toast.LENGTH_SHORT).show();
-                                Intent i = new Intent(SignUpActivity.this,SignInActivity.class);
-                                startActivity(i);
+                                if (Status.equals("1"))
+                                {
+                                    Log.d("message",""+message);
+                                    Intent i = new Intent(SignUpActivity.this,SignInActivity.class);
+                                    startActivity(i);
+                                }
+                                else
+                                {
+                                    Log.d("message",""+message);
+                                }
                             }
 
                             @Override

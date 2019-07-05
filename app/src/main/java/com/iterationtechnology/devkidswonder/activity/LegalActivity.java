@@ -9,8 +9,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
@@ -18,54 +16,26 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iterationtechnology.devkidswonder.R;
-import com.iterationtechnology.devkidswonder.adapter.MyOrderListAdapter;
-import com.iterationtechnology.devkidswonder.model.Order;
-import com.iterationtechnology.devkidswonder.model.OrderList;
-import com.iterationtechnology.devkidswonder.network.GetProductDataService;
-import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
-import com.iterationtechnology.devkidswonder.network.SessionManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class MyOrderActivity extends AppCompatActivity
+public class LegalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    SessionManager session;
-    int flag = 0;
-    RecyclerView rvMyOrder;
-    ArrayList<Order> MyOrderProductListArray = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_order);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_legal);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        session = new SessionManager(MyOrderActivity.this);
-        flag = session.checkLogin();
-
-        HashMap<String,String> user = session.getUserDetails();
-        final String user_id = user.get(SessionManager.user_id);
-        String user_name = user.get(SessionManager.user_name);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         Menu menu = navigationView.getMenu();
 
@@ -81,88 +51,62 @@ public class MyOrderActivity extends AppCompatActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        View headerview = navigationView.getHeaderView(0);
-        TextView txt_login = (TextView)headerview.findViewById(R.id.txt_login);
-        LinearLayout nav_header_ll = (LinearLayout)headerview.findViewById(R.id.nav_header_ll);
+        TextView txtRefundPolicy = (TextView)findViewById(R.id.txtRefundPolicy);
+        TextView txtShippingPolicy = (TextView)findViewById(R.id.txtShippingPolicy);
+        TextView txtPrivacyPolicy = (TextView)findViewById(R.id.txtPrivacyPolicy);
+        TextView txtTC = (TextView)findViewById(R.id.txtTC);
+        TextView txtReturnPolicy = (TextView)findViewById(R.id.txtReturnPolicy);
 
-        if (flag == 1)
-        {
-            txt_login.setText(user_name);
-            nav_header_ll.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(MyOrderActivity.this, MyProfileActivity.class);
-                    startActivity(i);
-                }
-            });
+        txtRefundPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), RefundPolicyActivity.class);
+                startActivity(i);
+            }
+        });
 
-            rvMyOrder = (RecyclerView)findViewById(R.id.rvMyOrder);
-            rvMyOrder.setHasFixedSize(true);
+        txtShippingPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ShippingPolicyActivity.class);
+                startActivity(i);
+            }
+        });
 
-            RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
-            rvMyOrder.setLayoutManager(manager);
+        txtPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), PrivacyPolicyActivity.class);
+                startActivity(i);
+            }
+        });
 
-            GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
-            Call<OrderList> OrderListCall = productDataService.getOrderListData(user_id);
-            OrderListCall.enqueue(new Callback<OrderList>() {
-                @Override
-                public void onResponse(Call<OrderList> call, Response<OrderList> response) {
-                    String status = response.body().getStatus();
-                    String message = response.body().getMessage();
-                    if (status.equals("1"))
-                    {
-                        Log.d("message",""+message);
-                        MyOrderProductListArray = response.body().getOrderList();
-                        MyOrderListAdapter myOrderListAdapter = new MyOrderListAdapter(MyOrderActivity.this, MyOrderProductListArray,user_id);
-                        rvMyOrder.setAdapter(myOrderListAdapter);
-                    }
-                    else
-                    {
-                        Log.d("message",""+message);
-                    }
-                }
+        txtTC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), TermsActivity.class);
+                startActivity(i);
+            }
+        });
 
-                @Override
-                public void onFailure(Call<OrderList> call, Throwable t) {
-                    Toast.makeText(MyOrderActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        }
-        else if (flag == 0)
-        {
-            txt_login.setText("Login / Register");
-            nav_header_ll.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(MyOrderActivity.this, SignInActivity.class);
-                    startActivity(i);
-                }
-            });
-        }
+        txtReturnPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ReturnPolicyActivity.class);
+                startActivity(i);
+            }
+        });
 
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -173,7 +117,7 @@ public class MyOrderActivity extends AppCompatActivity
 
         if (id == R.id.nav_home)
         {
-            Intent i = new Intent(getApplicationContext(),HomeActivity.class);
+            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(i);
         }
         else if (id == R.id.nav_cart)
@@ -184,6 +128,11 @@ public class MyOrderActivity extends AppCompatActivity
         else if (id == R.id.nav_wishlist)
         {
             Intent i = new Intent(getApplicationContext(), WishListActivity.class);
+            startActivity(i);
+        }
+        else if (id == R.id.nav_order)
+        {
+            Intent i = new Intent(getApplicationContext(), MyOrderActivity.class);
             startActivity(i);
         }
         else if (id == R.id.nav_website)
@@ -207,11 +156,6 @@ public class MyOrderActivity extends AppCompatActivity
         else if (id == R.id.nav_contactus)
         {
             Intent i = new Intent(getApplicationContext(), ContactUsActivity.class);
-            startActivity(i);
-        }
-        else if (id == R.id.nav_terms)
-        {
-            Intent i = new Intent(getApplicationContext(), LegalActivity.class);
             startActivity(i);
         }
         else if (id == R.id.nav_facebook)
@@ -289,11 +233,10 @@ public class MyOrderActivity extends AppCompatActivity
             startActivity(Intent.createChooser(i,"Share using"));
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
     private boolean MyStartActivity(Intent i) {
         try
         {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
@@ -23,7 +24,8 @@
 
     </group>
 
-    <item android:title="Quick Links">
+    <item android:title="Quick Links"
+        android:id="@+id/nvQuickLinks">
         <menu>
             <item
                 android:id="@+id/nav_website"
@@ -40,7 +42,29 @@
             <item
                 android:id="@+id/nav_terms"
                 android:icon="@drawable/ic_terms"
-                android:title="Terms and Condition" />
+                android:title="Legal Policy" />
+        </menu>
+    </item>
+
+    <item android:title="Social Media Links"
+        android:id="@+id/nvSocialMediaLinks">
+        <menu>
+            <item
+                android:id="@+id/nav_facebook"
+                android:icon="@drawable/ic_facebook"
+                android:title="Facebook" />
+            <item
+                android:id="@+id/nav_instagram"
+                android:icon="@drawable/ic_instagram"
+                android:title="Instagram" />
+            <item
+                android:id="@+id/nav_pinterest"
+                android:icon="@drawable/ic_pinterest"
+                android:title="Pinterest" />
+            <item
+                android:id="@+id/nav_youtube"
+                android:icon="@drawable/ic_youtube"
+                android:title="Youtube" />
         </menu>
     </item>
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -67,17 +68,18 @@ public class ResetActivity extends AppCompatActivity {
                     ResetPasswordCall.enqueue(new Callback<Message>() {
                         @Override
                         public void onResponse(Call<Message> call, Response<Message> response) {
+                            dialog.dismiss();
                             String status = response.body().getStatus();
                             String message = response.body().getMessage();
                             if(status.equals("1"))
                             {
-                                dialog.dismiss();
+                                Log.d("message",""+message);
                                 Intent i = new Intent(ResetActivity.this, SignInActivity.class);
                                 startActivity(i);
                             }
                             else
                             {
-                                Toast.makeText(ResetActivity.this,message,Toast.LENGTH_SHORT).show();
+                                Log.d("message",""+message);
                             }
                         }
 

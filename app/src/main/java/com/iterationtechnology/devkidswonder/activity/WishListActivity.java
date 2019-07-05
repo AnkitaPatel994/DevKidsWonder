@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,6 +79,19 @@ public class WishListActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        Menu menu = navigationView.getMenu();
+
+        MenuItem SocialMediaLinks = menu.findItem(R.id.nvSocialMediaLinks);
+        SpannableString social = new SpannableString(SocialMediaLinks.getTitle());
+        social.setSpan(new TextAppearanceSpan(this, R.style.NavigationTitle), 0, social.length(), 0);
+        SocialMediaLinks.setTitle(social);
+
+        MenuItem QuickLinks = menu.findItem(R.id.nvQuickLinks);
+        SpannableString quick = new SpannableString(QuickLinks.getTitle());
+        quick.setSpan(new TextAppearanceSpan(this, R.style.NavigationTitle), 0, quick.length(), 0);
+        QuickLinks.setTitle(quick);
+
         navigationView.setNavigationItemSelectedListener(this);
 
         llWishlistEmpty = (LinearLayout)findViewById(R.id.llWishlistEmpty);
@@ -122,10 +137,11 @@ public class WishListActivity extends AppCompatActivity
         WishlistListCall.enqueue(new Callback<WishlistList>() {
             @Override
             public void onResponse(Call<WishlistList> call, Response<WishlistList> response) {
+
                 String status = response.body().getStatus();
-                wishListProductListArray = response.body().getWishlistList();
                 if (status.equals("1"))
                 {
+                    wishListProductListArray = response.body().getWishlistList();
                     WishListAdapter wishListAdapter = new WishListAdapter(WishListActivity.this,wishListProductListArray,user_id);
                     rvProductWishlist.setAdapter(wishListAdapter);
                     llWishlistEmpty.setVisibility(View.GONE);
@@ -136,6 +152,7 @@ public class WishListActivity extends AppCompatActivity
                     llWishlistEmpty.setVisibility(View.VISIBLE);
                     rvProductWishlist.setVisibility(View.GONE);
                 }
+
             }
 
             @Override
@@ -307,8 +324,60 @@ public class WishListActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_terms)
         {
-            Intent i = new Intent(getApplicationContext(), TermsActivity.class);
+            Intent i = new Intent(getApplicationContext(), LegalActivity.class);
             startActivity(i);
+        }
+        else if (id == R.id.nav_facebook)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://www.facebook.com/devkidswonder"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://www.facebook.com/devkidswonder"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_instagram)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://www.instagram.com/devkidswonder/"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://www.instagram.com/devkidswonder/"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_pinterest)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://in.pinterest.com/devkidswonder/?eq=devkidswonder&etslf=10776"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://in.pinterest.com/devkidswonder/?eq=devkidswonder&etslf=10776"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_youtube)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://www.youtube.com/channel/UCaSh7Xl_PwIYQrjHel5pqZg"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://www.youtube.com/channel/UCaSh7Xl_PwIYQrjHel5pqZg"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
         }
         else if (id == R.id.nav_rate)
         {

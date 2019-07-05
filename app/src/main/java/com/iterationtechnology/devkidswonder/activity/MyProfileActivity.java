@@ -10,6 +10,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,7 +64,21 @@ public class MyProfileActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        Menu menu = navigationView.getMenu();
+
+        MenuItem SocialMediaLinks = menu.findItem(R.id.nvSocialMediaLinks);
+        SpannableString social = new SpannableString(SocialMediaLinks.getTitle());
+        social.setSpan(new TextAppearanceSpan(this, R.style.NavigationTitle), 0, social.length(), 0);
+        SocialMediaLinks.setTitle(social);
+
+        MenuItem QuickLinks = menu.findItem(R.id.nvQuickLinks);
+        SpannableString quick = new SpannableString(QuickLinks.getTitle());
+        quick.setSpan(new TextAppearanceSpan(this, R.style.NavigationTitle), 0, quick.length(), 0);
+        QuickLinks.setTitle(quick);
+
         navigationView.setNavigationItemSelectedListener(this);
+
         View headerview = navigationView.getHeaderView(0);
         TextView txt_login = (TextView)headerview.findViewById(R.id.txt_login);
         LinearLayout nav_header_ll = (LinearLayout)headerview.findViewById(R.id.nav_header_ll);
@@ -111,29 +127,40 @@ public class MyProfileActivity extends AppCompatActivity
         customerCall.enqueue(new Callback<Customer>() {
             @Override
             public void onResponse(Call<Customer> call, Response<Customer> response) {
-                String id = response.body().getId();
-                firstname = response.body().getFirstname();
-                lastname = response.body().getLastname();
-                email = response.body().getEmail();
-                contact = response.body().getContact();
-                address = response.body().getAddress();
-                city = response.body().getCity();
-                state = response.body().getState();
-                country = response.body().getCountry();
-                zipcode = response.body().getZipcode();
 
-                txtprofilename.setText(firstname + " " + lastname);
-                txtprofileemail.setText(email);
-                txtprofilemobileno.setText(contact);
-
-                if (address.equals(""))
+                String status = response.body().getStatus();
+                String message = response.body().getMessage();
+                if(status.equals("1"))
                 {
-                    llHomeAddress.setVisibility(View.GONE);
+                    Log.d("message",""+message);
+                    String id = response.body().getId();
+                    firstname = response.body().getFirstname();
+                    lastname = response.body().getLastname();
+                    email = response.body().getEmail();
+                    contact = response.body().getContact();
+                    address = response.body().getAddress();
+                    city = response.body().getCity();
+                    state = response.body().getState();
+                    country = response.body().getCountry();
+                    zipcode = response.body().getZipcode();
+
+                    txtprofilename.setText(firstname + " " + lastname);
+                    txtprofileemail.setText(email);
+                    txtprofilemobileno.setText(contact);
+
+                    if (address.equals(""))
+                    {
+                        llHomeAddress.setVisibility(View.GONE);
+                    }
+                    else
+                    {
+                        llHomeAddress.setVisibility(View.VISIBLE);
+                        txtprofileaddress.setText(address + "," + city + "," + state + "," + country + "," + zipcode);
+                    }
                 }
                 else
                 {
-                    llHomeAddress.setVisibility(View.VISIBLE);
-                    txtprofileaddress.setText(address + "," + city + "," + state + "," + country + "," + zipcode);
+                    Log.d("message",""+message);
                 }
 
             }
@@ -245,8 +272,60 @@ public class MyProfileActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_terms)
         {
-            Intent i = new Intent(getApplicationContext(), TermsActivity.class);
+            Intent i = new Intent(getApplicationContext(), LegalActivity.class);
             startActivity(i);
+        }
+        else if (id == R.id.nav_facebook)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://www.facebook.com/devkidswonder"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://www.facebook.com/devkidswonder"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_instagram)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://www.instagram.com/devkidswonder/"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://www.instagram.com/devkidswonder/"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_pinterest)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://in.pinterest.com/devkidswonder/?eq=devkidswonder&etslf=10776"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://in.pinterest.com/devkidswonder/?eq=devkidswonder&etslf=10776"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
+        }
+        else if (id == R.id.nav_youtube)
+        {
+            Intent i=new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse("https://www.youtube.com/channel/UCaSh7Xl_PwIYQrjHel5pqZg"));
+            if(!MyStartActivity(i))
+            {
+                i.setData(Uri.parse("https://www.youtube.com/channel/UCaSh7Xl_PwIYQrjHel5pqZg"));
+                if(!MyStartActivity(i))
+                {
+                    Log.d("Like","Could not open browser");
+                }
+            }
         }
         else if (id == R.id.nav_rate)
         {

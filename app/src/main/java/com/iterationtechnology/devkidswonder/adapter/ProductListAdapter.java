@@ -85,8 +85,17 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 insertRecentViewPropCall.enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
-                        String Message = response.body().getMessage();
-                        Log.d("Message",Message);
+
+                        String Status = response.body().getStatus();
+                        String message = response.body().getMessage();
+                        if (Status.equals("1"))
+                        {
+                            Log.d("message",""+message);
+                        }
+                        else
+                        {
+                            Log.d("message",""+message);
+                        }
                     }
 
                     @Override

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -95,10 +96,19 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
                         dialog.dismiss();
+                        String status = response.body().getStatus();
                         String message = response.body().getMessage();
-                        Intent i = new Intent(UpdateProfileActivity.this,MyProfileActivity.class);
-                        startActivity(i);
-                        finish();
+                        if (status.equals("1"))
+                        {
+                            Log.d("message",""+message);
+                            Intent i = new Intent(UpdateProfileActivity.this,MyProfileActivity.class);
+                            startActivity(i);
+                            finish();
+                        }
+                        else
+                        {
+                            Log.d("message",""+message);
+                        }
                     }
 
                     @Override

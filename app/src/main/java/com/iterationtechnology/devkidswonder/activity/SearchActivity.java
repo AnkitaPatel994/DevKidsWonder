@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -65,9 +66,20 @@ public class SearchActivity extends AppCompatActivity {
         ProductListCall.enqueue(new Callback<ProductList>() {
             @Override
             public void onResponse(Call<ProductList> call, Response<ProductList> response) {
-                SearchProductListArray = response.body().getProductList();
-                searchProductListAdapter = new SearchProductListAdapter(SearchActivity.this,SearchProductListArray);
-                rvSearch.setAdapter(searchProductListAdapter);
+
+                String status = response.body().getStatus();
+                String message = response.body().getMessage();
+                if (status.equals("1"))
+                {
+                    Log.d("message",""+message);
+                    SearchProductListArray = response.body().getProductList();
+                    searchProductListAdapter = new SearchProductListAdapter(SearchActivity.this,SearchProductListArray);
+                    rvSearch.setAdapter(searchProductListAdapter);
+                }
+                else
+                {
+                    Log.d("message",""+message);
+                }
             }
 
             @Override

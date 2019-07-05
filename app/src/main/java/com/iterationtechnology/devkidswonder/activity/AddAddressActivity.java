@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -96,9 +97,9 @@ public class AddAddressActivity extends AppCompatActivity {
                         public void onResponse(Call<Message> call, Response<Message> response) {
                             String status = response.body().getStatus();
                             String message = response.body().getMessage();
-
                             if (status.equals("1"))
                             {
+                                Log.d("message",""+message);
                                 if (chAddShipping.isChecked())
                                 {
 
@@ -107,22 +108,31 @@ public class AddAddressActivity extends AppCompatActivity {
                                         @Override
                                         public void onResponse(Call<Message> call, Response<Message> response) {
                                             dialog.dismiss();
+                                            String status = response.body().getStatus();
                                             String message1 = response.body().getMessage();
-                                            Toast.makeText(AddAddressActivity.this, message1, Toast.LENGTH_SHORT).show();
-                                            Intent i = new Intent(AddAddressActivity.this, DeliveryActivity.class);
-                                            i.putExtra("user_id",id);
-                                            i.putExtra("firstname",firstname);
-                                            i.putExtra("lastname",lastname);
-                                            i.putExtra("email",email);
-                                            i.putExtra("contact",contact);
-                                            i.putExtra("address",txtAddress.getText().toString());
-                                            i.putExtra("city",txtCity.getText().toString());
-                                            i.putExtra("state",txtState.getText().toString());
-                                            i.putExtra("country",txtCountry.getText().toString());
-                                            i.putExtra("pincode",txtPincode.getText().toString());
-                                            i.putExtra("TotalCartPrice",TotalCartPrice);
-                                            i.putExtra("ShippingPrice",ShippingPrice);
-                                            startActivity(i);
+                                            if (status.equals("1"))
+                                            {
+                                                Log.d("message",""+message1);
+                                                Intent i = new Intent(AddAddressActivity.this, DeliveryActivity.class);
+                                                i.putExtra("user_id",id);
+                                                i.putExtra("firstname",firstname);
+                                                i.putExtra("lastname",lastname);
+                                                i.putExtra("email",email);
+                                                i.putExtra("contact",contact);
+                                                i.putExtra("address",txtAddress.getText().toString());
+                                                i.putExtra("city",txtCity.getText().toString());
+                                                i.putExtra("state",txtState.getText().toString());
+                                                i.putExtra("country",txtCountry.getText().toString());
+                                                i.putExtra("pincode",txtPincode.getText().toString());
+                                                i.putExtra("TotalCartPrice",TotalCartPrice);
+                                                i.putExtra("ShippingPrice",ShippingPrice);
+                                                startActivity(i);
+                                            }
+                                            else
+                                            {
+                                                Log.d("message",""+message1);
+                                            }
+
                                         }
 
                                         @Override
@@ -154,7 +164,7 @@ public class AddAddressActivity extends AppCompatActivity {
                             }
                             else
                             {
-                                Toast.makeText(AddAddressActivity.this, message, Toast.LENGTH_SHORT).show();
+                                Log.d("message",""+message);
                             }
                         }
 

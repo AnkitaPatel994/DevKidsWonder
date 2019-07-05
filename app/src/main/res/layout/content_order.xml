@@ -52,6 +52,13 @@
                         android:text="Cash on Delivery" />
 
                     <RadioButton
+                        android:id="@+id/rbOnlinePayment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Online Payment"
+                        android:paddingLeft="5dp" />
+
+                    <!--<RadioButton
                         android:id="@+id/rbCreditCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -63,7 +70,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Debit Card"
-                        android:paddingLeft="5dp" />
+                        android:paddingLeft="5dp" />-->
 
                 </RadioGroup>
 
@@ -207,7 +214,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Change:"
+                        android:text="COD Change:"
                         android:textColor="@color/colorBlack"
                         android:textSize="17sp" />
 

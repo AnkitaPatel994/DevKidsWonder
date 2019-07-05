@@ -97,6 +97,7 @@ public class DeliveryActivity extends AppCompatActivity {
         txtOCouponPrice = (TextView)findViewById(R.id.txtOCouponPrice);
         txtCouponCode = (EditText)findViewById(R.id.txtCouponCode);
         btnVerification = (Button) findViewById(R.id.btnVerification);
+
         btnVerification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,6 +107,7 @@ public class DeliveryActivity extends AppCompatActivity {
                 CouponcodeCheckCall.enqueue(new Callback<CouponMessage>() {
                     @Override
                     public void onResponse(Call<CouponMessage> call, Response<CouponMessage> response) {
+
                         int amou = Integer.parseInt(TotalCartPrice)+Integer.parseInt(ShippingPrice);
                         String status = response.body().getStatus();
                         String message = response.body().getMessage();
@@ -126,6 +128,7 @@ public class DeliveryActivity extends AppCompatActivity {
                             llCoupon.setVisibility(View.GONE);
                             txtOTotalAmount.setText(rs+amount);
                         }
+
                     }
 
                     @Override

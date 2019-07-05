@@ -145,6 +145,7 @@ public interface GetProductDataService {
                                      @Field("order_total") String order_total,
                                      @Field("coupon_code") String coupon_code,
                                      @Field("coupon_discount") String coupon_discount,
+                                     @Field("cod_charge") String cod_charge,
                                      @Field("total") String total);
 
     @FormUrlEncoded

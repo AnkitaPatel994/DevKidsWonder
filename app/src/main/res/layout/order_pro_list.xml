@@ -108,7 +108,17 @@
                         android:textColor="@color/colorProductOffer"
                         android:textSize="12sp" />
                 </LinearLayout>
-
+                <TextView
+                    android:id="@+id/txtOProductStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Delivered"
+                    android:textColor="@color/colorProductOffer"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
 
             </LinearLayout>
         </LinearLayout>

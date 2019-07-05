@@ -1,5 +1,6 @@
 package com.iterationtechnology.devkidswonder.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +37,7 @@ public class OrderActivity extends AppCompatActivity {
     String user_id,TotalCartPrice,ShippingPrice,coupon_code,discount_rate,rs,PaymentMethod,user_email;
     TextView txtConPrice,txtConShippingPrice,txtConShippingCouponPrice,txtConTotalAmount,txtChange;
     RadioGroup rgPaymentMethod;
-    RadioButton rbCashonDelivery,rbCreditCard,rbDebitCard;
+    RadioButton rbCashonDelivery,rbOnlinePayment;/*,rbCreditCard,rbDebitCard;*/
     Button btnContinuesOrder;
     GetProductDataService productDataService;
     SessionManager session;
@@ -83,8 +84,9 @@ public class OrderActivity extends AppCompatActivity {
         LinearLayout llCouponcode = (LinearLayout) findViewById(R.id.llCouponcode);
         rgPaymentMethod = (RadioGroup)findViewById(R.id.rgPaymentMethod);
         rbCashonDelivery = (RadioButton) findViewById(R.id.rbCashonDelivery);
-        rbCreditCard = (RadioButton) findViewById(R.id.rbCreditCard);
-        rbDebitCard = (RadioButton) findViewById(R.id.rbDebitCard);
+        rbOnlinePayment = (RadioButton) findViewById(R.id.rbOnlinePayment);
+        /*rbCreditCard = (RadioButton) findViewById(R.id.rbCreditCard);
+        rbDebitCard = (RadioButton) findViewById(R.id.rbDebitCard);*/
         btnContinuesOrder = (Button) findViewById(R.id.btnContinuesOrder);
 
         if (discount_rate.equals("0"))
@@ -118,7 +120,14 @@ public class OrderActivity extends AppCompatActivity {
                         txtConTotalAmount.setText(rs+amount);
                         llChange.setVisibility(View.VISIBLE);
                         break;
-                    case R.id.rbCreditCard:
+                    case R.id.rbOnlinePayment:
+                        PaymentMethod = "Online Payment";
+                        change = 0;
+                        amount = ((Integer.parseInt(TotalCartPrice)+Integer.parseInt(ShippingPrice))-Integer.parseInt(discount_rate))+change;
+                        txtConTotalAmount.setText(rs+amount);
+                        llChange.setVisibility(View.GONE);
+                        break;
+                    /*case R.id.rbCreditCard:
                         PaymentMethod = "Credit Card";
                         change = 0;
                         amount = ((Integer.parseInt(TotalCartPrice)+Integer.parseInt(ShippingPrice))-Integer.parseInt(discount_rate))+change;
@@ -131,7 +140,7 @@ public class OrderActivity extends AppCompatActivity {
                         amount = ((Integer.parseInt(TotalCartPrice)+Integer.parseInt(ShippingPrice))-Integer.parseInt(discount_rate))+change;
                         txtConTotalAmount.setText(rs+amount);
                         llChange.setVisibility(View.GONE);
-                        break;
+                        break;*/
 
                 }
             }
@@ -194,16 +203,22 @@ public class OrderActivity extends AppCompatActivity {
                     }
                     String order_total = TotalCartPrice;
 
-                    Log.d("order_pr",""+pro_id+"==="+pro_quantity+"==="+order_size+"==="+order_price);
+                    String cod_charge = String.valueOf(change);
+                    Log.d("order_pro",""+pro_id+"--"+order_price);
 
                     String coupon_discount = discount_rate;
                     String total = String.valueOf(amount);
 
-                    Call<Message> InsertOrderCall = productDataService.getInsertOrderData(customer_id,user_email,pro_id,pro_quantity,shipping_method,payment_method,order_size,order_price,order_total,coupon_code,coupon_discount,total);
+                    final ProgressDialog dialog = new ProgressDialog(OrderActivity.this);
+                    dialog.setMessage("Loading...");
+                    dialog.setCancelable(true);
+                    dialog.show();
+
+                    Call<Message> InsertOrderCall = productDataService.getInsertOrderData(customer_id,user_email,pro_id,pro_quantity,shipping_method,payment_method,order_size,order_price,order_total,coupon_code,coupon_discount,cod_charge,total);
                     InsertOrderCall.enqueue(new Callback<Message>() {
                         @Override
                         public void onResponse(Call<Message> call, Response<Message> response) {
-
+                            dialog.dismiss();
                             for (int i = 0;i<OrderProIdArray.size();i++)
                             {
                                 String pro_idd = OrderProIdArray.get(i);
@@ -211,8 +226,17 @@ public class OrderActivity extends AppCompatActivity {
                                 DeleteCartCall.enqueue(new Callback<Message>() {
                                     @Override
                                     public void onResponse(Call<Message> call, Response<Message> response) {
+
+                                        String status = response.body().getStatus();
                                         String message = response.body().getMessage();
-                                        Log.d("delete","Item Delete"+message);
+                                        if (status.equals("1"))
+                                        {
+                                            Log.d("message","Item Delete"+message);
+                                        }
+                                        else
+                                        {
+                                            Log.d("message",""+message);
+                                        }
                                     }
 
                                     @Override
@@ -225,9 +249,10 @@ public class OrderActivity extends AppCompatActivity {
 
                             String message = response.body().getMessage();
                             Toast.makeText(OrderActivity.this, message, Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(OrderActivity.this, OrderPlacedActivity.class);
+                            Intent i = new Intent(OrderActivity.this, ConformOrderActivity.class);
                             i.putExtra("item","mulItem");
                             i.putExtra("customer_id",customer_id);
+                            i.putExtra("ordersta","Your Order has been Placed Sucessfully");
                             i.putExtra("OrderProIdArray",OrderProIdArray);
                             startActivity(i);
                         }

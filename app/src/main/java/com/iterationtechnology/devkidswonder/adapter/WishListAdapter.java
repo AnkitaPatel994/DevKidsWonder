@@ -123,10 +123,19 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
                             @Override
                             public void onResponse(Call<Message> call, Response<Message> response) {
                                 dialog.dismiss();
+                                String Status = response.body().getStatus();
                                 String message = response.body().getMessage();
-                                Intent i = new Intent(context,WishListActivity.class);
-                                context.startActivity(i);
-                                Log.d("message",message);
+                                if (Status.equals("1"))
+                                {
+                                    Log.d("message",""+message);
+                                    Intent i = new Intent(context,WishListActivity.class);
+                                    context.startActivity(i);
+                                }
+                                else
+                                {
+                                    Log.d("message",""+message);
+                                }
+
                             }
 
                             @Override

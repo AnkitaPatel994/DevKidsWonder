@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -46,8 +47,19 @@ public class OrderShippedActivity extends AppCompatActivity {
                 DeleteOrderCall.enqueue(new Callback<Message>() {
                     @Override
                     public void onResponse(Call<Message> call, Response<Message> response) {
-                        Intent i = new Intent(OrderShippedActivity.this,HomeActivity.class);
-                        startActivity(i);
+
+                        String Status = response.body().getStatus();
+                        String message = response.body().getMessage();
+                        if (Status.equals("1"))
+                        {
+                            Log.d("message",""+message);
+                            Intent i = new Intent(OrderShippedActivity.this,HomeActivity.class);
+                            startActivity(i);
+                        }
+                        else
+                        {
+                            Log.d("message",""+message);
+                        }
                     }
 
                     @Override

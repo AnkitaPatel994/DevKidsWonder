@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -81,6 +82,7 @@ public class MobileOTPActivity extends AppCompatActivity {
                             String message = response.body().getMessage();
                             if(status.equals("1"))
                             {
+                                Log.d("message",""+message);
                                 otp = response.body().getOtp();
                                 btnMobileVerification.setVisibility(View.GONE);
                                 txtMOTP.setVisibility(View.VISIBLE);
@@ -89,7 +91,7 @@ public class MobileOTPActivity extends AppCompatActivity {
                             }
                             else
                             {
-                                Toast.makeText(MobileOTPActivity.this,message,Toast.LENGTH_SHORT).show();
+                                Log.d("message",""+message);
                             }
                         }
 

@@ -65,6 +65,9 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
         viewHolder.txtOCuttedPrice.setText(rs+pro_oprice);
         viewHolder.txtOProductOff.setText(pro_discount+"%off");
 
+        viewHolder.txtOProductStatus.setVisibility(View.VISIBLE);
+        viewHolder.txtOProductStatus.setText(order_status);
+
         viewHolder.txtOCuttedPrice.setPaintFlags(viewHolder.txtOCuttedPrice.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
 
         if (order_status.equals("Delivered"))
@@ -82,6 +85,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
                 {
                     Intent i = new Intent(context, OrderPlacedActivity.class);
                     i.putExtra("order_id",order_id);
+                    i.putExtra("item","sinItem");
                     i.putExtra("ordersta","Your Order has been Placed Sucessfully");
                     context.startActivity(i);
                 }
@@ -89,6 +93,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
                 {
                     Intent i = new Intent(context, OrderPlacedActivity.class);
                     i.putExtra("order_id",order_id);
+                    i.putExtra("item","sinItem");
                     i.putExtra("ordersta","Your Order has been Confirmed, if will Ready to Ship");
                     context.startActivity(i);
                 }
@@ -118,7 +123,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivProImg;
         Button btnTrackOrder;
-        TextView txtOTitle,txtOSizeCart,txtOCartQty,txtOProductPrice,txtOCuttedPrice,txtOProductOff;
+        TextView txtOTitle,txtOSizeCart,txtOCartQty,txtOProductPrice,txtOCuttedPrice,txtOProductOff,txtOProductStatus;
         LinearLayout llOrderProList;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -130,6 +135,7 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
             txtOProductPrice = (TextView) itemView.findViewById(R.id.txtOProductPrice);
             txtOCuttedPrice = (TextView) itemView.findViewById(R.id.txtOCuttedPrice);
             txtOProductOff = (TextView) itemView.findViewById(R.id.txtOProductOff);
+            txtOProductStatus = (TextView) itemView.findViewById(R.id.txtOProductStatus);
             btnTrackOrder = (Button) itemView.findViewById(R.id.btnTrackOrder);
             llOrderProList = (LinearLayout) itemView.findViewById(R.id.llOrderProList);
 
