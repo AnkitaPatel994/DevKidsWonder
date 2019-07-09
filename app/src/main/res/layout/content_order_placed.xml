@@ -46,13 +46,23 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Thank You For Your Order"
                 android:gravity="center"
                 android:layout_marginTop="16dp"
                 android:textColor="#4b2fb7"/>
+
+            <TextView
+                android:id="@+id/txtInvoiceNoOP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="#INV-217393873"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:textColor="#F44336"/>
 
 
             <TextView

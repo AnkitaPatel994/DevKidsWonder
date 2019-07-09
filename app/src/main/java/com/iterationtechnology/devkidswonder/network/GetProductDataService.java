@@ -150,7 +150,7 @@ public interface GetProductDataService {
 
     @FormUrlEncoded
     @POST("json_android/deleteorder.php")
-    Call<Message> getDeleteOrderData(@Field("order_id") String order_id);
+    Call<Message> getDeleteOrderData(@Field("invoice_no") String invoice_no);
 
     @FormUrlEncoded
     @POST("json_android/wishlist.php")

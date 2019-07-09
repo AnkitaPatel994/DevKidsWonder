@@ -53,15 +53,38 @@
                 android:layout_marginTop="16dp"
                 android:textColor="#f24f99"/>
 
-
             <TextView
+                android:id="@+id/txtInvoiceNoOS"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:text="#INV-217393873"
                 android:gravity="center"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                android:text="Your Order was shipped . we will notify you when it has been Deliver to you" />
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                android:textColor="#009688"/>
+
+            <TextView
+                android:id="@+id/txtShippingIdOS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="July"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:textColor="#F44336"/>
+
+            <TextView
+                android:id="@+id/txtTotalOS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="₹ 587"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:textColor="#03A9F4"/>
 
             <View
                 android:id="@+id/divider"
@@ -74,17 +97,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/btnShippingCancelOrder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Cancel Order"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorWhite"
-                    android:background="@color/colorRed"/>
 
                 <Button
                     android:id="@+id/btnShippingConShopping"

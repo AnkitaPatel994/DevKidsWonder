@@ -20,6 +20,10 @@ import com.iterationtechnology.devkidswonder.model.Message;
 import com.iterationtechnology.devkidswonder.network.GetProductDataService;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
 import com.iterationtechnology.devkidswonder.network.SessionManager;
+import com.iterationtechnology.devkidswonder.payment.WebViewActivity;
+import com.iterationtechnology.devkidswonder.utility.AvenuesParams;
+import com.iterationtechnology.devkidswonder.utility.Constants;
+import com.iterationtechnology.devkidswonder.utility.ServiceUtility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +46,7 @@ public class OrderActivity extends AppCompatActivity {
     GetProductDataService productDataService;
     SessionManager session;
     int change,amount;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,10 @@ public class OrderActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
+        dialog = new ProgressDialog(this);
+        dialog.setCancelable(false);
+        dialog.setMessage("Please Wait...");
 
         session = new SessionManager(OrderActivity.this);
 
@@ -121,7 +130,7 @@ public class OrderActivity extends AppCompatActivity {
                         llChange.setVisibility(View.VISIBLE);
                         break;
                     case R.id.rbOnlinePayment:
-                        PaymentMethod = "Online Payment";
+                        PaymentMethod = "online";
                         change = 0;
                         amount = ((Integer.parseInt(TotalCartPrice)+Integer.parseInt(ShippingPrice))-Integer.parseInt(discount_rate))+change;
                         txtConTotalAmount.setText(rs+amount);
@@ -160,101 +169,166 @@ public class OrderActivity extends AppCompatActivity {
 
                 /*for (int i = 0;i<OrderProIdArray.size();i++)
                 {*/
-                    final String customer_id = user_id;
-                    String pro_id = "";
-                    for (String ss : OrderProIdArray)
-                    {
-                        if(pro_id == ""){
-                            pro_id += ss;
-                        }else{
-                            pro_id += "," + ss;
-                        }
+                final String customer_id = user_id;
+                String pro_id = "";
+                for (String ss : OrderProIdArray)
+                {
+                    if(pro_id == ""){
+                        pro_id += ss;
+                    }else{
+                        pro_id += "," + ss;
                     }
+                }
 
-                    String pro_quantity = "";
-                    for (String ss : OrderProQtyArray)
-                    {
-                        if(pro_quantity == ""){
-                            pro_quantity += ss;
-                        }else{
-                            pro_quantity += "," + ss;
-                        }
+                String pro_quantity = "";
+                for (String ss : OrderProQtyArray)
+                {
+                    if(pro_quantity == ""){
+                        pro_quantity += ss;
+                    }else{
+                        pro_quantity += "," + ss;
                     }
-                    String shipping_method = ShippingPrice;
-                    String payment_method = PaymentMethod;
-                    String order_size = "";
-                    for (String ss : OrderProSizeArray)
-                    {
-                        if(order_size == ""){
-                            order_size += ss;
-                        }else{
-                            order_size += "," + ss;
-                        }
+                }
+                String shipping_method = ShippingPrice;
+                String payment_method = PaymentMethod;
+                String order_size = "";
+                for (String ss : OrderProSizeArray)
+                {
+                    if(order_size == ""){
+                        order_size += ss;
+                    }else{
+                        order_size += "," + ss;
                     }
+                }
 
-                    String order_price = "";
-                    for (String ss : OrderProPriceArray)
-                    {
-                        if(order_price == ""){
-                            order_price += ss;
-                        }else{
-                            order_price += "," + ss;
-                        }
+                String order_price = "";
+                for (String ss : OrderProPriceArray)
+                {
+                    if(order_price == ""){
+                        order_price += ss;
+                    }else{
+                        order_price += "," + ss;
                     }
-                    String order_total = TotalCartPrice;
+                }
+                String order_total = TotalCartPrice;
 
-                    String cod_charge = String.valueOf(change);
-                    Log.d("order_pro",""+pro_id+"--"+order_price);
+                String cod_charge = String.valueOf(change);
+                Log.d("order_pro",""+pro_id+"--"+order_price);
 
-                    String coupon_discount = discount_rate;
-                    String total = String.valueOf(amount);
+                String coupon_discount = discount_rate;
+                String total = String.valueOf(amount);
 
-                    final ProgressDialog dialog = new ProgressDialog(OrderActivity.this);
-                    dialog.setMessage("Loading...");
-                    dialog.setCancelable(true);
+                if (payment_method.equals("Cash on Delivery"))
+                {
+
                     dialog.show();
+                    InsertOrder(customer_id,user_email,pro_id,pro_quantity,shipping_method,payment_method,order_size,order_price,order_total,coupon_code,coupon_discount,cod_charge,total);
 
-                    Call<Message> InsertOrderCall = productDataService.getInsertOrderData(customer_id,user_email,pro_id,pro_quantity,shipping_method,payment_method,order_size,order_price,order_total,coupon_code,coupon_discount,cod_charge,total);
-                    InsertOrderCall.enqueue(new Callback<Message>() {
+                }
+                else
+                {
+                    Intent intent = new Intent(OrderActivity.this, WebViewActivity.class);
+                    intent.putExtra(AvenuesParams.ACCESS_CODE, ServiceUtility.chkNull(Constants.ACCESS_CODE).toString().trim());
+                    intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull(Constants.MARCHANT_ID).toString().trim());
+                    Integer randomNum = ServiceUtility.randInt(0, 9999999);
+                    intent.putExtra(AvenuesParams.ORDER_ID, ServiceUtility.chkNull(randomNum + "").toString().trim());
+                    intent.putExtra(AvenuesParams.CURRENCY, ServiceUtility.chkNull(Constants.CURRENCEY).toString().trim());
+                    intent.putExtra(AvenuesParams.AMOUNT, ServiceUtility.chkNull(order_total).toString().trim());
+                    //intent.putExtra(AvenuesParams.AMOUNT, ServiceUtility.chkNull("1").toString().trim());
+                    intent.putExtra(AvenuesParams.REDIRECT_URL, ServiceUtility.chkNull(Constants.REDIRECT_URL).toString().trim());
+                    intent.putExtra(AvenuesParams.CANCEL_URL, ServiceUtility.chkNull(Constants.CANCEL_URL).toString().trim());
+                    intent.putExtra(AvenuesParams.RSA_KEY_URL, ServiceUtility.chkNull(Constants.RSA_KEY_URL).toString().trim());
+                    startActivityForResult(intent, 1);
+                }
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if (requestCode == 1) {
+            String status = data.getStringExtra("transStatus");
+            if (status.equals("Success")) {
+                final String customer_id = user_id;
+                String pro_id = "";
+                for (String ss : OrderProIdArray) {
+                    if (pro_id == "") {
+                        pro_id += ss;
+                    } else {
+                        pro_id += "," + ss;
+                    }
+                }
+
+                String pro_quantity = "";
+                for (String ss : OrderProQtyArray) {
+                    if (pro_quantity == "") {
+                        pro_quantity += ss;
+                    } else {
+                        pro_quantity += "," + ss;
+                    }
+                }
+                String shipping_method = ShippingPrice;
+                String payment_method = PaymentMethod;
+                String order_size = "";
+                for (String ss : OrderProSizeArray) {
+                    if (order_size == "") {
+                        order_size += ss;
+                    } else {
+                        order_size += "," + ss;
+                    }
+                }
+
+                String order_price = "";
+                for (String ss : OrderProPriceArray) {
+                    if (order_price == "") {
+                        order_price += ss;
+                    } else {
+                        order_price += "," + ss;
+                    }
+                }
+                String order_total = TotalCartPrice;
+                String cod_charge = String.valueOf(change);
+
+                Log.d("order_pr", "" + pro_id + "===" + pro_quantity + "===" + order_size + "===" + order_price);
+
+                String coupon_discount = discount_rate;
+                String total = String.valueOf(amount);
+
+                dialog.show();
+                InsertOrder(customer_id, user_email, pro_id, pro_quantity, shipping_method, payment_method, order_size, order_price, order_total, coupon_code, coupon_discount, cod_charge, total);
+            }
+        }
+    }
+
+    private void InsertOrder(String customer_id, String user_email, String pro_id, String pro_quantity, String shipping_method, String payment_method, String order_size, String order_price, String order_total, String coupon_code, String coupon_discount, String cod_charge, String total) {
+        Call<Message> InsertOrderCall = productDataService.getInsertOrderData(customer_id,user_email,pro_id,pro_quantity,shipping_method,payment_method,order_size,order_price,order_total,coupon_code,coupon_discount,cod_charge,total);
+        InsertOrderCall.enqueue(new Callback<Message>() {
+            @Override
+            public void onResponse(Call<Message> call, Response<Message> response) {
+                if (dialog.isShowing()) {
+                    dialog.hide();
+                }
+                for (int i = 0;i<OrderProIdArray.size();i++)
+                {
+                    String pro_idd = OrderProIdArray.get(i);
+                    Call<Message> DeleteCartCall = productDataService.getDeleteCartData(pro_idd,user_id);
+                    DeleteCartCall.enqueue(new Callback<Message>() {
                         @Override
                         public void onResponse(Call<Message> call, Response<Message> response) {
-                            dialog.dismiss();
-                            for (int i = 0;i<OrderProIdArray.size();i++)
-                            {
-                                String pro_idd = OrderProIdArray.get(i);
-                                Call<Message> DeleteCartCall = productDataService.getDeleteCartData(pro_idd,user_id);
-                                DeleteCartCall.enqueue(new Callback<Message>() {
-                                    @Override
-                                    public void onResponse(Call<Message> call, Response<Message> response) {
-
-                                        String status = response.body().getStatus();
-                                        String message = response.body().getMessage();
-                                        if (status.equals("1"))
-                                        {
-                                            Log.d("message","Item Delete"+message);
-                                        }
-                                        else
-                                        {
-                                            Log.d("message",""+message);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<Message> call, Throwable t) {
-                                        Toast.makeText(OrderActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-
-
+                            String status = response.body().getStatus();
                             String message = response.body().getMessage();
-                            Toast.makeText(OrderActivity.this, message, Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(OrderActivity.this, ConformOrderActivity.class);
-                            i.putExtra("item","mulItem");
-                            i.putExtra("customer_id",customer_id);
-                            i.putExtra("ordersta","Your Order has been Placed Sucessfully");
-                            i.putExtra("OrderProIdArray",OrderProIdArray);
-                            startActivity(i);
+                            if (status.equals("1"))
+                            {
+                                Log.d("message","Item Delete"+message);
+                            }
+                            else
+                            {
+                                Log.d("message",""+message);
+                            }
                         }
 
                         @Override
@@ -262,11 +336,27 @@ public class OrderActivity extends AppCompatActivity {
                             Toast.makeText(OrderActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
                         }
                     });
+                }
 
-                /*}*/
+                String message = response.body().getMessage();
+                Log.d("message",""+message);
+                Intent i = new Intent(OrderActivity.this, ConformOrderActivity.class);
+                startActivity(i);
+
+                /*i.putExtra("item","mulItem");
+                i.putExtra("customer_id",customer_id);
+                i.putExtra("ordersta","Your Order has been Placed Sucessfully");
+                i.putExtra("OrderProIdArray",OrderProIdArray);*/
+            }
+
+            @Override
+            public void onFailure(Call<Message> call, Throwable t) {
+                if (dialog.isShowing()) {
+                    dialog.hide();
+                }
+                Toast.makeText(OrderActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     @Override

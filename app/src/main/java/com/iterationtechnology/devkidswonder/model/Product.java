@@ -28,30 +28,10 @@ public class Product {
     private String pro_quantity;
     @SerializedName("pro_date")
     private String pro_date;
-    @SerializedName("statusid")
-    private String statusid;
     @SerializedName("rating")
     private String rating;
     @SerializedName("product_img")
     private String product_img;
-
-    public Product(String id, String pro_id, String cate_id, String pro_title, String brand_id, String brand_name, String pro_oprice, String pro_discount, String pro_price, String pro_desc, String pro_quantity, String pro_date, String statusid, String rating, String product_img) {
-        this.id = id;
-        this.pro_id = pro_id;
-        this.cate_id = cate_id;
-        this.pro_title = pro_title;
-        this.brand_id = brand_id;
-        this.brand_name = brand_name;
-        this.pro_oprice = pro_oprice;
-        this.pro_discount = pro_discount;
-        this.pro_price = pro_price;
-        this.pro_desc = pro_desc;
-        this.pro_quantity = pro_quantity;
-        this.pro_date = pro_date;
-        this.statusid = statusid;
-        this.rating = rating;
-        this.product_img = product_img;
-    }
 
     public String getId() {
         return id;
@@ -147,14 +127,6 @@ public class Product {
 
     public void setPro_date(String pro_date) {
         this.pro_date = pro_date;
-    }
-
-    public String getStatusid() {
-        return statusid;
-    }
-
-    public void setStatusid(String statusid) {
-        this.statusid = statusid;
     }
 
     public String getRating() {

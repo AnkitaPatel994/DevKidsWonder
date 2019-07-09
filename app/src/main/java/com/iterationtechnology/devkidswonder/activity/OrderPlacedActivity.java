@@ -18,16 +18,13 @@ import com.iterationtechnology.devkidswonder.model.Message;
 import com.iterationtechnology.devkidswonder.network.GetProductDataService;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
 
-import java.util.ArrayList;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OrderPlacedActivity extends AppCompatActivity {
 
-    ArrayList<String> OrderProIdArray = new ArrayList<>();
-    String order_id;
+    String invoice_no;
     GetProductDataService productDataService;
 
     @Override
@@ -43,26 +40,17 @@ public class OrderPlacedActivity extends AppCompatActivity {
         }
 
         productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
-        order_id = getIntent().getExtras().getString("order_id");
+        invoice_no = getIntent().getExtras().getString("invoice_no");
         String ordersta = getIntent().getExtras().getString("ordersta");
 
         TextView textView2 = (TextView)findViewById(R.id.textView2);
         textView2.setText(ordersta);
 
+        TextView txtInvoiceNoOP = (TextView)findViewById(R.id.txtInvoiceNoOP);
+        txtInvoiceNoOP.setText("INVOICE ID : "+invoice_no);
+
         Button btnCancelOrder = (Button)findViewById(R.id.btnCancelOrder);
         Button btnConShopping = (Button)findViewById(R.id.btnConShopping);
-
-        final String item = getIntent().getExtras().getString("item");
-        if (item.equals("mulItem"))
-        {
-            OrderProIdArray = getIntent().getExtras().getStringArrayList("OrderProIdArray");
-            btnCancelOrder.setVisibility(View.GONE);
-        }
-        else if (item.equals("sinItem"))
-        {
-            //ProId = getIntent().getExtras().getString("ProId");
-        }
-
 
         btnConShopping.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,27 +82,35 @@ public class OrderPlacedActivity extends AppCompatActivity {
                 txtWishlistRemove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        CancelOrder(order_id);
+                    Call<Message> DeleteOrderCall = productDataService.getDeleteOrderData(invoice_no);
+                    DeleteOrderCall.enqueue(new Callback<Message>() {
+                        @Override
+                        public void onResponse(Call<Message> call, Response<Message> response) {
+                            String Status = response.body().getStatus();
+                            String message = response.body().getMessage();
+                            if (Status.equals("1"))
+                            {
+                                Log.d("message",""+message);
+                                Intent i = new Intent(OrderPlacedActivity.this,MyOrderActivity.class);
+                                startActivity(i);
+                                finish();
+                            }
+                            else
+                            {
+                                Log.d("message",""+message);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Message> call, Throwable t) {
+                            Toast.makeText(OrderPlacedActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     }
                 });
 
                 dialog.show();
 
-                /*if (item.equals("mulItem"))
-                {
-                    for (int i=0; i<OrderProIdArray.size();i++)
-                    {
-                        String ProductId = OrderProIdArray.get(i);
-                        String UserId = customer_id;
-                        CancelOrder(ProductId,UserId);
-                    }
-                }
-                else if (item.equals("sinItem"))
-                {
-                    String ProductId = ProId;
-                    String UserId = customer_id;
-                    CancelOrder(ProductId,UserId);
-                }*/
             }
         });
 
@@ -131,7 +127,7 @@ public class OrderPlacedActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    private void CancelOrder(String order_id) {
+    /*private void CancelOrder(String order_id) {
 
         Call<Message> DeleteOrderCall = productDataService.getDeleteOrderData(order_id);
         DeleteOrderCall.enqueue(new Callback<Message>() {
@@ -158,6 +154,6 @@ public class OrderPlacedActivity extends AppCompatActivity {
             }
         });
 
-    }
+    }*/
 
 }

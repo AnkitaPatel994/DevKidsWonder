@@ -90,6 +90,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     int mCartItemCount = 1;
     ArrayList<Cart> cartProductListArray = new ArrayList<>();
     EditText txtProductPincode;
+    LinearLayout llPDQty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,9 +139,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
         String pro_discount = getIntent().getExtras().getString("pro_discount");
         String pro_price = getIntent().getExtras().getString("pro_price");
         String pro_desc = getIntent().getExtras().getString("pro_desc");
-        String pro_quantity = getIntent().getExtras().getString("pro_quantity");
+        final String pro_quantity = getIntent().getExtras().getString("pro_quantity");
         String pro_date = getIntent().getExtras().getString("pro_date");
-        final String statusid = getIntent().getExtras().getString("statusid");
         String rating = getIntent().getExtras().getString("rating");
 
         vpPagerImgSlider = (ViewPager)findViewById(R.id.vpPagerImgSlider);
@@ -202,6 +202,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         });
 
+        llPDQty = (LinearLayout)findViewById(R.id.llPDQty);
         TextView txtPDBrandName = (TextView)findViewById(R.id.txtPDBrandName);
         TextView txtPDProductName = (TextView)findViewById(R.id.txtPDProductName);
         TextView txtPDProductSubTitle = (TextView)findViewById(R.id.txtPDProductSubTitle);
@@ -334,14 +335,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         TextView txtProduct_view_all = (TextView)findViewById(R.id.txtProduct_view_all);
 
-        txtPDStatusId.setText(statusid);
-        if(statusid.equals("Available"))
+        if(!pro_quantity.equals("0"))
         {
+            txtPDStatusId.setText("Available");
             txtPDStatusId.setTextColor(ContextCompat.getColor(ProductDetailsActivity.this,R.color.colorProductRating));
+            llPDQty.setVisibility(View.VISIBLE);
         }
         else
         {
+            txtPDStatusId.setText("Unavailable");
             txtPDStatusId.setTextColor(ContextCompat.getColor(ProductDetailsActivity.this,R.color.colorRed));
+            llPDQty.setVisibility(View.GONE);
         }
         txtPDBrandName.setText(brand_name);
         txtPDProductName.setText(pro_title);
@@ -432,7 +436,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
             productSizeListArray.add(String.valueOf(s));
         }
 
-        LinearLayout llPDQty = (LinearLayout)findViewById(R.id.llPDQty);
         llPDQty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -603,7 +606,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     {
                         txtError.setVisibility(View.GONE);
                         pd_size_name = "";
-                        if(statusid.equals("Available"))
+                        if(!pro_quantity.equals("0"))
                         {
                             InsertCart(pd_user_id,pd_pro_id,pd_quantity,pd_pro_price,pd_size_name);
                         }
@@ -940,11 +943,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     {
                         txtPDStatusId.setTextColor(ContextCompat.getColor(ProductDetailsActivity.this,R.color.colorRed));
                         txtPDStatusId.setText("Unavailable");
+                        llPDQty.setVisibility(View.GONE);
                     }
                     else
                     {
                         txtPDStatusId.setTextColor(ContextCompat.getColor(ProductDetailsActivity.this,R.color.colorProductRating));
                         txtPDStatusId.setText("Available");
+                        llPDQty.setVisibility(View.VISIBLE);
                     }
 
                     bottomSheetDialog.dismiss();

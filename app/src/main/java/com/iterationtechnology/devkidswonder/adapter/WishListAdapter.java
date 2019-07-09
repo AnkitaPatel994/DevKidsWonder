@@ -70,7 +70,6 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
         final String pro_desc = wishListProductListArray.get(position).getPro_desc();
         final String pro_quantity = wishListProductListArray.get(position).getPro_quantity();
         final String pro_date = wishListProductListArray.get(position).getPro_date();
-        final String statusid = wishListProductListArray.get(position).getStatusid();
         final String rating = wishListProductListArray.get(position).getRating();
         final String product_img = wishListProductListArray.get(position).getProduct_img();
         final String Sizename = wishListProductListArray.get(position).getSizename();
@@ -166,7 +165,6 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
                 i.putExtra("pro_desc",pro_desc);
                 i.putExtra("pro_quantity",pro_quantity);
                 i.putExtra("pro_date",pro_date);
-                i.putExtra("statusid",statusid);
                 i.putExtra("rating",rating);
                 context.startActivity(i);
             }

@@ -254,12 +254,14 @@ public class DeliveryActivity extends AppCompatActivity {
             viewHolder.btnTrackOrder.setVisibility(View.GONE);
 
             ArrayList<ProductSize> Pro_size = cartProductListArray.get(position).getPro_size();
+            String Size_Id = "";
             String Size_name = "";
             String size_price = "";
             String size_discount = "";
 
             for (int i=0;i<Pro_size.size();i++)
             {
+                Size_Id = Pro_size.get(i).getS_id();
                 Size_name = Pro_size.get(i).getSize_name();
                 size_price = Pro_size.get(i).getSize_price();
                 size_discount = Pro_size.get(i).getSize_discount();
@@ -267,7 +269,7 @@ public class DeliveryActivity extends AppCompatActivity {
 
             OrderProIdArray.add(pro_id);
             OrderProQtyArray.add(cart_pro_quantity);
-            OrderProSizeArray.add(Size_name);
+            OrderProSizeArray.add(Size_Id);
 
             viewHolder.txtOTitle.setText(pro_title);
             viewHolder.txtOSizeCart.setText(Size_name);

@@ -474,7 +474,6 @@ public class CartActivity extends AppCompatActivity
             final String pro_quantity = cartProductListArray.get(position).getPro_quantity();
             final String cart_pro_quantity = cartProductListArray.get(position).getCart_pro_quantity();
             final String pro_date = cartProductListArray.get(position).getPro_date();
-            final String statusid = cartProductListArray.get(position).getStatusid();
             final String rating = cartProductListArray.get(position).getRating();
             final String product_img = cartProductListArray.get(position).getProduct_img();
 
@@ -678,7 +677,6 @@ public class CartActivity extends AppCompatActivity
                     i.putExtra("pro_desc",pro_desc);
                     i.putExtra("pro_quantity",pro_quantity);
                     i.putExtra("pro_date",pro_date);
-                    i.putExtra("statusid",statusid);
                     i.putExtra("rating",rating);
                     startActivity(i);
                 }

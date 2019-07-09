@@ -64,7 +64,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         final String pro_desc = productListArray.get(position).getPro_desc();
         final String pro_quantity = productListArray.get(position).getPro_quantity();
         final String pro_date = productListArray.get(position).getPro_date();
-        final String statusid = productListArray.get(position).getStatusid();
         final String rating = productListArray.get(position).getRating();
         String product_img = productListArray.get(position).getProduct_img();
 
@@ -117,7 +116,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 i.putExtra("pro_desc",pro_desc);
                 i.putExtra("pro_quantity",pro_quantity);
                 i.putExtra("pro_date",pro_date);
-                i.putExtra("statusid",statusid);
                 i.putExtra("rating",rating);
                 context.startActivity(i);
             }

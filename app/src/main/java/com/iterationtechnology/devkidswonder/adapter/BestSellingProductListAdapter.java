@@ -64,7 +64,6 @@ public class BestSellingProductListAdapter extends RecyclerView.Adapter<BestSell
         final String pro_desc = bestSellingListArray.get(position).getPro_desc();
         final String pro_quantity = bestSellingListArray.get(position).getPro_quantity();
         final String pro_date = bestSellingListArray.get(position).getPro_date();
-        final String statusid = bestSellingListArray.get(position).getStatusid();
         final String rating = bestSellingListArray.get(position).getRating();
         String product_img = bestSellingListArray.get(position).getProduct_img();
 
@@ -115,7 +114,6 @@ public class BestSellingProductListAdapter extends RecyclerView.Adapter<BestSell
                 i.putExtra("pro_desc",pro_desc);
                 i.putExtra("pro_quantity",pro_quantity);
                 i.putExtra("pro_date",pro_date);
-                i.putExtra("statusid",statusid);
                 i.putExtra("rating",rating);
                 context.startActivity(i);
             }

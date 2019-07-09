@@ -17,9 +17,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".payment.WebViewActivity"
+            android:label="@string/title_activity_web_view"
+            android:theme="@style/AppTheme.ActionBar"/>
+        <activity android:name=".payment.StatusActivity" />
+        <activity
             android:name=".activity.ConformOrderActivity"
             android:label="@string/title_activity_conform_order"
-            android:theme="@style/AppTheme.ActionBar"></activity>
+            android:theme="@style/AppTheme.ActionBar" />
         <activity
             android:name=".activity.RefundPolicyActivity"
             android:label="@string/title_activity_refund_policy"

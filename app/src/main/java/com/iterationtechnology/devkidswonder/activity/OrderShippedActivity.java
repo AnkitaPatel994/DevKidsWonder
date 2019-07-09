@@ -4,25 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.iterationtechnology.devkidswonder.R;
-import com.iterationtechnology.devkidswonder.model.Message;
-import com.iterationtechnology.devkidswonder.network.GetProductDataService;
-import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class OrderShippedActivity extends AppCompatActivity {
-
-    Button btnShippingCancelOrder,btnShippingConShopping;
-    String order_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,41 +25,21 @@ public class OrderShippedActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        order_id = getIntent().getExtras().getString("order_id");
-        final GetProductDataService productDataService = RetrofitInstance.getRetrofitInstance().create(GetProductDataService.class);
-        btnShippingCancelOrder = (Button)findViewById(R.id.btnShippingCancelOrder);
-        btnShippingCancelOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String orderid = order_id;
-                Call<Message> DeleteOrderCall = productDataService.getDeleteOrderData(orderid);
-                DeleteOrderCall.enqueue(new Callback<Message>() {
-                    @Override
-                    public void onResponse(Call<Message> call, Response<Message> response) {
+        TextView txtInvoiceNoOS = (TextView)findViewById(R.id.txtInvoiceNoOS);
+        TextView txtShippingIdOS = (TextView)findViewById(R.id.txtShippingIdOS);
+        TextView txtTotalOS = (TextView)findViewById(R.id.txtTotalOS);
 
-                        String Status = response.body().getStatus();
-                        String message = response.body().getMessage();
-                        if (Status.equals("1"))
-                        {
-                            Log.d("message",""+message);
-                            Intent i = new Intent(OrderShippedActivity.this,HomeActivity.class);
-                            startActivity(i);
-                        }
-                        else
-                        {
-                            Log.d("message",""+message);
-                        }
-                    }
+        String invoice_no = getIntent().getExtras().getString("invoice_no");
+        txtInvoiceNoOS.setText("INVOICE ID : "+invoice_no);
 
-                    @Override
-                    public void onFailure(Call<Message> call, Throwable t) {
-                        Toast.makeText(OrderShippedActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
+        String shipping_id = getIntent().getExtras().getString("shipping_id");
+        txtShippingIdOS.setText("Shipping ID : "+shipping_id);
 
-        btnShippingConShopping = (Button)findViewById(R.id.btnShippingConShopping);
+        String rs = getApplicationContext().getResources().getString(R.string.RS);
+        String total = getIntent().getExtras().getString("total");
+        txtTotalOS.setText("Order Total : "+rs+" "+total);
+
+        Button btnShippingConShopping = (Button)findViewById(R.id.btnShippingConShopping);
         btnShippingConShopping.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

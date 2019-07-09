@@ -53,7 +53,6 @@ public class SearchProductListAdapter extends RecyclerView.Adapter<SearchProduct
         final String pro_desc = searchProductListArray.get(position).getPro_desc();
         final String pro_quantity = searchProductListArray.get(position).getPro_quantity();
         final String pro_date = searchProductListArray.get(position).getPro_date();
-        final String statusid = searchProductListArray.get(position).getStatusid();
         final String rating = searchProductListArray.get(position).getRating();
         final String product_img = searchProductListArray.get(position).getProduct_img();
 
@@ -75,7 +74,6 @@ public class SearchProductListAdapter extends RecyclerView.Adapter<SearchProduct
                 i.putExtra("pro_desc",pro_desc);
                 i.putExtra("pro_quantity",pro_quantity);
                 i.putExtra("pro_date",pro_date);
-                i.putExtra("statusid",statusid);
                 i.putExtra("rating",rating);
                 context.startActivity(i);
             }
