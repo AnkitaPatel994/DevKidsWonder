@@ -14,6 +14,7 @@ import com.iterationtechnology.devkidswonder.R;
 import com.iterationtechnology.devkidswonder.activity.OrderDeliveredActivity;
 import com.iterationtechnology.devkidswonder.activity.OrderPlacedActivity;
 import com.iterationtechnology.devkidswonder.activity.OrderShippedActivity;
+import com.iterationtechnology.devkidswonder.activity.PDFActivity;
 import com.iterationtechnology.devkidswonder.model.Order;
 
 import java.util.ArrayList;
@@ -96,6 +97,15 @@ public class MyOrderListAdapter extends RecyclerView.Adapter<MyOrderListAdapter.
                     context.startActivity(i);
                 }
 
+            }
+        });
+
+        viewHolder.btnViewOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, PDFActivity.class);
+                i.putExtra("invoice_no",invoice_no);
+                context.startActivity(i);
             }
         });
 

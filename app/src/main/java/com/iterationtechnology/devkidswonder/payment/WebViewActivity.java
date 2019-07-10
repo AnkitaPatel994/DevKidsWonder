@@ -50,6 +50,12 @@ public class WebViewActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
+
     private class RenderView extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
@@ -111,6 +117,7 @@ public class WebViewActivity extends AppCompatActivity {
                     LoadingDialog.cancelLoading();
                     if (url.indexOf("/ccavResponseHandler.php") != -1) {
                         webview.loadUrl("javascript:window.HTMLOUT.processHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+                       // webview.loadUrl("javascript:window.HTMLOUT.processHTML('<head>hello</head>');");
                     }
                 }
 

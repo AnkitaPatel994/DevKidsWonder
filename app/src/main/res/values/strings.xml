@@ -15,6 +15,7 @@
     <string name="title_activity_change_password">Change Password</string>
     <string name="title_activity_conform_order">ConformOrderActivity</string>
     <string name="title_activity_web_view">Online Payment</string>
+    <string name="title_activity_pdf">View Order</string>
 
     <!--==== Home Page ===-->
     <string name="shop_by_category">Shop by Category</string>

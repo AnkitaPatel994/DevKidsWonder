@@ -250,9 +250,9 @@ public class OrderActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
-        if (requestCode == 1) {
-            String status = data.getStringExtra("transStatus");
-            if (status.equals("Success")) {
+        if (resultCode == 1) {
+//            String status = data.getStringExtra("transStatus");
+//            if (status.equals("Success")) {
                 final String customer_id = user_id;
                 String pro_id = "";
                 for (String ss : OrderProIdArray) {
@@ -301,7 +301,7 @@ public class OrderActivity extends AppCompatActivity {
                 dialog.show();
                 InsertOrder(customer_id, user_email, pro_id, pro_quantity, shipping_method, payment_method, order_size, order_price, order_total, coupon_code, coupon_discount, cod_charge, total);
             }
-        }
+ //       }
     }
 
     private void InsertOrder(String customer_id, String user_email, String pro_id, String pro_quantity, String shipping_method, String payment_method, String order_size, String order_price, String order_total, String coupon_code, String coupon_discount, String cod_charge, String total) {

@@ -17,9 +17,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.PDFActivity"
+            android:label="@string/title_activity_pdf"
+            android:theme="@style/AppTheme.ActionBar"></activity>
+        <activity
             android:name=".payment.WebViewActivity"
             android:label="@string/title_activity_web_view"
-            android:theme="@style/AppTheme.ActionBar"/>
+            android:theme="@style/AppTheme.ActionBar" />
         <activity android:name=".payment.StatusActivity" />
         <activity
             android:name=".activity.ConformOrderActivity"

@@ -11,6 +11,8 @@ public class Constants {
     public static final String CURRENCEY = "INR";
     public static final String REDIRECT_URL = "http://devkidswonder.com/payment/ccavResponseHandler.php";
     public static final String CANCEL_URL = "http://devkidswonder.com/payment/ccavResponseHandler.php";
+   // public static final String CANCEL_URL = "http://devkidswonder.com/IFRAME_KIT/ccavResponseHandler.php";
+
     public static final String RSA_KEY_URL = "http://devkidswonder.com/payment/GetRSA.php";
 
 }
