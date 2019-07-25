@@ -65,11 +65,18 @@ public class ChangePasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (awesomeValidation.validate())
+                String old_password = change_pass_oldpassword.getText().toString();
+                String new_password = chnage_pass_newpassword.getText().toString();
+                if (old_password.equals("") && new_password.equals(""))
                 {
-                    String old_password = change_pass_oldpassword.getText().toString();
-                    String new_password = chnage_pass_newpassword.getText().toString();
-
+                    Toast.makeText(ChangePasswordActivity.this, "Old Password not Empty", Toast.LENGTH_SHORT).show();
+                }
+                else if (new_password.equals(""))
+                {
+                    Toast.makeText(ChangePasswordActivity.this, "New Password not Empty", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
                     final ProgressDialog dialog = new ProgressDialog(ChangePasswordActivity.this);
                     dialog.setMessage("Loading...");
                     dialog.setCancelable(true);
@@ -99,9 +106,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                             Toast.makeText(ChangePasswordActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
                         }
                     });
-
                 }
-
             }
         });
     }

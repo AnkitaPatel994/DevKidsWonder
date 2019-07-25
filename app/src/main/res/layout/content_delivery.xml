@@ -85,8 +85,8 @@
                     android:textColor="@color/colorWhite"
                     android:backgroundTint="@color/colorBtnCart"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="2"
-                    android:text="Verification" />
+                    android:layout_weight="1.6"
+                    android:text="Apply Coupon" />
 
             </LinearLayout>
             <View

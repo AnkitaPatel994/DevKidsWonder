@@ -107,6 +107,7 @@ public class SignInActivity extends AppCompatActivity {
                                 else
                                 {
                                     Log.d("message",""+message);
+                                    Toast.makeText(SignInActivity.this, ""+message, Toast.LENGTH_SHORT).show();
                                     uname.setText("");
                                     password.setText("");
                                 }

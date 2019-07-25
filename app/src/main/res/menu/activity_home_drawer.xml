@@ -79,4 +79,9 @@
             android:title="Share App" />
     </group>
 
+    <item android:title="© Design &amp; Develop by Iteration Technology"
+        android:id="@+id/nvSize">
+
+    </item>
+
 </menu>
