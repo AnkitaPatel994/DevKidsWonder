@@ -93,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
-                android:text="10. Scenarios where a user is initiating a cancellation request, because of which the order value is going below Rs. 249/- (Excluding COD charges, Shipping charges, Taxes or value reduced after application of coupons or any other offer), cancellation would not be applicable or if applicable, the entire order has to be cancelled. " />
+                android:text="10. Scenarios where a user is initiating a cancellation request, because of which the order value is going below Rs. 700/- (Excluding COD charges, Shipping charges, Taxes or value reduced after application of coupons or any other offer), cancellation would not be applicable or if applicable, the entire order has to be cancelled. " />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -108,7 +108,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
-                android:text="13. Scenarios, where the system identifies that even a single product from the order is shipped, shipping charges would be deducted / recovered from User's Dev Kids Wallet (As a one time deduction) irrespective of the order amount." />
+                android:text="13. Scenarios, where the system identifies that even a single product from the order is shipped, shipping charges would be deducted / recovered from User's Dev Kids Wallet (As a one time deduction) irrespective of the order amount.\n" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:text="Cash On Delivery Charges\n" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="1. The payment option of Cash on Delivery is available for All Eligible orders." />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="2. Cash on Delivery can be used as payment method only for an order not exceeding Rs. 30,000. The order value limit could be lower depending on the pin code of your address." />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="3. Convenience fees of Rs. 100 will be charged on orders placed using Cash on Delivery. However, for a limited period, no convenience fees will be charged on any orders placed using Cash on Delivery." />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="4. The order amount has to be paid in full before receiving the package and signing the delivery sheet. The package can be opened only after the payment is made\n" />
 
         </LinearLayout>
 

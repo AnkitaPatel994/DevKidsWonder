@@ -453,6 +453,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="8dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/colorDivider"/>
+
+                <TextView
+                    android:id="@+id/txtCustomerReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Customer Review"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:background="@android:drawable/btn_default"
+                    android:drawableRight="@drawable/greater_than"
+                    android:drawableTint="@color/colorBlack"
+                    android:padding="20dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
                     android:background="@color/colorDivider"/>
 
                 <LinearLayout

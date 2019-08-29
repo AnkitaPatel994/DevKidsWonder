@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:background="#6F000000"
+    android:theme="@style/AppTheme"
     android:id="@+id/llEditDialog">
 
     <LinearLayout
@@ -25,13 +26,15 @@
 
         <RatingBar
             android:id="@+id/rbProductRating"
-            android:layout_width="match_parent"
+            style="@style/Widget.AppCompat.RatingBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize="1.0"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
+            android:max="5"
             android:minHeight="10dp"
+            android:numStars="5"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:stepSize="1.0"
             android:transformPivotX="0dp"
             android:transformPivotY="0dp" />
 

@@ -13,6 +13,7 @@ import com.iterationtechnology.devkidswonder.model.OrderList;
 import com.iterationtechnology.devkidswonder.model.ProductImgList;
 import com.iterationtechnology.devkidswonder.model.ProductList;
 import com.iterationtechnology.devkidswonder.model.ProductSizeList;
+import com.iterationtechnology.devkidswonder.model.RatingList;
 import com.iterationtechnology.devkidswonder.model.SendOtp;
 import com.iterationtechnology.devkidswonder.model.SliderList;
 import com.iterationtechnology.devkidswonder.model.WishlistList;
@@ -215,5 +216,9 @@ public interface GetProductDataService {
     @FormUrlEncoded
     @POST("json_android/couponcode.php")
     Call<CouponMessage> getCouponcodeCheckData(@Field("promo_code") String promo_code);
+
+    @FormUrlEncoded
+    @POST("json_android/view_rating.php")
+    Call<RatingList> getViewRatingData(@Field("rating_pro_id") String rating_pro_id);
 
 }

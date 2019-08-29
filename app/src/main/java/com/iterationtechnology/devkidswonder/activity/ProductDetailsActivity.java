@@ -71,7 +71,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     String cate_id,ipAddress,pro_id,rs,user_id;
     ViewPager vpPagerImgSlider;
     TabLayout tabIndicator;
-    TextView txtCuttedPrice,txtProductOffers,txtPDPSize,txtPDStatusId,txtError;
+    TextView txtCuttedPrice,txtProductOffers,txtPDPSize,txtPDStatusId,txtError,txtCustomerReview;
     BottomSheetDialog bottomSheetDialog;
     int size;
     SessionManager session;
@@ -147,6 +147,16 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         tabIndicator = (TabLayout)findViewById(R.id.tabIndicator);
         tabIndicator.setupWithViewPager(vpPagerImgSlider);
+
+        txtCustomerReview = (TextView)findViewById(R.id.txtCustomerReview);
+        txtCustomerReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ProductDetailsActivity.this,RatingViewActivity.class);
+                i.putExtra("pro_id",pro_id);
+                startActivity(i);
+            }
+        });
 
         Button btnShare = (Button)findViewById(R.id.btnShare);
         btnShare.setOnClickListener(new View.OnClickListener() {

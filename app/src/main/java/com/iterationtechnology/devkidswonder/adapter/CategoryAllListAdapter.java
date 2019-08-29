@@ -49,8 +49,6 @@ public class CategoryAllListAdapter extends RecyclerView.Adapter<CategoryAllList
 
         viewHolder.txtAllCatName.setText(category_title);
 
-
-
         viewHolder.llCatListBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +64,7 @@ public class CategoryAllListAdapter extends RecyclerView.Adapter<CategoryAllList
                 context.startActivity(i);
             }
         });
+
         if ((position % 2) == 0) {
             viewHolder.llCatListBg.setBackground(ContextCompat.getDrawable(context, R.color.colorPEACH));
         } else {
@@ -73,8 +72,6 @@ public class CategoryAllListAdapter extends RecyclerView.Adapter<CategoryAllList
         }
 
         Picasso.with(context).load(RetrofitInstance.BASE_URL + category_img).into(viewHolder.ivAllCatImg);
-
-
 
     }
 
