@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.iterationtechnology.devkidswonder.R;
 import com.iterationtechnology.devkidswonder.model.Cart;
 import com.iterationtechnology.devkidswonder.model.CartList;
@@ -26,7 +27,6 @@ import com.iterationtechnology.devkidswonder.model.CouponMessage;
 import com.iterationtechnology.devkidswonder.model.ProductSize;
 import com.iterationtechnology.devkidswonder.network.GetProductDataService;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -199,6 +199,15 @@ public class DeliveryActivity extends AppCompatActivity {
 
                 Intent i = new Intent(DeliveryActivity.this, OrderActivity.class);
                 i.putExtra("user_id",user_id);
+                i.putExtra("firstname",firstname);
+                i.putExtra("lastname",lastname);
+                i.putExtra("email",email);
+                i.putExtra("contact",contact);
+                i.putExtra("address",Address);
+                i.putExtra("city",City);
+                i.putExtra("state",State);
+                i.putExtra("country",Country);
+                i.putExtra("pincode",Pincode);
                 i.putExtra("OrderProIdArray",OrderProIdArray);
                 i.putExtra("OrderProQtyArray",OrderProQtyArray);
                 i.putExtra("OrderProSizeArray",OrderProSizeArray);
@@ -297,7 +306,7 @@ public class DeliveryActivity extends AppCompatActivity {
             {
                 viewHolder.txtOProductOff.setText(size_discount+"%off");
             }
-            Picasso.with(DeliveryActivity.this).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivProImg);
+            Glide.with(DeliveryActivity.this).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivProImg);
             viewHolder.txtOCartQty.setText(cart_pro_quantity);
 
         }

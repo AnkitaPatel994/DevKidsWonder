@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.iterationtechnology.devkidswonder.R;
 import com.iterationtechnology.devkidswonder.model.Cart;
 import com.iterationtechnology.devkidswonder.model.CartList;
@@ -42,7 +43,6 @@ import com.iterationtechnology.devkidswonder.model.ProductSize;
 import com.iterationtechnology.devkidswonder.network.GetProductDataService;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
 import com.iterationtechnology.devkidswonder.network.SessionManager;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -102,6 +102,11 @@ public class CartActivity extends AppCompatActivity
         SpannableString quick = new SpannableString(QuickLinks.getTitle());
         quick.setSpan(new TextAppearanceSpan(this, R.style.NavigationTitle), 0, quick.length(), 0);
         QuickLinks.setTitle(quick);
+
+        MenuItem SizeLinks = menu.findItem(R.id.nvSize);
+        SpannableString quickSize = new SpannableString(SizeLinks.getTitle());
+        quickSize.setSpan(new TextAppearanceSpan(this, R.style.NavigationTitleSize), 0, quickSize.length(), 0);
+        SizeLinks.setTitle(quickSize);
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -234,6 +239,8 @@ public class CartActivity extends AppCompatActivity
                             i.putExtra("user_id",id);
                             i.putExtra("firstname",firstname);
                             i.putExtra("lastname",lastname);
+                            i.putExtra("email",email);
+                            i.putExtra("contact",contact);
                             i.putExtra("address",address);
                             i.putExtra("city",city);
                             i.putExtra("state",state);
@@ -514,7 +521,7 @@ public class CartActivity extends AppCompatActivity
             {
                 viewHolder.txtProductOff.setText(size_discount+"%off");
             }
-            Picasso.with(CartActivity.this).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.img_product);
+            Glide.with(CartActivity.this).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.img_product);
             viewHolder.txtCartQty.setText(cart_pro_quantity);
 
             viewHolder.llCartMinus.setOnClickListener(new View.OnClickListener() {

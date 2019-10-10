@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.iterationtechnology.devkidswonder.R;
 import com.iterationtechnology.devkidswonder.activity.ProductDetailsActivity;
 import com.iterationtechnology.devkidswonder.activity.WishListActivity;
@@ -24,7 +25,6 @@ import com.iterationtechnology.devkidswonder.model.Message;
 import com.iterationtechnology.devkidswonder.model.Wishlist;
 import com.iterationtechnology.devkidswonder.network.GetProductDataService;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -74,7 +74,7 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
         final String product_img = wishListProductListArray.get(position).getProduct_img();
         final String Sizename = wishListProductListArray.get(position).getSizename();
 
-        Picasso.with(context).load(RetrofitInstance.BASE_URL +product_img).into(viewHolder.whishlist_img);
+        Glide.with(context).load(RetrofitInstance.BASE_URL +product_img).into(viewHolder.whishlist_img);
 
         viewHolder.whishlist_name.setText(pro_title);
         viewHolder.whishlist_rating.setText(rating);

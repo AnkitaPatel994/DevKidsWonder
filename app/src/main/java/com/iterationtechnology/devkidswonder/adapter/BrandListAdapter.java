@@ -10,11 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.iterationtechnology.devkidswonder.R;
 import com.iterationtechnology.devkidswonder.activity.SubCategoryActivity;
 import com.iterationtechnology.devkidswonder.model.Brand;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -46,7 +46,7 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.View
 
         viewHolder.txtBrandName.setText(Brand_name);
 
-        Picasso.with(context).load(RetrofitInstance.BASE_URL +Brand_img).into(viewHolder.ivBrandImg);
+        Glide.with(context).load(RetrofitInstance.BASE_URL +Brand_img).into(viewHolder.ivBrandImg);
 
 
         viewHolder.llBrandList.setOnClickListener(new View.OnClickListener() {

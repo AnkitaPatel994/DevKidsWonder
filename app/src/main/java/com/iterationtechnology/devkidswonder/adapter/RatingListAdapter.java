@@ -19,7 +19,6 @@ import com.iterationtechnology.devkidswonder.model.Category;
 import com.iterationtechnology.devkidswonder.model.Rating;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
 import com.jackandphantom.circularimageview.RoundedImage;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 

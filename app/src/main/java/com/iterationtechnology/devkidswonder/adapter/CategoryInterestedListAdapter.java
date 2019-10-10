@@ -10,11 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.iterationtechnology.devkidswonder.R;
 import com.iterationtechnology.devkidswonder.activity.SubCategoryActivity;
 import com.iterationtechnology.devkidswonder.model.Category;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -46,7 +46,7 @@ public class CategoryInterestedListAdapter extends RecyclerView.Adapter<Category
 
         viewHolder.txtcpProductCatName.setText(category_title);
 
-        Picasso.with(context).load(RetrofitInstance.BASE_URL +category_img).into(viewHolder.ivcpProductImg);
+        Glide.with(context).load(RetrofitInstance.BASE_URL +category_img).into(viewHolder.ivcpProductImg);
 
 
         viewHolder.llIntCategoryList.setOnClickListener(new View.OnClickListener() {

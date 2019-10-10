@@ -93,6 +93,11 @@ public class SubCategoryActivity extends AppCompatActivity
         quick.setSpan(new TextAppearanceSpan(this, R.style.NavigationTitle), 0, quick.length(), 0);
         QuickLinks.setTitle(quick);
 
+        MenuItem SizeLinks = menu.findItem(R.id.nvSize);
+        SpannableString quickSize = new SpannableString(SizeLinks.getTitle());
+        quickSize.setSpan(new TextAppearanceSpan(this, R.style.NavigationTitleSize), 0, quickSize.length(), 0);
+        SizeLinks.setTitle(quickSize);
+
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerview = navigationView.getHeaderView(0);

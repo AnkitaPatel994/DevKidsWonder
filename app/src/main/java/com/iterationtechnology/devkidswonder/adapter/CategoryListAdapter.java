@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.iterationtechnology.devkidswonder.R;
 import com.iterationtechnology.devkidswonder.activity.SubCategoryActivity;
 import com.iterationtechnology.devkidswonder.model.Category;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -47,8 +47,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
         viewHolder.txtCatName.setText(category_title);
 
-        Picasso.with(context).load(RetrofitInstance.BASE_URL +category_img).into(viewHolder.ivCatImg);
-
+        Glide.with(context).load(RetrofitInstance.BASE_URL +category_img).into(viewHolder.ivCatImg);
 
         viewHolder.llCategoryList.setOnClickListener(new View.OnClickListener() {
             @Override

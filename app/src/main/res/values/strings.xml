@@ -70,8 +70,8 @@
     <string name="title_activity_search">Search</string>
 
     <string name="reload"><u>Reload page</u></string>
-    <string name="title_activity_mobile_otp">MobileOTPActivity</string>
-    <string name="title_activity_email_otp">EmailOTPActivity</string>
+    <string name="title_activity_mobile_otp">Mobile Verification</string>
+    <string name="title_activity_email_otp">Email Verification</string>
     <string name="title_activity_contact_us">Contact Us</string>
 
     <string name="address">A-117 to 124, First Floor, Swagat Rainforest II, Opp.Swaminarayan Dham, Gandhinagar, Gujarat 382421</string>

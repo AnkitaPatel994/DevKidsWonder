@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.iterationtechnology.devkidswonder.R;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
-import com.squareup.picasso.Picasso;
 
 public class ImgSliderFragment extends Fragment {
 
@@ -40,7 +40,7 @@ public class ImgSliderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_img_slider, container, false);
         ImageView ivImgSlider = (ImageView)view.findViewById(R.id.ivImgSlider);
-        Picasso.with(getActivity()).load(RetrofitInstance.BASE_URL +title).into(ivImgSlider);
+        Glide.with(getActivity()).load(RetrofitInstance.BASE_URL +title).into(ivImgSlider);
         return view;
     }
 

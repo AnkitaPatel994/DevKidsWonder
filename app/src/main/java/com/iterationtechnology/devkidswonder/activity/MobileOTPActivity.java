@@ -50,7 +50,7 @@ public class MobileOTPActivity extends AppCompatActivity {
         txtMMobileNo = (EditText)findViewById(R.id.txtMMobileNo);
         txtMOTP = (EditText)findViewById(R.id.txtMOTP);
 
-        awesomeValidation.addValidation(this, R.id.txtMMobileNo, "^[2-9]{2}[0-9]{8}$", R.string.mobileNo);
+        awesomeValidation.addValidation(this, R.id.txtMMobileNo, "^[0-9]{10}$", R.string.mobileNo);
 
         btnMSubmitOTP = (Button) findViewById(R.id.btnMSubmitOTP);
         btnMResendOTP = (Button) findViewById(R.id.btnMResendOTP);

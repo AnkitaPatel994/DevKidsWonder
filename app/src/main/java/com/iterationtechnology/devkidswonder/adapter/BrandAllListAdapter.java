@@ -11,12 +11,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.iterationtechnology.devkidswonder.R;
 import com.iterationtechnology.devkidswonder.activity.SubCategoryActivity;
 import com.iterationtechnology.devkidswonder.model.Brand;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
 import com.jackandphantom.circularimageview.RoundedImage;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -57,7 +57,7 @@ public class BrandAllListAdapter extends RecyclerView.Adapter<BrandAllListAdapte
             viewHolder.llCatListBg.setBackground(ContextCompat.getDrawable(context,R.color.colorllBg));
         }
 
-        Picasso.with(context).load(RetrofitInstance.BASE_URL +Brand_img).into(viewHolder.ivAllCatImg);
+        Glide.with(context).load(RetrofitInstance.BASE_URL +Brand_img).into(viewHolder.ivAllCatImg);
 
 
         viewHolder.llCatListBg.setOnClickListener(new View.OnClickListener() {

@@ -13,13 +13,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.iterationtechnology.devkidswonder.R;
 import com.iterationtechnology.devkidswonder.activity.ProductDetailsActivity;
 import com.iterationtechnology.devkidswonder.model.Message;
 import com.iterationtechnology.devkidswonder.model.Product;
 import com.iterationtechnology.devkidswonder.network.GetProductDataService;
 import com.iterationtechnology.devkidswonder.network.RetrofitInstance;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -73,7 +73,7 @@ public class BestSellingProductListAdapter extends RecyclerView.Adapter<BestSell
         viewHolder.txtSellerProductOPrize.setText(rs+pro_oprice);
         viewHolder.txtSellerProductOPrize.setPaintFlags(viewHolder.txtSellerProductOPrize.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
 
-        Picasso.with(context).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivSellerProductImg);
+        Glide.with(context).load(RetrofitInstance.BASE_URL+product_img).into(viewHolder.ivSellerProductImg);
 
         viewHolder.llSellerProductList.setOnClickListener(new View.OnClickListener() {
             @Override
